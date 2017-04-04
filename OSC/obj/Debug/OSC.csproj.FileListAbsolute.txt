@@ -1,0 +1,19 @@
+c:\users\isabella.riquetti\documents\visual studio 2015\Projects\OSC\OSC\bin\Debug\OSC.exe.config
+c:\users\isabella.riquetti\documents\visual studio 2015\Projects\OSC\OSC\bin\Debug\OSC.exe
+c:\users\isabella.riquetti\documents\visual studio 2015\Projects\OSC\OSC\bin\Debug\OSC.pdb
+c:\users\isabella.riquetti\documents\visual studio 2015\Projects\OSC\OSC\obj\Debug\OSC.Function.resources
+c:\users\isabella.riquetti\documents\visual studio 2015\Projects\OSC\OSC\obj\Debug\OSC.Main.resources
+c:\users\isabella.riquetti\documents\visual studio 2015\Projects\OSC\OSC\obj\Debug\OSC.Properties.Resources.resources
+c:\users\isabella.riquetti\documents\visual studio 2015\Projects\OSC\OSC\obj\Debug\OSC.csproj.GenerateResource.Cache
+c:\users\isabella.riquetti\documents\visual studio 2015\Projects\OSC\OSC\obj\Debug\OSC.exe
+c:\users\isabella.riquetti\documents\visual studio 2015\Projects\OSC\OSC\obj\Debug\OSC.pdb
+C:\Users\isabella.riquetti\Documents\OSC\OSC\bin\Debug\OSC.exe.config
+C:\Users\isabella.riquetti\Documents\OSC\OSC\obj\Debug\OSC.exe
+C:\Users\isabella.riquetti\Documents\OSC\OSC\obj\Debug\OSC.pdb
+C:\Users\isabella.riquetti\Documents\OSC\OSC\bin\Debug\OSC.exe
+C:\Users\isabella.riquetti\Documents\OSC\OSC\bin\Debug\OSC.pdb
+C:\Users\isabella.riquetti\Documents\OSC\OSC\obj\Debug\OSC.csprojResolveAssemblyReference.cache
+C:\Users\isabella.riquetti\Documents\OSC\OSC\obj\Debug\OSC.Function.resources
+C:\Users\isabella.riquetti\Documents\OSC\OSC\obj\Debug\OSC.Main.resources
+C:\Users\isabella.riquetti\Documents\OSC\OSC\obj\Debug\OSC.Properties.Resources.resources
+C:\Users\isabella.riquetti\Documents\OSC\OSC\obj\Debug\OSC.csproj.GenerateResource.Cache
