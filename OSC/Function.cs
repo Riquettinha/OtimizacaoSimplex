@@ -12,9 +12,9 @@ namespace OSC
 {
     public partial class Function : Form
     {
-        List<string> variables = new List<string>();
+        List<VariableData> variables = new List<VariableData>();
 
-        public Function(List<string> variables)
+        public Function(List<VariableData> variables)
         {
             InitializeComponent();
             this.variables = variables;
@@ -40,13 +40,13 @@ namespace OSC
                 {
                     Name = "lbVar" + i,
                     Location = new Point(locationX, 37),
-                    Size = TextRenderer.MeasureText(variables[i], Font),
-                    Text = variables[i]
+                    Size = TextRenderer.MeasureText(variables[i].Value, Font),
+                    Text = variables[i].Value
                 };
 
                 lbVar.BringToFront();
                 Controls.Add(lbVar);
-                locationX += TextRenderer.MeasureText(variables[i], Font).Width-1;
+                locationX += TextRenderer.MeasureText(variables[i].Value, Font).Width-1;
 
                 var plus = new Label
                 {
@@ -74,6 +74,11 @@ namespace OSC
             //};
             //txtFinal.BringToFront();
             //Controls.Add(txtFinal);
+        }
+
+        private void Function_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }

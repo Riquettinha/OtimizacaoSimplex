@@ -82,7 +82,8 @@
             this.Controls.Add(this.maxValue);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Function";
-            this.Text = "Function";
+            this.Text = "Função";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Function_FormClosing);
             this.Load += new System.EventHandler(this.Function_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
