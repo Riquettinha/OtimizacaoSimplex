@@ -1,6 +1,6 @@
 ﻿namespace OSC
 {
-    partial class Main
+    partial class Variables
     {
         /// <summary>
         /// Required designer variable.
@@ -36,6 +36,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
+            this.btnEdit = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // variableList
@@ -58,9 +59,9 @@
             this.btnRemoveVariable.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRemoveVariable.Location = new System.Drawing.Point(12, 113);
             this.btnRemoveVariable.Name = "btnRemoveVariable";
-            this.btnRemoveVariable.Size = new System.Drawing.Size(177, 23);
+            this.btnRemoveVariable.Size = new System.Drawing.Size(85, 23);
             this.btnRemoveVariable.TabIndex = 1;
-            this.btnRemoveVariable.Text = "Remover Selecionado";
+            this.btnRemoveVariable.Text = "Remover";
             this.btnRemoveVariable.UseVisualStyleBackColor = true;
             this.btnRemoveVariable.Click += new System.EventHandler(this.btnRemoveVariable_Click);
             // 
@@ -113,12 +114,24 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.btnNext);
             // 
-            // Main
+            // btnEdit
+            // 
+            this.btnEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnEdit.Location = new System.Drawing.Point(104, 113);
+            this.btnEdit.Name = "btnEdit";
+            this.btnEdit.Size = new System.Drawing.Size(85, 23);
+            this.btnEdit.TabIndex = 7;
+            this.btnEdit.Text = "Editar";
+            this.btnEdit.UseVisualStyleBackColor = true;
+            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
+            // 
+            // Variables
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(205, 269);
+            this.Controls.Add(this.btnEdit);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -128,7 +141,7 @@
             this.Controls.Add(this.txtVariableValue);
             this.Controls.Add(this.variableList);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-            this.Name = "Main";
+            this.Name = "Variables";
             this.Text = "Variáveis";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -145,6 +158,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnEdit;
     }
 }
 

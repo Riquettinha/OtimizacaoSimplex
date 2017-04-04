@@ -22,8 +22,8 @@ F:\Git Isabella\OtimizacaoSimplex\OSC\bin\Debug\OSC.exe
 F:\Git Isabella\OtimizacaoSimplex\OSC\bin\Debug\OSC.pdb
 F:\Git Isabella\OtimizacaoSimplex\OSC\obj\Debug\OSC.csprojResolveAssemblyReference.cache
 F:\Git Isabella\OtimizacaoSimplex\OSC\obj\Debug\OSC.Function.resources
-F:\Git Isabella\OtimizacaoSimplex\OSC\obj\Debug\OSC.Main.resources
 F:\Git Isabella\OtimizacaoSimplex\OSC\obj\Debug\OSC.Properties.Resources.resources
 F:\Git Isabella\OtimizacaoSimplex\OSC\obj\Debug\OSC.csproj.GenerateResource.Cache
 F:\Git Isabella\OtimizacaoSimplex\OSC\obj\Debug\OSC.exe
 F:\Git Isabella\OtimizacaoSimplex\OSC\obj\Debug\OSC.pdb
+F:\Git Isabella\OtimizacaoSimplex\OSC\obj\Debug\OSC.Variables.resources

@@ -4,10 +4,10 @@ using System.Windows.Forms;
 
 namespace OSC
 {
-    public partial class Main : Form
+    public partial class Variables : Form
     {
         List<VariableData> variables = new List<VariableData>();
-        public Main()
+        public Variables()
         {
             InitializeComponent();
         }
@@ -89,7 +89,12 @@ namespace OSC
             {
                 Helpers.ShowErrorMessage("O primeiro dígito do valor não pode ser um número!");
                 return false;
-            }            
+            }
+            if (Helpers.CheckForSpace(newValue))
+            {
+                Helpers.ShowErrorMessage("O valor não pode possuir espaços em branco.");
+                return false;
+            }
             if (Helpers.CheckForInvalidChars(newValue) || Helpers.CheckForInvalidChars(newDesc))
             {
                 Helpers.ShowErrorMessage("O valor ou descrição possuem caracteres inválidos, somente são permitidos letras e númros.");
@@ -97,6 +102,19 @@ namespace OSC
             }
 
             return true;
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            // Remove variable from list case possible.
+            if (variableList.Items.Count != 0)
+            {
+                var variableValue = variableList.Items[variableList.SelectedIndex].ToString();
+                txtVariableValue.Text = variableValue.Split('-')[0].Trim();
+                txtVariableDesc.Text = variableValue.Split('-')[1].Trim();
+            }
+            else
+                Helpers.ShowErrorMessage("Impossível editar valor de lista vazia!");
         }
     }
 }

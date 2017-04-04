@@ -46,11 +46,14 @@ namespace OSC
             }
         }
 
+        /// <summary>
+        /// Checks if string contains invalid characters.
+        /// </summary>
         public static bool CheckForInvalidChars(string value)
         {
             for (int i = 0; i < value.Length; i++)
             {
-                if(!Char.IsLetter(value[i]) && !Char.IsNumber(value[i]))
+                if(!char.IsLetter(value[i]) && !char.IsNumber(value[i]) && value[i] != ' ')
                 {
                     return true;
                 }
@@ -59,9 +62,20 @@ namespace OSC
             return false;
         }
 
+        /// <summary>
+        /// Show message box with warning icon.
+        /// </summary>
         public static void ShowErrorMessage(string message)
         {
             MessageBox.Show(message, "Atenção!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        /// <summary>
+        /// Check if string contains black space.
+        /// </summary>
+        public static bool CheckForSpace(string text)
+        {
+            return text.Contains(" ");
         }
     }
 }
