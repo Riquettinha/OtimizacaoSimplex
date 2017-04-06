@@ -1,23 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace OSC
 {
     public partial class Function : Form
     {
-        List<VariableData> variables = new List<VariableData>();
+        readonly List<VariableData> _problemaVariables = new List<VariableData>();
 
-        public Function(List<VariableData> variables)
+        public Function(List<VariableData> problemaVariables)
         {
             InitializeComponent();
-            this.variables = variables;
+            _problemaVariables = problemaVariables;
+        }
+
+        private void Function_Load(object sender, EventArgs e)
+        {
+            // Load the variables controls.
+            int locationX = 12;
+            for (int i = 0; i < _problemaVariables.Count; i++)
+            {
+                AddNewVariableTextBoxAndLabel(i, ref locationX);
+                AddPlusLabel(i, ref locationX);
+            }
         }
 
         private void AddNewVariableTextBoxAndLabel(int index, ref int locationX)
@@ -25,7 +31,7 @@ namespace OSC
             var txtVar = new TextBox
             {
                 Name = "txtVar" + index,
-                Location = new Point(locationX, 38),
+                Location = new Point(locationX, 41),
                 Size = new Size(60, 20)
             };
 
@@ -35,21 +41,21 @@ namespace OSC
             var lbVar = new Label
             {
                 Name = "lbVar" + index,
-                Location = new Point(locationX, 40),
-                Size = TextRenderer.MeasureText(variables[index].Value, Font),
-                Text = variables[index].Value,
+                Location = new Point(locationX, 43),
+                Size = TextRenderer.MeasureText(_problemaVariables[index].Value, Font),
+                Text = _problemaVariables[index].Value,
                 BackColor = Color.Transparent
             };
             
             Controls.Add(lbVar);
-            locationX += TextRenderer.MeasureText(variables[index].Value, Font).Width-1;
+            locationX += TextRenderer.MeasureText(_problemaVariables[index].Value, Font).Width-1;
         }
 
         private void AddPlusLabel(int index, ref int locationX)
         {
             var plus = new Label
             {
-                Location = new Point(locationX, 40),
+                Location = new Point(locationX, 43),
                 Size = TextRenderer.MeasureText("+", Font),
                 Text = @"+",
                 BackColor = Color.Transparent,
@@ -57,7 +63,7 @@ namespace OSC
                 Font = new Font(Font.FontFamily, Font.Size, FontStyle.Bold)
             };
         
-            if (index + 1 < variables.Count)
+            if (index + 1 < _problemaVariables.Count)
             {
                 Controls.Add(plus);
                 locationX += TextRenderer.MeasureText("+", Font).Width;
@@ -69,24 +75,15 @@ namespace OSC
             }
         }
 
-        private void Function_Load(object sender, EventArgs e)
+        private void btnNext_Click(object sender, EventArgs e)
         {
-            int locationX = 12;
-            for (int i = 0; i < variables.Count; i++)
-            {
-                AddNewVariableTextBoxAndLabel(i, ref locationX);
-                AddPlusLabel(i, ref locationX);
-            }
+
         }
 
         private void Function_FormClosing(object sender, FormClosingEventArgs e)
         {
+            // Close the entire project.
             Environment.Exit(0);
-        }
-
-        private void btnNext_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

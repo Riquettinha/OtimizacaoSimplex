@@ -35,7 +35,7 @@
             this.btnAddVariable = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnNext = new System.Windows.Forms.Button();
             this.btnEdit = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -48,6 +48,7 @@
             this.variableList.Name = "variableList";
             this.variableList.Size = new System.Drawing.Size(206, 116);
             this.variableList.TabIndex = 0;
+            this.variableList.SelectedIndexChanged += new System.EventHandler(this.variableList_SelectedIndexChanged);
             // 
             // txtVariableValue
             // 
@@ -59,6 +60,7 @@
             // 
             // btnRemoveVariable
             // 
+            this.btnRemoveVariable.Enabled = false;
             this.btnRemoveVariable.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRemoveVariable.Location = new System.Drawing.Point(14, 139);
             this.btnRemoveVariable.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -108,22 +110,24 @@
             this.label2.TabIndex = 6;
             this.label2.Text = "Descrição:";
             // 
-            // button1
+            // btnNext
             // 
-            this.button1.FlatAppearance.BorderSize = 2;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(14, 274);
-            this.button1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(206, 47);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Próximo Passo";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.btnNext);
+            this.btnNext.Enabled = false;
+            this.btnNext.FlatAppearance.BorderSize = 2;
+            this.btnNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnNext.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNext.Location = new System.Drawing.Point(14, 274);
+            this.btnNext.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnNext.Name = "btnNext";
+            this.btnNext.Size = new System.Drawing.Size(206, 47);
+            this.btnNext.TabIndex = 5;
+            this.btnNext.Text = "Próximo Passo";
+            this.btnNext.UseVisualStyleBackColor = true;
+            this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
             // 
             // btnEdit
             // 
+            this.btnEdit.Enabled = false;
             this.btnEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnEdit.Location = new System.Drawing.Point(121, 139);
             this.btnEdit.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -143,7 +147,7 @@
             this.Controls.Add(this.txtVariableValue);
             this.Controls.Add(this.txtVariableDesc);
             this.Controls.Add(this.btnEdit);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnNext);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnAddVariable);
@@ -152,7 +156,12 @@
             this.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(255, 370);
+            this.MinimumSize = new System.Drawing.Size(255, 370);
             this.Name = "Variables";
+            this.ShowIcon = false;
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Variáveis";
             this.ResumeLayout(false);
@@ -169,7 +178,7 @@
         private System.Windows.Forms.Button btnAddVariable;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.Button btnEdit;
     }
 }

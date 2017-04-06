@@ -68,7 +68,7 @@
             this.btnNext.FlatAppearance.BorderSize = 2;
             this.btnNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNext.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNext.Location = new System.Drawing.Point(14, 79);
+            this.btnNext.Location = new System.Drawing.Point(14, 74);
             this.btnNext.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnNext.Name = "btnNext";
             this.btnNext.Size = new System.Drawing.Size(243, 47);
@@ -94,7 +94,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(272, 140);
+            this.ClientSize = new System.Drawing.Size(272, 135);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.btnNext);
             this.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
