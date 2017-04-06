@@ -77,5 +77,13 @@ namespace OSC
         {
             return text.Contains(" ");
         }
+
+        /// <summary>
+        /// Convert the value to a decimal value.
+        /// </summary>
+        public static decimal ConvertToDecimal(this string text)
+        {
+            return Convert.ToDecimal(text.Replace('.', ',').Trim());
+        }
     }
 }

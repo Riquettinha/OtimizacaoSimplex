@@ -28,38 +28,40 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.maxValue = new System.Windows.Forms.RadioButton();
-            this.minValue = new System.Windows.Forms.RadioButton();
+            this.rdMaxValue = new System.Windows.Forms.RadioButton();
+            this.rdMinValue = new System.Windows.Forms.RadioButton();
             this.btnNext = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // maxValue
+            // rdMaxValue
             // 
-            this.maxValue.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.maxValue.AutoSize = true;
-            this.maxValue.Location = new System.Drawing.Point(125, 4);
-            this.maxValue.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.maxValue.Name = "maxValue";
-            this.maxValue.Size = new System.Drawing.Size(119, 20);
-            this.maxValue.TabIndex = 0;
-            this.maxValue.TabStop = true;
-            this.maxValue.Text = "Maximizar Valor";
-            this.maxValue.UseVisualStyleBackColor = true;
+            this.rdMaxValue.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.rdMaxValue.AutoSize = true;
+            this.rdMaxValue.Location = new System.Drawing.Point(125, 4);
+            this.rdMaxValue.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.rdMaxValue.Name = "rdMaxValue";
+            this.rdMaxValue.Size = new System.Drawing.Size(119, 20);
+            this.rdMaxValue.TabIndex = 0;
+            this.rdMaxValue.TabStop = true;
+            this.rdMaxValue.Text = "Maximizar Valor";
+            this.rdMaxValue.UseVisualStyleBackColor = true;
+            this.rdMaxValue.CheckedChanged += new System.EventHandler(this.rd_CheckedChanged);
             // 
-            // minValue
+            // rdMinValue
             // 
-            this.minValue.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.minValue.AutoSize = true;
-            this.minValue.Location = new System.Drawing.Point(4, 4);
-            this.minValue.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.minValue.Name = "minValue";
-            this.minValue.Size = new System.Drawing.Size(115, 20);
-            this.minValue.TabIndex = 1;
-            this.minValue.TabStop = true;
-            this.minValue.Text = "Minimizar Valor";
-            this.minValue.UseVisualStyleBackColor = true;
+            this.rdMinValue.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.rdMinValue.AutoSize = true;
+            this.rdMinValue.Location = new System.Drawing.Point(4, 4);
+            this.rdMinValue.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.rdMinValue.Name = "rdMinValue";
+            this.rdMinValue.Size = new System.Drawing.Size(115, 20);
+            this.rdMinValue.TabIndex = 1;
+            this.rdMinValue.TabStop = true;
+            this.rdMinValue.Text = "Minimizar Valor";
+            this.rdMinValue.UseVisualStyleBackColor = true;
+            this.rdMinValue.CheckedChanged += new System.EventHandler(this.rd_CheckedChanged);
             // 
             // btnNext
             // 
@@ -81,8 +83,8 @@
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.Controls.Add(this.minValue);
-            this.panel1.Controls.Add(this.maxValue);
+            this.panel1.Controls.Add(this.rdMinValue);
+            this.panel1.Controls.Add(this.rdMaxValue);
             this.panel1.Location = new System.Drawing.Point(14, 9);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel1.Name = "panel1";
@@ -113,8 +115,8 @@
 
         #endregion
 
-        private System.Windows.Forms.RadioButton maxValue;
-        private System.Windows.Forms.RadioButton minValue;
+        private System.Windows.Forms.RadioButton rdMaxValue;
+        private System.Windows.Forms.RadioButton rdMinValue;
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.Panel panel1;
     }

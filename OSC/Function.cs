@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 
 namespace OSC
@@ -26,6 +28,84 @@ namespace OSC
             }
         }
 
+        private void txtVar_TextChanged(object sender, EventArgs e)
+        {
+            if (CheckIfAllTextAreFilled() && rdMinValue.Checked || rdMaxValue.Checked)
+                btnNext.Enabled = true;
+            else
+                btnNext.Enabled = false;
+        }
+
+        private void txtVar_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != ',')
+            {
+                e.Handled = true;
+            }
+            else if (e.KeyChar == ',' && (sender as TextBox).Text.ToCharArray().Any(p => p == ','))
+            {
+                e.Handled = true;
+            }
+            else if (!char.IsControl(e.KeyChar) && !CheckIfIsAValidDecimal(((TextBox) sender).Text + e.KeyChar))
+            {
+                Helpers.ShowErrorMessage("Valor inserido inválido.");
+                e.Handled = true;
+            }
+        }
+
+        private void btnNext_Click(object sender, EventArgs e)
+        {
+            if (CheckIfAllTextAreFilled() && rdMinValue.Checked || rdMaxValue.Checked)
+            {
+                for (int i = 0; i < _problemaVariables.Count; i++)
+                {
+                    var functionValue = Convert.ToDecimal(Controls["txtVar" + i].Text);
+                    _problemaVariables[i].FunctionValue = functionValue;
+
+                }
+
+                var functionData = new FunctionData
+                {
+                    Maximiza = rdMaxValue.Checked,
+                    Variables = _problemaVariables
+                };
+            }
+        }
+
+        private void rd_CheckedChanged(object sender, EventArgs e)
+        {
+            if (CheckIfAllTextAreFilled() && rdMinValue.Checked || rdMaxValue.Checked)
+                btnNext.Enabled = true;
+            else
+                btnNext.Enabled = false;
+        }
+
+        private bool CheckIfAllTextAreFilled()
+        {
+            foreach (Control control in Controls)
+            {
+                if (control.GetType() == typeof(TextBox))
+                {
+                    if (((TextBox)control).Text.Length == 0)
+                        return false;
+                }
+            }
+            return true;
+        }
+
+        public bool CheckIfIsAValidDecimal(string value)
+        {
+            try
+            {
+                var aux = value.ConvertToDecimal();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         private void AddNewVariableTextBoxAndLabel(int index, ref int locationX)
         {
             var txtVar = new TextBox
@@ -34,10 +114,13 @@ namespace OSC
                 Location = new Point(locationX, 41),
                 Size = new Size(60, 20)
             };
+            // Validate the input
+            txtVar.KeyPress += txtVar_KeyPress;
+            txtVar.TextChanged += txtVar_TextChanged;
 
             Controls.Add(txtVar);
             locationX += 60;
-            
+
             var lbVar = new Label
             {
                 Name = "lbVar" + index,
@@ -46,9 +129,9 @@ namespace OSC
                 Text = _problemaVariables[index].Value,
                 BackColor = Color.Transparent
             };
-            
+
             Controls.Add(lbVar);
-            locationX += TextRenderer.MeasureText(_problemaVariables[index].Value, Font).Width-1;
+            locationX += TextRenderer.MeasureText(_problemaVariables[index].Value, Font).Width - 1;
         }
 
         private void AddPlusLabel(int index, ref int locationX)
@@ -62,7 +145,7 @@ namespace OSC
                 ForeColor = Color.FromArgb(45, 55, 175),
                 Font = new Font(Font.FontFamily, Font.Size, FontStyle.Bold)
             };
-        
+
             if (index + 1 < _problemaVariables.Count)
             {
                 Controls.Add(plus);
@@ -73,11 +156,6 @@ namespace OSC
                 if (locationX > Size.Width)
                     Size = new Size(locationX + 30, Size.Height);
             }
-        }
-
-        private void btnNext_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void Function_FormClosing(object sender, FormClosingEventArgs e)

@@ -51,6 +51,7 @@
     <Compile Include="Function.Designer.cs">
       <DependentUpon>Function.cs</DependentUpon>
     </Compile>
+    <Compile Include="FunctionData.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Variables.cs">
       <SubType>Form</SubType>
