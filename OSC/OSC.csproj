@@ -53,6 +53,14 @@
     </Compile>
     <Compile Include="FunctionData.cs" />
     <Compile Include="Helpers.cs" />
+    <Compile Include="Restriction.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Restriction.Designer.cs">
+      <DependentUpon>Restriction.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RestrictionData.cs" />
+    <Compile Include="RestrictionFunctionData.cs" />
     <Compile Include="Variables.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -64,6 +72,9 @@
     <Compile Include="VariableData.cs" />
     <EmbeddedResource Include="Function.resx">
       <DependentUpon>Function.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Restriction.resx">
+      <DependentUpon>Restriction.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Variables.resx">
       <DependentUpon>Variables.cs</DependentUpon>

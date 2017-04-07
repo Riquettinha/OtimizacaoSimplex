@@ -37,3 +37,4 @@ C:\Users\isabella.riquetti\Documents\Visual Studio 2015\Projects\Git Faculdade\O
 C:\Users\isabella.riquetti\Documents\Visual Studio 2015\Projects\Git Faculdade\OtimizacaoSimplex\OSC\obj\Debug\OSC.Variables.resources
 C:\Users\isabella.riquetti\Documents\Visual Studio 2015\Projects\Git Faculdade\OtimizacaoSimplex\OSC\obj\Debug\OSC.Properties.Resources.resources
 C:\Users\isabella.riquetti\Documents\Visual Studio 2015\Projects\Git Faculdade\OtimizacaoSimplex\OSC\obj\Debug\OSC.csproj.GenerateResource.Cache
+C:\Users\isabella.riquetti\Documents\Visual Studio 2015\Projects\Git Faculdade\OtimizacaoSimplex\OSC\obj\Debug\OSC.Restriction.resources
