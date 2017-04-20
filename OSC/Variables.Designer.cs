@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Variables));
             this.variableList = new System.Windows.Forms.ListBox();
             this.txtVariableValue = new System.Windows.Forms.TextBox();
             this.btnRemoveVariable = new System.Windows.Forms.Button();
@@ -119,7 +120,7 @@
             this.btnNext.Location = new System.Drawing.Point(14, 274);
             this.btnNext.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnNext.Name = "btnNext";
-            this.btnNext.Size = new System.Drawing.Size(206, 47);
+            this.btnNext.Size = new System.Drawing.Size(206, 32);
             this.btnNext.TabIndex = 5;
             this.btnNext.Text = "Próximo Passo";
             this.btnNext.UseVisualStyleBackColor = true;
@@ -155,15 +156,16 @@
             this.Controls.Add(this.variableList);
             this.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(255, 370);
             this.MinimumSize = new System.Drawing.Size(255, 370);
             this.Name = "Variables";
-            this.ShowIcon = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Variáveis";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Variables_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

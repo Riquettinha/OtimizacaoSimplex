@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace OSC
@@ -39,12 +40,15 @@ namespace OSC
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            // Edit variable from list case possible.
+            // Case possible, remove from list and load the previous value
             if (variableList.SelectedIndex > -1)
             {
                 var variableValue = variableList.Items[variableList.SelectedIndex].ToString();
                 txtVariableValue.Text = variableValue.Split('-')[0].Trim();
                 txtVariableDesc.Text = variableValue.Split('-')[1].Trim();
+
+                _problemVariables.RemoveAt(variableList.SelectedIndex);
+                variableList.Items.RemoveAt(variableList.SelectedIndex);
             }
             else
                 Helpers.ShowErrorMessage("Impossível editar valor de lista vazia!");
@@ -55,7 +59,9 @@ namespace OSC
             // Remove variable from list case possible.
             if (variableList.SelectedIndex > -1)
             {
+                _problemVariables.RemoveAt(variableList.SelectedIndex);
                 variableList.Items.RemoveAt(variableList.SelectedIndex);
+
                 if (variableList.Items.Count == 0)
                 {
                     // Disable edit and remove buttons case empty variableList.
@@ -81,7 +87,7 @@ namespace OSC
             else
             {
                 var function = new Function(_problemVariables);
-                function.ShowDialog();
+                function.Show();
 
                 Hide();
             }
@@ -145,6 +151,20 @@ namespace OSC
             {
                 btnRemoveVariable.Enabled = false;
                 btnEdit.Enabled = false;
+            }
+        }
+
+        private void Variables_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (_problemVariables.Count > 0)
+            {
+                var userDecision =
+                    MessageBox.Show(@"O cálculo ainda não foi finalizado, deseja fechar o programa mesmo assim?",
+                        @"Atenção!", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                if (userDecision == DialogResult.No)
+                {
+                    e.Cancel = true;
+                }
             }
         }
     }

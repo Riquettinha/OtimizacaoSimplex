@@ -10,8 +10,7 @@ namespace OSC
         [Description("Maior ou igual a")]
         MoreThan = 0,
         [Description("Igual a")]
-        EqualTo = 0,
-
+        EqualTo = 0
     }
 
     public class RestrictionFunctionData

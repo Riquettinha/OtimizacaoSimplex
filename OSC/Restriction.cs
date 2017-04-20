@@ -13,6 +13,7 @@ namespace OSC
     public partial class Restriction : Form
     {
         readonly List<VariableData> _problemaVariables = new List<VariableData>();
+
         public Restriction(FunctionData functionData)
         {
             InitializeComponent();
@@ -27,6 +28,7 @@ namespace OSC
                 AddNewVariableTextBoxAndLabel(i, ref locationX);
                 AddPlusLabel(i, ref locationX);
             }
+            AddCondictionComboBoxAndTextBox(locationX);
         }
 
         private void AddNewVariableTextBoxAndLabel(int index, ref int locationX)
@@ -34,7 +36,7 @@ namespace OSC
             var txtVar = new TextBox
             {
                 Name = "txtVar" + index,
-                Location = new Point(locationX, 41),
+                Location = new Point(locationX, 173),
                 Size = new Size(60, 20)
             };
             // Validate the input
@@ -47,7 +49,7 @@ namespace OSC
             var lbVar = new Label
             {
                 Name = "lbVar" + index,
-                Location = new Point(locationX, 173),
+                Location = new Point(locationX, 175),
                 Size = TextRenderer.MeasureText(_problemaVariables[index].Value, Font),
                 Text = _problemaVariables[index].Value,
                 BackColor = Color.Transparent
@@ -78,6 +80,45 @@ namespace OSC
             {
                 if (locationX > Size.Width)
                     Size = new Size(locationX + 173, Size.Height);
+                locationX += 10;
+            }
+        }
+
+        private void AddCondictionComboBoxAndTextBox(int locationX)
+        {
+            var condiction = new ComboBox
+            {
+                Location = new Point(locationX, 173),
+                Size = new Size(30, 20),
+                ForeColor = Color.FromArgb(45, 55, 175),
+                Font = new Font(Font.FontFamily, Font.Size, FontStyle.Bold)
+            };
+
+            condiction.Items.Add(RestrictionType.LessThan);
+            condiction.Items.Add(RestrictionType.MoreThan);
+            condiction.Items.Add(RestrictionType.EqualTo);
+
+            condiction.SelectedIndexChanged += condiction_SelectedIndexChanged;
+            Controls.Add(condiction);
+
+            var txtVar = new TextBox
+            {
+                Name = "txtCond",
+                Location = new Point(locationX, 173),
+                Size = new Size(60, 20)
+            };
+            // Validate the input
+            txtVar.KeyPress += txtVar_KeyPress;
+            txtVar.TextChanged += txtVar_TextChanged;
+
+            Controls.Add(txtVar);
+        }
+
+        private void condiction_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (CheckIfAllTextAreFilled())
+            {
+                
             }
         }
 
@@ -120,13 +161,57 @@ namespace OSC
         {
             try
             {
-                var aux = value.ConvertToDecimal();
+                // Testa se é possível converter para decimal
+                value.ConvertToDecimal();
                 return true;
             }
             catch (Exception)
             {
                 return false;
             }
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            var userDecision =
+                MessageBox.Show(@"Se você voltar para tela anterior perderá todas as alterações "
+                + @"realizadas nesta tela, deseja voltar para tela anteiror mesmo assim?",
+                    @"Atenção!", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+            if (userDecision == DialogResult.Yes)
+            {
+                Application.OpenForms["Function"].Show();
+                Hide();
+            }
+        }
+
+        private void btnNext_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Restriction_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            var userDecision =
+                MessageBox.Show(@"O cálculo ainda não foi finalizado, deseja fechar o programa mesmo assim?",
+                    @"Atenção!", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+            if (userDecision == DialogResult.No)
+            {
+                e.Cancel = true;
+            }
+            else
+            {
+                Environment.Exit(0);
+            }
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+           
         }
     }
 }

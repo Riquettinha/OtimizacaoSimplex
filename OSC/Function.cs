@@ -30,7 +30,7 @@ namespace OSC
 
         private void txtVar_TextChanged(object sender, EventArgs e)
         {
-            if (CheckIfAllTextAreFilled() && rdMinValue.Checked || rdMaxValue.Checked)
+            if (CheckIfAllTextAreFilled() && (rdMinValue.Checked || rdMaxValue.Checked))
                 btnNext.Enabled = true;
             else
                 btnNext.Enabled = false;
@@ -69,12 +69,20 @@ namespace OSC
                     Maximiza = rdMaxValue.Checked,
                     Variables = _problemaVariables
                 };
+
+                var restrictions = new Restriction(functionData);
+                restrictions.Show();
+                Hide();
+            }
+            else
+            {
+                MessageBox.Show(@"Para prosseguir preencha todos os dados necessários.", @"Atenção!");
             }
         }
 
         private void rd_CheckedChanged(object sender, EventArgs e)
         {
-            if (CheckIfAllTextAreFilled() && rdMinValue.Checked || rdMaxValue.Checked)
+            if (CheckIfAllTextAreFilled() && (rdMinValue.Checked || rdMaxValue.Checked))
                 btnNext.Enabled = true;
             else
                 btnNext.Enabled = false;
@@ -160,8 +168,30 @@ namespace OSC
 
         private void Function_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // Close the entire project.
-            Environment.Exit(0);
+            var userDecision =
+                MessageBox.Show(@"O cálculo ainda não foi finalizado, deseja fechar o programa mesmo assim?",
+                    @"Atenção!", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+            if (userDecision == DialogResult.No)
+            {
+                e.Cancel = true;
+            }
+            else
+            {
+                Environment.Exit(0);
+            }
+        }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            var userDecision =
+                MessageBox.Show(@"Se você voltar para tela anterior perderá todas as alterações "
+                + @"realizadas nesta tela, deseja voltar para tela anteiror mesmo assim?",
+                    @"Atenção!", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+            if (userDecision == DialogResult.Yes)
+            {
+                Application.OpenForms["Variables"].Show();
+                Hide();
+            }
         }
     }
 }
