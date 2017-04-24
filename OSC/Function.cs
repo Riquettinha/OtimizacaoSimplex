@@ -24,7 +24,7 @@ namespace OSC
             for (int i = 0; i < _problemaVariables.Count; i++)
             {
                 AddNewVariableTextBoxAndLabel(i, ref locationX);
-                AddPlusLabel(i, ref locationX);
+                AddPlusLabelOrResizeForm(i, ref locationX);
             }
         }
 
@@ -142,26 +142,29 @@ namespace OSC
             locationX += TextRenderer.MeasureText(_problemaVariables[index].Value, Font).Width - 1;
         }
 
-        private void AddPlusLabel(int index, ref int locationX)
+        private void AddPlusLabelOrResizeForm(int index, ref int locationX)
         {
-            var plus = new Label
-            {
-                Location = new Point(locationX, 43),
-                Size = TextRenderer.MeasureText("+", Font),
-                Text = @"+",
-                BackColor = Color.Transparent,
-                ForeColor = Color.FromArgb(45, 55, 175),
-                Font = new Font(Font.FontFamily, Font.Size, FontStyle.Bold)
-            };
-
             if (index + 1 < _problemaVariables.Count)
             {
+                // Add plus label
+
+                var plus = new Label
+                {
+                    Location = new Point(locationX, 43),
+                    Size = TextRenderer.MeasureText("+", Font),
+                    Text = @"+",
+                    BackColor = Color.Transparent,
+                    ForeColor = Color.FromArgb(45, 55, 175),
+                    Font = new Font(Font.FontFamily, Font.Size, FontStyle.Bold)
+                };
+
                 Controls.Add(plus);
                 locationX += TextRenderer.MeasureText("+", Font).Width;
             }
             else
             {
-                if (locationX > Size.Width)
+                // Resize form
+                if (locationX > (Size.Width + 30))
                     Size = new Size(locationX + 30, Size.Height);
             }
         }

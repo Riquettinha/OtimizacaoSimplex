@@ -2,7 +2,7 @@
 {
     public class RestrictionData
     {
-        public decimal RetrictionValue { get; set; }
+        public decimal RestrictionValue { get; set; }
         public VariableData RestrictionVariable { get; set; }
     }
 }

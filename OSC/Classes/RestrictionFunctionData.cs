@@ -8,9 +8,9 @@ namespace OSC
         [Description("Menor ou igual a")]
         LessThan = 0,
         [Description("Maior ou igual a")]
-        MoreThan = 0,
+        MoreThan = 1,
         [Description("Igual a")]
-        EqualTo = 0
+        EqualTo = 2
     }
 
     public class RestrictionFunctionData

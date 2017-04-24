@@ -45,22 +45,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\ComboBoxItem.cs" />
     <Compile Include="Function.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Function.Designer.cs">
       <DependentUpon>Function.cs</DependentUpon>
     </Compile>
-    <Compile Include="FunctionData.cs" />
-    <Compile Include="Helpers.cs" />
+    <Compile Include="Classes\FunctionData.cs" />
+    <Compile Include="Classes\Helpers.cs" />
     <Compile Include="Restriction.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Restriction.Designer.cs">
       <DependentUpon>Restriction.cs</DependentUpon>
     </Compile>
-    <Compile Include="RestrictionData.cs" />
-    <Compile Include="RestrictionFunctionData.cs" />
+    <Compile Include="Classes\RestrictionData.cs" />
+    <Compile Include="Classes\RestrictionFunctionData.cs" />
     <Compile Include="Variables.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -69,7 +70,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VariableData.cs" />
+    <Compile Include="Classes\VariableData.cs" />
     <EmbeddedResource Include="Function.resx">
       <DependentUpon>Function.cs</DependentUpon>
     </EmbeddedResource>

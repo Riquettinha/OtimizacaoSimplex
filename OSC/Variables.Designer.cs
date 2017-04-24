@@ -144,7 +144,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(239, 331);
+            this.ClientSize = new System.Drawing.Size(239, 316);
             this.Controls.Add(this.txtVariableValue);
             this.Controls.Add(this.txtVariableDesc);
             this.Controls.Add(this.btnEdit);
@@ -159,8 +159,8 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(255, 370);
-            this.MinimumSize = new System.Drawing.Size(255, 370);
+            this.MaximumSize = new System.Drawing.Size(255, 355);
+            this.MinimumSize = new System.Drawing.Size(255, 355);
             this.Name = "Variables";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
