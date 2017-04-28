@@ -62,6 +62,24 @@ namespace OSC
             UpdateButtonsEnableStatus();
         }
 
+        private void txtVar_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Valida se o valor preenchido é um decimal válido (apenas números e uma única vírgula)
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != ',')
+            {
+                e.Handled = true;
+            }
+            else if (e.KeyChar == ',' && (sender as TextBox).Text.ToCharArray().Any(p => p == ','))
+            {
+                e.Handled = true;
+            }
+            else if (!char.IsControl(e.KeyChar) && !Helpers.CheckIfIsAValidDecimal(((TextBox)sender).Text + e.KeyChar))
+            {
+                Helpers.ShowErrorMessage("Valor inserido inválido.");
+                e.Handled = true;
+            }
+        }
+
         private void rd_CheckedChanged(object sender, EventArgs e)
         {
             UpdateButtonsEnableStatus();
@@ -126,24 +144,6 @@ namespace OSC
                 // Resize form
                 if (locationX + 30 > Size.Width)
                     Size = new Size(locationX + 26, Size.Height);
-            }
-        }
-
-        private void txtVar_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            // Valida se o valor preenchido é um decimal válido (apenas números e uma única vírgula)
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != ',')
-            {
-                e.Handled = true;
-            }
-            else if (e.KeyChar == ',' && (sender as TextBox).Text.ToCharArray().Any(p => p == ','))
-            {
-                e.Handled = true;
-            }
-            else if (!char.IsControl(e.KeyChar) && !Helpers.CheckIfIsAValidDecimal(((TextBox)sender).Text + e.KeyChar))
-            {
-                Helpers.ShowErrorMessage("Valor inserido inválido.");
-                e.Handled = true;
             }
         }
     }

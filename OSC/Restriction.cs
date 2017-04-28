@@ -26,6 +26,85 @@ namespace OSC
             LoadExtraFields();
         }
 
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            if (CheckEveryThingIsFilled())
+            {
+                var newRestr = CreateRestrictionObject();
+                if (CheckIfIsNewRestriction(newRestr))
+                {
+                    restrictionList.Items.Add(CreateRestrictionString(newRestr));
+                    _problemRestrictions.Add(newRestr);
+                }
+                else
+                {
+                    Helpers.ShowErrorMessage(
+                    "Já existe uma restrição com estes mesmos dados!");
+                }
+            }
+            else
+            {
+                Helpers.ShowErrorMessage(
+                    "Para adicionar uma função de restrição é necessário que todos os valores e o tipo de restrição sejam preenchidos.");
+            }
+        }
+
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            _problemRestrictions.RemoveAt(restrictionList.SelectedIndex);
+            restrictionList.Items.RemoveAt(restrictionList.SelectedIndex);
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            var restriction = _problemRestrictions[restrictionList.SelectedIndex];
+            for (int i = 0; i < restriction.RestrictionData.Count; i++)
+                Controls["txtVar" + i].Text = restriction.RestrictionData[i].RestrictionValue.ToString();
+
+            Controls["txtCond"].Text = restriction.RestrictionValue.ToString();
+            (Controls["cbCondiction"] as ComboBox).SelectedValue = restriction.RestrictionType;
+
+            _problemRestrictions.RemoveAt(restrictionList.SelectedIndex);
+            restrictionList.Items.RemoveAt(restrictionList.SelectedIndex);
+        }
+
+        private void txtVar_TextChanged(object sender, EventArgs e)
+        {
+            FillComboBoxItems(Controls["cbCondiction"] as ComboBox);
+            btnAdd.Enabled = CheckEveryThingIsFilled();
+        }
+
+        private void txtVar_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != ',')
+            {
+                e.Handled = true;
+            }
+            else if (e.KeyChar == ',' && (sender as TextBox).Text.ToCharArray().Any(p => p == ','))
+            {
+                e.Handled = true;
+            }
+            else if (!char.IsControl(e.KeyChar) && !Helpers.CheckIfIsAValidDecimal(((TextBox)sender).Text + e.KeyChar))
+            {
+                Helpers.ShowErrorMessage("Valor inserido inválido.");
+                e.Handled = true;
+            }
+        }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            if (Helpers.BackForm())
+            {
+                Application.OpenForms["Function"].Show();
+                Hide();
+            }
+        }
+
+        private void btnNext_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void LoadExtraFields()
         {
             int locationX = 12;
@@ -99,8 +178,7 @@ namespace OSC
             };
 
             FillComboBoxItems(condiction);
-
-            condiction.SelectedIndexChanged += condiction_SelectedIndexChanged;
+            
             Controls.Add(condiction);
             locationX += 45;
 
@@ -125,26 +203,33 @@ namespace OSC
 
         private void FillComboBoxItems(ComboBox condiction)
         {
-            var cbSource = new List<ComboBoxItem>
+            var cbSource = new List<ComboBoxItem>();
+            if(SingleTextBoxFilled())
             {
-                new ComboBoxItem
+                cbSource.Add(new ComboBoxItem
                 {
-                    Text = GetRestrictionString(RestrictionType.LessThan),
-                    Value = RestrictionType.LessThan
-                },
-                new ComboBoxItem
-                {
-                    Text = GetRestrictionString(RestrictionType.MoreThan),
+                    Text = GetRestrictionString(RestrictionType.EqualTo),
                     Value = RestrictionType.MoreThan
-                }
-            };
+                });
+            }
+
+            cbSource.Add(new ComboBoxItem
+            {
+                Text = GetRestrictionString(RestrictionType.LessThan),
+                Value = RestrictionType.LessThan
+            });
+            cbSource.Add(new ComboBoxItem
+            {
+                Text = GetRestrictionString(RestrictionType.MoreThan),
+                Value = RestrictionType.MoreThan
+            });
             condiction.DataSource = cbSource;
             condiction.DisplayMember = "Text";
             condiction.ValueMember = "Value";
-            condiction.SelectedValue = RestrictionType.MoreThan;
+            condiction.SelectedValue = RestrictionType.LessThan;
         }
 
-        public void ResizeControls(int locationX)
+        private void ResizeControls(int locationX)
         {
             if (locationX + 30 > Size.Width)
             {
@@ -156,46 +241,6 @@ namespace OSC
                 btnEdit.Location = new Point(12, 139);
                 btnRemove.Size = new Size(btnRemove.Width + diff, btnRemove.Height);
                 btnRemove.Location = new Point(127 + diff, btnRemove.Location.Y);
-            }
-        }
-
-        private void condiction_SelectedIndexChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void txtVar_TextChanged(object sender, EventArgs e)
-        {
-            btnAdd.Enabled = CheckEveryThingIsFilled();
-        }
-
-        private void txtVar_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != ',')
-            {
-                e.Handled = true;
-            }
-            else if (e.KeyChar == ',' && (sender as TextBox).Text.ToCharArray().Any(p => p == ','))
-            {
-                e.Handled = true;
-            }
-            else if (!char.IsControl(e.KeyChar) && !CheckIfIsAValidDecimal(((TextBox)sender).Text + e.KeyChar))
-            {
-                Helpers.ShowErrorMessage("Valor inserido inválido.");
-                e.Handled = true;
-            }
-        }
-
-        public bool CheckIfIsAValidDecimal(string value)
-        {
-            try
-            {
-                // Testa se é possível converter para decimal
-                value.ConvertToDecimal();
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
             }
         }
 
@@ -215,7 +260,7 @@ namespace OSC
 
         private RestrictionFunctionData CreateRestrictionObject()
         {
-
+            // Transforma os valores preenchidos na tela em um objeto do tipo RestrictionFunctionData
             var listRestricitonData = new List<RestrictionData>();
             for (int i = 0; i < _problemVariables.Count; i++)
             {
@@ -246,48 +291,6 @@ namespace OSC
                 || e.RestrictionValue != newRestr.RestrictionValue);
         }
 
-        private void btnAdd_Click(object sender, EventArgs e)
-        {
-            if (CheckEveryThingIsFilled())
-            {
-                var newRestr = CreateRestrictionObject();
-                if (CheckIfIsNewRestriction(newRestr))
-                {
-                    restrictionList.Items.Add(CreateRestrictionString(newRestr));
-                    _problemRestrictions.Add(newRestr);
-                }
-                else
-                {
-                    Helpers.ShowErrorMessage(
-                    "Já existe uma restrição com estes mesmos dados!");
-                }
-            }
-            else
-            {
-                Helpers.ShowErrorMessage(
-                    "Para adicionar uma função de restrição é necessário que todos os valores e o tipo de restrição sejam preenchidos.");
-            }
-        }
-
-        private void btnEdit_Click(object sender, EventArgs e)
-        {
-            var restriction = _problemRestrictions[restrictionList.SelectedIndex];
-            for (int i = 0; i < restriction.RestrictionData.Count; i++)
-                Controls["txtVar" + i].Text = restriction.RestrictionData[i].RestrictionValue.ToString();
-
-            Controls["txtCond"].Text = restriction.RestrictionValue.ToString();
-            (Controls["cbCondiction"] as ComboBox).SelectedValue = restriction.RestrictionType;
-
-            _problemRestrictions.RemoveAt(restrictionList.SelectedIndex);
-            restrictionList.Items.RemoveAt(restrictionList.SelectedIndex);
-        }
-
-        private void btnRemove_Click(object sender, EventArgs e)
-        {
-            _problemRestrictions.RemoveAt(restrictionList.SelectedIndex);
-            restrictionList.Items.RemoveAt(restrictionList.SelectedIndex);
-        }
-
         private string GetRestrictionString(RestrictionType restType)
         {
             switch (restType)
@@ -303,44 +306,52 @@ namespace OSC
             }
         }
 
-        private void btnBack_Click(object sender, EventArgs e)
-        {
-            var userDecision =
-                MessageBox.Show(@"Se você voltar para tela anterior perderá todas as alterações "
-                + @"realizadas nesta tela, deseja voltar para tela anteiror mesmo assim?",
-                    @"Atenção!", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-            if (userDecision == DialogResult.Yes)
-            {
-                Application.OpenForms["Function"].Show();
-                Hide();
-            }
-        }
-
-        private void btnNext_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private bool CheckEveryThingIsFilled()
         {
-            foreach (Control control in Controls)
-            {
-                if (control.GetType() == typeof(TextBox))
-                {
-                    if (((TextBox)control).Text.Length == 0)
-                        return false;
-                }
-            }
-            if ((Controls["cbCondiction"] as ComboBox).SelectedIndex == -1)
+            if(!Helpers.CheckIfAllTextAreFilled(Controls) || (Controls["cbCondiction"] as ComboBox).SelectedIndex == -1)
                 return false;
 
             return true;
         }
 
+        private bool SingleTextBoxFilled()
+        {
+            int count = 0;
+            foreach (var control in Controls)
+                if (control.GetType() == typeof(TextBox))
+                    if (((TextBox)control).Text.Length > 0)
+                        count++;
+
+            if (count == 1)
+                return true;
+            return false;
+        }
+
         private void restrictionList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            btnEdit.Enabled = restrictionList.SelectedIndex != -1;
-            btnRemove.Enabled = restrictionList.SelectedIndex != -1;
+            UpdateButtonsEnableStatus();
+        }
+        
+        private void UpdateButtonsEnableStatus()
+        {
+            // Caso esvazie a lista de variáveis, desabilita botão para ir para o próximo passo
+            if (_problemRestrictions.Count == 0 || restrictionList.SelectedIndex == -1)
+            {
+                btnRemove.Enabled = false;
+                btnEdit.Enabled = false;
+            }
+            // Caso esteja selecionado na lista algum valor, habilita os botões
+            if (restrictionList.SelectedIndex != -1)
+            {
+                btnRemove.Enabled = true;
+                btnEdit.Enabled = true;
+            }
+
+            // Verifica se a lista de variáveis tem valores o suficiente para ir para o próximo passo
+            btnNext.Enabled = _problemRestrictions.Count >= 2;
+
+            // Verifica se é possível adicionar o valor a lista
+            btnAdd.Enabled = CheckEveryThingIsFilled() || SingleTextBoxFilled() && Controls["txtCond"].Text.Length > 0;
         }
     }
 }

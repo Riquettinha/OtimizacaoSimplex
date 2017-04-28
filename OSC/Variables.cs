@@ -101,14 +101,14 @@ namespace OSC
             // Caso esvazie a lista de variáveis, desabilita botão para ir para o próximo passo
             if (variableList.Items.Count == 0 || variableList.SelectedIndex == -1)
             {
-                btnRemoveVariable.Enabled = false;
+                btnRemove.Enabled = false;
                 btnEdit.Enabled = false;
             }
 
             // Caso esteja selecionado na lista algum valor, habilita os botões
             if (variableList.SelectedIndex != -1)
             {
-                btnRemoveVariable.Enabled = true;
+                btnRemove.Enabled = true;
                 btnEdit.Enabled = true;
             }
 
@@ -116,7 +116,7 @@ namespace OSC
             btnNext.Enabled = _problemVariables.Count >= 2;
 
             // Verifica se é possível adicionar o valor a lista
-            btnAddVariable.Enabled = txtVariableDesc.Text.Length != 0 && txtVariableDesc.Text.Length != 0;
+            btnAdd.Enabled = txtVariableDesc.Text.Length != 0 && txtVariableDesc.Text.Length != 0;
         }
 
         private bool CheckForDuplicatedValueInProblemVariableList(string newValue)
