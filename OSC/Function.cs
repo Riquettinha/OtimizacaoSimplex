@@ -1,79 +1,150 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using OSC.Classes;
 
 namespace OSC
 {
     public partial class Function : Form
     {
-        List<string> variables = new List<string>();
+        readonly List<VariableData> _problemaVariables;
 
-        public Function(List<string> variables)
+        public Function(List<VariableData> problemaVariables)
         {
             InitializeComponent();
-            this.variables = variables;
+            _problemaVariables = problemaVariables;
+            LoadExtraFields();
         }
 
-        private void Function_Load(object sender, EventArgs e)
+        private void LoadExtraFields()
         {
+            // Carrega uma textbox e uma label para cada variável e depois redefine tamanho da tela.
             int locationX = 12;
-            for (int i = 0; i < variables.Count; i++)
+            for (int i = 0; i < _problemaVariables.Count; i++)
             {
-                var txtVar = new TextBox
-                {
-                    Name = "txtVar" + i,
-                    Location = new Point(locationX, 35),
-                    Size = new Size(50, 20)
-                };
-                txtVar.BringToFront();
+                AddNewVariableTextBoxAndLabel(i, ref locationX);
+                AddPlusLabelOrResizeForm(i, ref locationX);
+            }
+        }
 
-                Controls.Add(txtVar);
-                locationX += 55;
+        private void btnNext_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < _problemaVariables.Count; i++)
+            {
+                var functionValue = Convert.ToDecimal(Controls["txtVar" + i].Text);
+                _problemaVariables[i].FunctionValue = functionValue;
+            }
 
-                var lbVar = new Label
-                {
-                    Name = "lbVar" + i,
-                    Location = new Point(locationX, 37),
-                    Size = TextRenderer.MeasureText(variables[i], Font),
-                    Text = variables[i]
-                };
+            var functionData = new FunctionData
+            {
+                Maximiza = rdMaxValue.Checked,
+                Variables = _problemaVariables
+            };
 
-                lbVar.BringToFront();
-                Controls.Add(lbVar);
-                locationX += TextRenderer.MeasureText(variables[i], Font).Width-1;
+            var restrictions = new Restriction(functionData);
+            restrictions.Show();
+            Hide();
+        }
+        
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            if (Helpers.BackForm())
+            {
+                Application.OpenForms["Variables"].Show();
+                Hide();
+            }
+        }
+
+        private void txtVar_TextChanged(object sender, EventArgs e)
+        {
+            UpdateButtonsEnableStatus();
+        }
+
+        private void txtVar_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Valida se o valor preenchido é um decimal válido (apenas números e uma única vírgula)
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != ',')
+            {
+                e.Handled = true;
+            }
+            else if (e.KeyChar == ',' && (sender as TextBox).Text.ToCharArray().Any(p => p == ','))
+            {
+                e.Handled = true;
+            }
+            else if (!char.IsControl(e.KeyChar) && !Helpers.CheckIfIsAValidDecimal(((TextBox)sender).Text + e.KeyChar))
+            {
+                Helpers.ShowErrorMessage("Valor inserido inválido.");
+                e.Handled = true;
+            }
+        }
+
+        private void rd_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateButtonsEnableStatus();
+        }
+
+        private void UpdateButtonsEnableStatus()
+        {
+            // Verifica se todos os campos necessários foram preenchidos,
+            // para então permitir ou não ir para o próximo passo
+            btnNext.Enabled = Helpers.CheckIfAllTextAreFilled(Controls) && (rdMinValue.Checked || rdMaxValue.Checked);
+        }
+
+        private void AddNewVariableTextBoxAndLabel(int index, ref int locationX)
+        {
+            var txtVar = new TextBox
+            {
+                Name = "txtVar" + index,
+                Location = new Point(locationX, 41),
+                Size = new Size(60, 20)
+            };
+            // Validate the input
+            txtVar.KeyPress += txtVar_KeyPress;
+            txtVar.TextChanged += txtVar_TextChanged;
+
+            Controls.Add(txtVar);
+            locationX += 60;
+
+            var lbVar = new Label
+            {
+                Name = "lbVar" + index,
+                Location = new Point(locationX, 43),
+                Size = TextRenderer.MeasureText(_problemaVariables[index].Value, Font),
+                Text = _problemaVariables[index].Value,
+                BackColor = Color.Transparent
+            };
+
+            Controls.Add(lbVar);
+            locationX += TextRenderer.MeasureText(_problemaVariables[index].Value, Font).Width - 1;
+        }
+
+        private void AddPlusLabelOrResizeForm(int index, ref int locationX)
+        {
+            if (index + 1 < _problemaVariables.Count)
+            {
+                // Add plus label
 
                 var plus = new Label
                 {
-                    Location = new Point(locationX, 37),
+                    Location = new Point(locationX, 43),
                     Size = TextRenderer.MeasureText("+", Font),
-                    Text = @"+"
-                    //Text = i + 1 < variables.Count ? @"+" : maxValue.Checked ? ">" : "<"
+                    Text = @"+",
+                    BackColor = Color.Transparent,
+                    ForeColor = Color.FromArgb(45, 55, 175),
+                    Font = new Font(Font.FontFamily, Font.Size, FontStyle.Bold)
                 };
-                plus.ForeColor = Color.Gray;
-                plus.BringToFront();
-                locationX += 13;
 
-                if (i + 1 < variables.Count)
-                    Controls.Add(plus);
-                //    plus.Name = "end";
+                Controls.Add(plus);
+                locationX += TextRenderer.MeasureText("+", Font).Width;
             }
-            
-            if(locationX > Size.Width)
-            this.Size = new Size(locationX + 80, Size.Height);
-
-            //var txtFinal = new TextBox
-            //{
-            //    Location = new Point(locationX, 35),
-            //    Size = new Size(50, 20)
-            //};
-            //txtFinal.BringToFront();
-            //Controls.Add(txtFinal);
+            else
+            {
+                // Resize form
+                if (locationX + 30 > Size.Width)
+                    Size = new Size(locationX + 26, Size.Height);
+            }
         }
     }
 }

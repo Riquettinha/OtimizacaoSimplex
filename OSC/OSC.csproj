@@ -45,25 +45,40 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\ComboBoxItem.cs" />
     <Compile Include="Function.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Function.Designer.cs">
       <DependentUpon>Function.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main.cs">
+    <Compile Include="Classes\FunctionData.cs" />
+    <Compile Include="Classes\Helpers.cs" />
+    <Compile Include="Restriction.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Main.Designer.cs">
-      <DependentUpon>Main.cs</DependentUpon>
+    <Compile Include="Restriction.Designer.cs">
+      <DependentUpon>Restriction.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Classes\RestrictionData.cs" />
+    <Compile Include="Classes\RestrictionFunctionData.cs" />
+    <Compile Include="Variables.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Variables.Designer.cs">
+      <DependentUpon>Variables.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Classes\VariableData.cs" />
     <EmbeddedResource Include="Function.resx">
       <DependentUpon>Function.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Main.resx">
-      <DependentUpon>Main.cs</DependentUpon>
+    <EmbeddedResource Include="Restriction.resx">
+      <DependentUpon>Restriction.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Variables.resx">
+      <DependentUpon>Variables.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -73,6 +88,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -86,6 +102,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="External References\duvida.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="External References\back.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
