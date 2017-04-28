@@ -58,6 +58,8 @@
             this.txtVariableValue.Name = "txtVariableValue";
             this.txtVariableValue.Size = new System.Drawing.Size(138, 22);
             this.txtVariableValue.TabIndex = 2;
+            this.txtVariableValue.TextChanged += new System.EventHandler(this.txtVariableData_TextChanged);
+            this.txtVariableValue.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtVariableValue_KeyPress);
             // 
             // btnRemoveVariable
             // 
@@ -79,6 +81,7 @@
             this.txtVariableDesc.Name = "txtVariableDesc";
             this.txtVariableDesc.Size = new System.Drawing.Size(138, 22);
             this.txtVariableDesc.TabIndex = 3;
+            this.txtVariableDesc.TextChanged += new System.EventHandler(this.txtVariableData_TextChanged);
             // 
             // btnAddVariable
             // 
@@ -165,7 +168,6 @@
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Variáveis";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Variables_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

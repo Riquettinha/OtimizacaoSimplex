@@ -1,10 +1,21 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 
-namespace OSC
+// ReSharper disable AccessToModifiedClosure
+namespace OSC.Classes
 {
     static class Helpers
     {
+        public static void FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // FormClosing generic
+            if (FinishProcess())
+                Environment.Exit(0);
+            else
+                e.Cancel = true;
+        }
+
         /// <summary>
         /// Remove all texts from textboxs, combobox selections, and checkbox or radiobutton checks.
         /// </summary>
@@ -51,15 +62,7 @@ namespace OSC
         /// </summary>
         public static bool CheckForInvalidChars(string value)
         {
-            for (int i = 0; i < value.Length; i++)
-            {
-                if(!char.IsLetter(value[i]) && !char.IsNumber(value[i]) && value[i] != ' ')
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return value.Any(t => !char.IsLetter(t) && !char.IsNumber(t) && t != ' ');
         }
 
         /// <summary>
@@ -67,7 +70,7 @@ namespace OSC
         /// </summary>
         public static void ShowErrorMessage(string message)
         {
-            MessageBox.Show(message, "Atenção!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(message, @"Atenção!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         /// <summary>
@@ -84,6 +87,67 @@ namespace OSC
         public static decimal ConvertToDecimal(this string text)
         {
             return Convert.ToDecimal(text.Replace('.', ',').Trim());
+        }
+
+        /// <summary>
+        /// Ask for the user if he/she want to close all the process
+        /// </summary>
+        /// <returns>User decision</returns>
+        public static bool FinishProcess()
+        {
+            var userDecision =
+                MessageBox.Show(@"O cálculo ainda não foi finalizado, deseja fechar o programa mesmo assim?",
+                    @"Atenção!", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+            return userDecision != DialogResult.No;
+        }
+
+        /// <summary>
+        /// Ask for the user if he/she wnat to back a form
+        /// </summary>
+        /// <returns></returns>
+        public static bool BackForm()
+        {
+            var userDecision =
+                MessageBox.Show(@"Se você voltar para tela anterior perderá todas as alterações "
+                + @"realizadas nesta tela, deseja voltar para tela anteiror mesmo assim?",
+                    @"Atenção!", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+            return userDecision == DialogResult.Yes;
+        }
+        
+        /// <summary>
+        /// Try to convert value to decimal
+        /// </summary>
+        /// <param name="value"></param>
+        public static bool CheckIfIsAValidDecimal(string value)
+        {
+            // Tenta converter para decimal, caso seja possível é um decimal válido
+            try
+            {
+                value.ConvertToDecimal();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Check if all TextBoxes are filles
+        /// </summary>
+        /// <param name="controls"></param>
+        public static bool CheckIfAllTextAreFilled(Control.ControlCollection controls)
+        {
+            // Verifica se todos os controles do tipo textbox estão preenchidos
+            foreach (Control control in controls)
+            {
+                if (control.GetType() == typeof(TextBox))
+                {
+                    if (((TextBox)control).Text.Length == 0)
+                        return false;
+                }
+            }
+            return true;
         }
     }
 }

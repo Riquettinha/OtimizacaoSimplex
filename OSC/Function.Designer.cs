@@ -1,4 +1,6 @@
-﻿namespace OSC
+﻿using OSC.Classes;
+
+namespace OSC
 {
     partial class Function
     {
@@ -124,8 +126,7 @@
             this.Name = "Function";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Função";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Function_FormClosing);
-            this.Load += new System.EventHandler(this.Function_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(Helpers.FormClosing);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnBack)).EndInit();

@@ -2,24 +2,25 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows.Forms;
+using OSC.Classes;
 
 namespace OSC
 {
     public partial class Function : Form
     {
-        readonly List<VariableData> _problemaVariables = new List<VariableData>();
+        readonly List<VariableData> _problemaVariables;
 
         public Function(List<VariableData> problemaVariables)
         {
             InitializeComponent();
             _problemaVariables = problemaVariables;
+            LoadExtraFields();
         }
 
-        private void Function_Load(object sender, EventArgs e)
+        private void LoadExtraFields()
         {
-            // Load the variables controls.
+            // Carrega uma textbox e uma label para cada variável e depois redefine tamanho da tela.
             int locationX = 12;
             for (int i = 0; i < _problemaVariables.Count; i++)
             {
@@ -28,90 +29,49 @@ namespace OSC
             }
         }
 
-        private void txtVar_TextChanged(object sender, EventArgs e)
-        {
-            if (CheckIfAllTextAreFilled() && (rdMinValue.Checked || rdMaxValue.Checked))
-                btnNext.Enabled = true;
-            else
-                btnNext.Enabled = false;
-        }
-
-        private void txtVar_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != ',')
-            {
-                e.Handled = true;
-            }
-            else if (e.KeyChar == ',' && (sender as TextBox).Text.ToCharArray().Any(p => p == ','))
-            {
-                e.Handled = true;
-            }
-            else if (!char.IsControl(e.KeyChar) && !CheckIfIsAValidDecimal(((TextBox) sender).Text + e.KeyChar))
-            {
-                Helpers.ShowErrorMessage("Valor inserido inválido.");
-                e.Handled = true;
-            }
-        }
-
         private void btnNext_Click(object sender, EventArgs e)
         {
-            if (CheckIfAllTextAreFilled() && rdMinValue.Checked || rdMaxValue.Checked)
+            for (int i = 0; i < _problemaVariables.Count; i++)
             {
-                for (int i = 0; i < _problemaVariables.Count; i++)
-                {
-                    var functionValue = Convert.ToDecimal(Controls["txtVar" + i].Text);
-                    _problemaVariables[i].FunctionValue = functionValue;
+                var functionValue = Convert.ToDecimal(Controls["txtVar" + i].Text);
+                _problemaVariables[i].FunctionValue = functionValue;
+            }
 
-                }
+            var functionData = new FunctionData
+            {
+                Maximiza = rdMaxValue.Checked,
+                Variables = _problemaVariables
+            };
 
-                var functionData = new FunctionData
-                {
-                    Maximiza = rdMaxValue.Checked,
-                    Variables = _problemaVariables
-                };
-
-                var restrictions = new Restriction(functionData);
-                restrictions.Show();
+            var restrictions = new Restriction(functionData);
+            restrictions.Show();
+            Hide();
+        }
+        
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            if (Helpers.BackForm())
+            {
+                Application.OpenForms["Variables"].Show();
                 Hide();
             }
-            else
-            {
-                MessageBox.Show(@"Para prosseguir preencha todos os dados necessários.", @"Atenção!");
-            }
+        }
+
+        private void txtVar_TextChanged(object sender, EventArgs e)
+        {
+            UpdateButtonsEnableStatus();
         }
 
         private void rd_CheckedChanged(object sender, EventArgs e)
         {
-            if (CheckIfAllTextAreFilled() && (rdMinValue.Checked || rdMaxValue.Checked))
-                btnNext.Enabled = true;
-            else
-                btnNext.Enabled = false;
+            UpdateButtonsEnableStatus();
         }
 
-        private bool CheckIfAllTextAreFilled()
+        private void UpdateButtonsEnableStatus()
         {
-            foreach (Control control in Controls)
-            {
-                if (control.GetType() == typeof(TextBox))
-                {
-                    if (((TextBox)control).Text.Length == 0)
-                        return false;
-                }
-            }
-            return true;
-        }
-
-        public bool CheckIfIsAValidDecimal(string value)
-        {
-            try
-            {
-                var aux = value.ConvertToDecimal();
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            // Verifica se todos os campos necessários foram preenchidos,
+            // para então permitir ou não ir para o próximo passo
+            btnNext.Enabled = Helpers.CheckIfAllTextAreFilled(Controls) && (rdMinValue.Checked || rdMaxValue.Checked);
         }
 
         private void AddNewVariableTextBoxAndLabel(int index, ref int locationX)
@@ -164,36 +124,26 @@ namespace OSC
             else
             {
                 // Resize form
-                if (locationX > (Size.Width + 30))
-                    Size = new Size(locationX + 30, Size.Height);
+                if (locationX + 30 > Size.Width)
+                    Size = new Size(locationX + 26, Size.Height);
             }
         }
 
-        private void Function_FormClosing(object sender, FormClosingEventArgs e)
+        private void txtVar_KeyPress(object sender, KeyPressEventArgs e)
         {
-            var userDecision =
-                MessageBox.Show(@"O cálculo ainda não foi finalizado, deseja fechar o programa mesmo assim?",
-                    @"Atenção!", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-            if (userDecision == DialogResult.No)
+            // Valida se o valor preenchido é um decimal válido (apenas números e uma única vírgula)
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != ',')
             {
-                e.Cancel = true;
+                e.Handled = true;
             }
-            else
+            else if (e.KeyChar == ',' && (sender as TextBox).Text.ToCharArray().Any(p => p == ','))
             {
-                Environment.Exit(0);
+                e.Handled = true;
             }
-        }
-
-        private void btnBack_Click(object sender, EventArgs e)
-        {
-            var userDecision =
-                MessageBox.Show(@"Se você voltar para tela anterior perderá todas as alterações "
-                + @"realizadas nesta tela, deseja voltar para tela anteiror mesmo assim?",
-                    @"Atenção!", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-            if (userDecision == DialogResult.Yes)
+            else if (!char.IsControl(e.KeyChar) && !Helpers.CheckIfIsAValidDecimal(((TextBox)sender).Text + e.KeyChar))
             {
-                Application.OpenForms["Variables"].Show();
-                Hide();
+                Helpers.ShowErrorMessage("Valor inserido inválido.");
+                e.Handled = true;
             }
         }
     }

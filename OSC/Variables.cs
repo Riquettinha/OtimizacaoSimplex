@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using OSC.Classes;
 
 namespace OSC
 {
@@ -15,32 +16,26 @@ namespace OSC
 
         private void btnAddVariable_Click(object sender, EventArgs e)
         {
-            // Add to variable list the new value case possible
+            // Adiciona variável à lista caso isso seja possível
             var newValue = txtVariableValue.Text;
             var newDesc = txtVariableDesc.Text;
 
-            if (CheckIfValueIsValid(newValue, newDesc))
+            if (CheckIfVariableIsValid(newValue, newDesc))
             {
-                if (CheckForDuplicatedValueInVariableList(newValue))
-                {
+                if (CheckForDuplicatedValueInProblemVariableList(newValue))
                     Helpers.ShowErrorMessage(string.Concat("Valor ", newValue, " já adicionado."));
-                }
                 else
-                {
                     AddNewVariable(newValue, newDesc);
-
-                    // If you already have at least two variables, allow go to the next step
-                    if (variableList.Items.Count > 1)
-                        btnNext.Enabled = true;
-                }
 
                 Helpers.ClearFormValues(this);
             }
+
+            UpdateButtonsEnableStatus();
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            // Case possible, remove from list and load the previous value
+            // Ao editar remove da lista e adiciona os valores nos campos
             if (variableList.SelectedIndex > -1)
             {
                 var variableValue = variableList.Items[variableList.SelectedIndex].ToString();
@@ -52,45 +47,42 @@ namespace OSC
             }
             else
                 Helpers.ShowErrorMessage("Impossível editar valor de lista vazia!");
+
+            UpdateButtonsEnableStatus();
         }
 
         private void btnRemoveVariable_Click(object sender, EventArgs e)
         {
-            // Remove variable from list case possible.
-            if (variableList.SelectedIndex > -1)
-            {
-                _problemVariables.RemoveAt(variableList.SelectedIndex);
-                variableList.Items.RemoveAt(variableList.SelectedIndex);
-
-                if (variableList.Items.Count == 0)
-                {
-                    // Disable edit and remove buttons case empty variableList.
-                    btnRemoveVariable.Enabled = false;
-                    btnEdit.Enabled = false;
-                }
-
-                // If you already have less than two variables, don't allow go to the next step
-                if (variableList.Items.Count < 2)
-                    btnNext.Enabled = false;
-            }
-            else
-                Helpers.ShowErrorMessage("Impossível remover valor de lista vazia!");
+            _problemVariables.RemoveAt(variableList.SelectedIndex);
+            variableList.Items.RemoveAt(variableList.SelectedIndex);
+            UpdateButtonsEnableStatus();
         }
 
         private void btnNext_Click(object sender, EventArgs e)
         {
-            // Go to next Simples step case possible.
-            if (variableList.Items.Count < 2)
-            {
-                Helpers.ShowErrorMessage("Número de variáveis insuficientes!");
-            }
-            else
-            {
-                var function = new Function(_problemVariables);
-                function.Show();
+            var function = new Function(_problemVariables);
+            function.Show();
 
-                Hide();
+            Hide();
+        }
+
+        private void variableList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateButtonsEnableStatus();
+        }
+
+        private void txtVariableValue_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (txtVariableValue.Text.Length == 0 && Char.IsNumber(e.KeyChar))
+            {
+                Helpers.ShowErrorMessage(@"O primeiro dígito do valor da variável não pode ser um número!");
+                e.Handled = true;
             }
+        }
+
+        private void txtVariableData_TextChanged(object sender, EventArgs e)
+        {
+            UpdateButtonsEnableStatus();
         }
 
         public void AddNewVariable(string value, string desc)
@@ -101,29 +93,42 @@ namespace OSC
                 Description = desc
             };
             _problemVariables.Add(newVariable);
-
             variableList.Items.Add(string.Concat(newVariable.Value, " - ", newVariable.Description));
         }
 
-        private bool CheckForDuplicatedValueInVariableList(string newValue)
+        private void UpdateButtonsEnableStatus()
         {
-            foreach (object existedValue in variableList.Items)
-                if (existedValue.ToString().Split('-')[0].Trim() == newValue)
-                    return true;
+            // Caso esvazie a lista de variáveis, desabilita botão para ir para o próximo passo
+            if (variableList.Items.Count == 0 || variableList.SelectedIndex == -1)
+            {
+                btnRemoveVariable.Enabled = false;
+                btnEdit.Enabled = false;
+            }
 
-            return false;
+            // Caso esteja selecionado na lista algum valor, habilita os botões
+            if (variableList.SelectedIndex != -1)
+            {
+                btnRemoveVariable.Enabled = true;
+                btnEdit.Enabled = true;
+            }
+
+            // Verifica se a lista de variáveis tem valores o suficiente para ir para o próximo passo
+            btnNext.Enabled = _problemVariables.Count >= 2;
+
+            // Verifica se é possível adicionar o valor a lista
+            btnAddVariable.Enabled = txtVariableDesc.Text.Length != 0 && txtVariableDesc.Text.Length != 0;
         }
 
-        private bool CheckIfValueIsValid(string newValue, string newDesc)
+        private bool CheckForDuplicatedValueInProblemVariableList(string newValue)
+        {
+            return _problemVariables.Any(p => p.Value == newValue);
+        }
+
+        private bool CheckIfVariableIsValid(string newValue, string newDesc)
         {
             if (string.IsNullOrEmpty(newValue) || string.IsNullOrEmpty(newDesc))
             {
                 Helpers.ShowErrorMessage("Para adicionar uma nova variável é necessário preencher o valor e a descrição.");
-                return false;
-            }
-            if (char.IsNumber(newValue[0]))
-            {
-                Helpers.ShowErrorMessage("O primeiro dígito do valor não pode ser um número!");
                 return false;
             }
             if (Helpers.CheckForSpace(newValue))
@@ -138,34 +143,6 @@ namespace OSC
             }
 
             return true;
-        }
-
-        private void variableList_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if(variableList.SelectedIndex != -1)
-            {
-                btnRemoveVariable.Enabled = true;
-                btnEdit.Enabled = true;
-            }
-            else
-            {
-                btnRemoveVariable.Enabled = false;
-                btnEdit.Enabled = false;
-            }
-        }
-
-        private void Variables_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (_problemVariables.Count > 0)
-            {
-                var userDecision =
-                    MessageBox.Show(@"O cálculo ainda não foi finalizado, deseja fechar o programa mesmo assim?",
-                        @"Atenção!", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-                if (userDecision == DialogResult.No)
-                {
-                    e.Cancel = true;
-                }
-            }
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace OSC
+﻿using OSC.Classes;
+
+namespace OSC
 {
     partial class Restriction
     {
@@ -29,7 +31,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Restriction));
-            this.functionList = new System.Windows.Forms.ListBox();
+            this.restrictionList = new System.Windows.Forms.ListBox();
             this.btnRemove = new System.Windows.Forms.Button();
             this.btnEdit = new System.Windows.Forms.Button();
             this.btnNext = new System.Windows.Forms.Button();
@@ -38,17 +40,18 @@
             ((System.ComponentModel.ISupportInitialize)(this.btnBack)).BeginInit();
             this.SuspendLayout();
             // 
-            // functionList
+            // restrictionList
             // 
-            this.functionList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.restrictionList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.functionList.FormattingEnabled = true;
-            this.functionList.ItemHeight = 16;
-            this.functionList.Location = new System.Drawing.Point(12, 12);
-            this.functionList.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.functionList.Name = "functionList";
-            this.functionList.Size = new System.Drawing.Size(224, 116);
-            this.functionList.TabIndex = 1;
+            this.restrictionList.FormattingEnabled = true;
+            this.restrictionList.ItemHeight = 16;
+            this.restrictionList.Location = new System.Drawing.Point(12, 12);
+            this.restrictionList.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.restrictionList.Name = "restrictionList";
+            this.restrictionList.Size = new System.Drawing.Size(224, 116);
+            this.restrictionList.TabIndex = 1;
+            this.restrictionList.SelectedIndexChanged += new System.EventHandler(this.restrictionList_SelectedIndexChanged);
             // 
             // btnRemove
             // 
@@ -134,15 +137,14 @@
             this.Controls.Add(this.btnNext);
             this.Controls.Add(this.btnEdit);
             this.Controls.Add(this.btnRemove);
-            this.Controls.Add(this.functionList);
+            this.Controls.Add(this.restrictionList);
             this.Font = new System.Drawing.Font("Arial", 9.75F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Restriction";
             this.Text = "Função de Restrição";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Restriction_FormClosing);
-            this.Load += new System.EventHandler(this.Restriction_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(Helpers.FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.btnBack)).EndInit();
             this.ResumeLayout(false);
 
@@ -150,7 +152,7 @@
 
         #endregion
 
-        private System.Windows.Forms.ListBox functionList;
+        private System.Windows.Forms.ListBox restrictionList;
         private System.Windows.Forms.Button btnRemove;
         private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.Button btnNext;
