@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Drawing.Design;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using OSC.Classes;
 
@@ -15,7 +9,7 @@ namespace OSC
 {
     public partial class Restriction : Form
     {
-        readonly List<VariableData> _problemVariables = new List<VariableData>();
+        readonly List<VariableData> _problemVariables;
         readonly List<RestrictionFunctionData> _problemRestrictions = new List<RestrictionFunctionData>();
 
         public Restriction(FunctionData functionData)
@@ -28,7 +22,7 @@ namespace OSC
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (CheckEveryThingIsFilled())
+            if (TextBoxFilledCount() > 1 && RestrictionValueFilled())
             {
                 var newRestr = CreateRestrictionObject();
                 if (CheckIfIsNewRestriction(newRestr))
@@ -38,14 +32,13 @@ namespace OSC
                 }
                 else
                 {
-                    Helpers.ShowErrorMessage(
-                    "Já existe uma restrição com estes mesmos dados!");
+                    Helpers.ShowErrorMessage("Já existe uma restrição com estes mesmos dados!");
                 }
             }
             else
             {
                 Helpers.ShowErrorMessage(
-                    "Para adicionar uma função de restrição é necessário que todos os valores e o tipo de restrição sejam preenchidos.");
+                    "Para adicionar uma função de restrição é necessário que ao menos um valor seja informado.");
             }
         }
 
@@ -71,7 +64,7 @@ namespace OSC
         private void txtVar_TextChanged(object sender, EventArgs e)
         {
             FillComboBoxItems(Controls["cbCondiction"] as ComboBox);
-            btnAdd.Enabled = CheckEveryThingIsFilled();
+            UpdateButtonsEnableStatus();
         }
 
         private void txtVar_KeyPress(object sender, KeyPressEventArgs e)
@@ -118,13 +111,14 @@ namespace OSC
 
         private void AddNewVariableTextBoxAndLabel(int index, ref int locationX)
         {
+            // Cria a textbox do valor da variável nas restrição e a label com o nome da variável
             var txtVar = new TextBox
             {
                 Name = "txtVar" + index,
                 Location = new Point(locationX, 173),
                 Size = new Size(60, 20)
             };
-            // Validate the input
+            
             txtVar.KeyPress += txtVar_KeyPress;
             txtVar.TextChanged += txtVar_TextChanged;
 
@@ -165,7 +159,7 @@ namespace OSC
 
         private void AddCondictionComboBoxAndTextBox(int locationX)
         {
-            // Create condiction type ComboBox
+            // Cria combobox com tipo de restrição e textbox para adicionar o valor da restrição
             locationX += 5;
             var condiction = new ComboBox
             {
@@ -204,12 +198,16 @@ namespace OSC
         private void FillComboBoxItems(ComboBox condiction)
         {
             var cbSource = new List<ComboBoxItem>();
-            if(SingleTextBoxFilled())
+            var textsFilles = TextBoxFilledCount();
+            var restrictionValueFilled = RestrictionValueFilled();
+            var singleVariableValueFilled = textsFilles == 1 && !restrictionValueFilled || textsFilles == 2 && restrictionValueFilled;
+            if (singleVariableValueFilled)
             {
+                // Se somente um valor de váriavel de restrição está preenchido permite igualar
                 cbSource.Add(new ComboBoxItem
                 {
                     Text = GetRestrictionString(RestrictionType.EqualTo),
-                    Value = RestrictionType.MoreThan
+                    Value = RestrictionType.EqualTo
                 });
             }
 
@@ -226,7 +224,8 @@ namespace OSC
             condiction.DataSource = cbSource;
             condiction.DisplayMember = "Text";
             condiction.ValueMember = "Value";
-            condiction.SelectedValue = RestrictionType.LessThan;
+            condiction.SelectedValue = singleVariableValueFilled ? RestrictionType.EqualTo : RestrictionType.LessThan;
+
         }
 
         private void ResizeControls(int locationX)
@@ -264,12 +263,15 @@ namespace OSC
             var listRestricitonData = new List<RestrictionData>();
             for (int i = 0; i < _problemVariables.Count; i++)
             {
-                var newRestritcionData = new RestrictionData
+                if (!String.IsNullOrEmpty(Controls["txtVar" + i].Text))
                 {
-                    RestrictionValue = Controls["txtVar" + i].Text.ConvertToDecimal(),
-                    RestrictionVariable = _problemVariables[i]
-                };
-                listRestricitonData.Add(newRestritcionData);
+                    var newRestritcionData = new RestrictionData
+                    {
+                        RestrictionValue = Controls["txtVar" + i].Text.ConvertToDecimal(),
+                        RestrictionVariable = _problemVariables[i]
+                    };
+                    listRestricitonData.Add(newRestritcionData);
+                }
             }
 
             return new RestrictionFunctionData
@@ -285,10 +287,49 @@ namespace OSC
             // Verifica quais problmas existentes possuem mesmos valores para todas as variáveis da restrição
             var existedProblemWithTheSameSubData = _problemRestrictions.Where(p => p.RestrictionData.All(d => newRestr.RestrictionData.Any(n =>
                 d.RestrictionValue == n.RestrictionValue && d.RestrictionVariable.Value == n.RestrictionVariable.Value))).ToList();
-            
+
             // Verifica desses existentes se algum deles possui também o mesmo tipo e valor da restrição
             return existedProblemWithTheSameSubData.All(e => e.RestrictionType != newRestr.RestrictionType
                 || e.RestrictionValue != newRestr.RestrictionValue);
+        }
+
+        private bool CheckWithConflict(RestrictionFunctionData newRestr)
+        {
+            //TODO: Se possível corrigir erros desse método.
+            // Verifica quais problmas existentes possuem mesmos valores para todas as variáveis da restrição
+            var existedProblemWithTheSameSubData =
+                _problemRestrictions.Where(p => p.RestrictionData.All(d => newRestr.RestrictionData.Any(n =>
+                    d.RestrictionValue == n.RestrictionValue &&
+                    d.RestrictionVariable.Value == n.RestrictionVariable.Value))).ToList();
+
+            // Verifica se somente o tipo é diferente
+            var onlyTypeIsDifferent =
+                existedProblemWithTheSameSubData.Any(s => s.RestrictionValue == newRestr.RestrictionValue && s.RestrictionType != newRestr.RestrictionType);
+            if(onlyTypeIsDifferent)
+                return false;
+
+            var possibleConflict = existedProblemWithTheSameSubData.Where(s => s.RestrictionType != newRestr.RestrictionType).ToList();
+            // Se somente o tipo é diferente quer dizer que está adicionando uma restrição que impossibilita
+            // Se os tipos são diferentes, mas pelo menos um deles é do tipo "=" também impossibilita o cálculo
+            if (onlyTypeIsDifferent || (possibleConflict.Count > 0 && 
+                (possibleConflict.Any(p => p.RestrictionType == RestrictionType.EqualTo) ||
+                newRestr.RestrictionType == RestrictionType.EqualTo)))
+            {
+                return false;
+            }
+
+            foreach (var existingPossibleConflict in possibleConflict)
+            {
+                if ((existingPossibleConflict.RestrictionType == RestrictionType.MoreThan &&
+                     existingPossibleConflict.RestrictionValue > newRestr.RestrictionValue) ||
+                    existingPossibleConflict.RestrictionType == RestrictionType.LessThan &&
+                    existingPossibleConflict.RestrictionValue < newRestr.RestrictionValue)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private string GetRestrictionString(RestrictionType restType)
@@ -306,15 +347,7 @@ namespace OSC
             }
         }
 
-        private bool CheckEveryThingIsFilled()
-        {
-            if(!Helpers.CheckIfAllTextAreFilled(Controls) || (Controls["cbCondiction"] as ComboBox).SelectedIndex == -1)
-                return false;
-
-            return true;
-        }
-
-        private bool SingleTextBoxFilled()
+        private int TextBoxFilledCount()
         {
             int count = 0;
             foreach (var control in Controls)
@@ -322,9 +355,12 @@ namespace OSC
                     if (((TextBox)control).Text.Length > 0)
                         count++;
 
-            if (count == 1)
-                return true;
-            return false;
+            return count;
+        }
+
+        private bool RestrictionValueFilled()
+        {
+            return Controls["txtCond"]?.Text.Length > 0;
         }
 
         private void restrictionList_SelectedIndexChanged(object sender, EventArgs e)
@@ -351,7 +387,8 @@ namespace OSC
             btnNext.Enabled = _problemRestrictions.Count >= 2;
 
             // Verifica se é possível adicionar o valor a lista
-            btnAdd.Enabled = CheckEveryThingIsFilled() || SingleTextBoxFilled() && Controls["txtCond"].Text.Length > 0;
+            var textsFilles = TextBoxFilledCount();
+            btnAdd.Enabled = RestrictionValueFilled() && textsFilles >= 2;
         }
     }
 }
