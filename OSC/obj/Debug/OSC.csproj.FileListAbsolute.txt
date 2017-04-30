@@ -49,6 +49,6 @@ C:\Users\Isabella\Documents\Visual Studio 2017\Projects\Git Source\OtimizacaoSim
 C:\Users\Isabella\Documents\Visual Studio 2017\Projects\Git Source\OtimizacaoSimplex\OSC\bin\Debug\OSC.exe
 C:\Users\Isabella\Documents\Visual Studio 2017\Projects\Git Source\OtimizacaoSimplex\OSC\bin\Debug\OSC.pdb
 C:\Users\Isabella\Documents\Visual Studio 2017\Projects\Git Source\OtimizacaoSimplex\OSC\obj\Debug\OSC.SimplexMain.resources
-C:\Users\Isabella\Documents\Visual Studio 2017\Projects\Git Source\OtimizacaoSimplex\OSC\obj\Debug\OSC.csprojResolveAssemblyReference.cache
 C:\Users\Isabella\Documents\Visual Studio 2017\Projects\Git Source\OtimizacaoSimplex\OSC\obj\Debug\OSC.SimplexStep0.resources
-C:\Users\Isabella\Documents\Visual Studio 2017\Projects\Git Source\OtimizacaoSimplex\OSC\obj\Debug\OSC.SimplexStep1.resources
+C:\Users\Isabella\Documents\Visual Studio 2017\Projects\Git Source\OtimizacaoSimplex\OSC\obj\Debug\OSC.csprojResolveAssemblyReference.cache
+C:\Users\Isabella\Documents\Visual Studio 2017\Projects\Git Source\OtimizacaoSimplex\OSC\obj\Debug\OSC.SimplexGrid.resources

@@ -80,7 +80,7 @@ namespace OSC.Problem_Classes
         {
             // Monta uma string com os dados da restrição incluindo variável de folga
             string restrictionString = RestrictionLeftOver.LeftOverVariable.Value + " = " + 
-                RestrictionLeftOver.LockedMember.GetString().Replace(" + ", "") + " - (";
+                RestrictionLeftOver.FreeMember.GetString().Replace(" + ", "") + " - (";
             foreach (RestrictionVariableData restr in RestrictionLeftOver.RestrictionVariables)
             {
                 var restrictionVariableValue = restr.RestrictionValue.GetString();

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using OSC.Problem_Classes;
 
 namespace OSC.Classes
@@ -42,15 +41,6 @@ namespace OSC.Classes
             }
         }
 
-        public static void TransformFunction(ref ProblemData problem)
-        {
-            // Negativa zera a função para achar o ponto 0,0.
-            // Ou seja, f(a) = 2x + 3y se transforma em 0 = 2x + 3y que é o mesmo que
-            // f(a) = 0 - 2x - 3y. Resumindo, é só trocar o símbolo.
-            foreach (var variable in problem.Variables)
-                variable.FunctionValue *= -1;
-        }
-
         public static void IsolateTheLeftOver(ref ProblemData problem)
         {
             foreach (var restriction in problem.Restrictions)
@@ -58,7 +48,7 @@ namespace OSC.Classes
                 // O membro livre é o valor da restrição multiplicado pelo valor do leftover
                 // O valor do leftover é definido em "CreateRestrictionLeftOver"
                 var restLeftOver = restriction.RestrictionLeftOver;
-                restLeftOver.LockedMember = restriction.RestrictionValue * restLeftOver.LeftOverVariable.FunctionValue;
+                restLeftOver.FreeMember = restriction.RestrictionValue * restLeftOver.LeftOverVariable.FunctionValue;
 
                 // Se a variável de sobra for negativa, positiva ela e troca sinal do membro livre
                 if (restLeftOver.LeftOverVariable.FunctionValue.IsNegative())
@@ -76,7 +66,7 @@ namespace OSC.Classes
                     {
                         RestrictionVariable = restrictionVariables.RestrictionVariable,
                         RestrictionValue =
-                            DifferentSymbol(restrictionVariables.RestrictionValue, restLeftOver.LockedMember)
+                            DifferentSymbol(restrictionVariables.RestrictionValue, restLeftOver.FreeMember)
                                 ? restrictionVariables.RestrictionValue * -1
                                 : restrictionVariables.RestrictionValue
                     });
@@ -89,37 +79,106 @@ namespace OSC.Classes
             return value1.IsNegative() != value2.IsNegative();
         }
 
-        public static bool FirstStep(ref ProblemData problem)
+        public static int FirstStageCheckForTheEnd(GridCell[,] simplexGrid)
         {
-            var columnsHeaderArray = new string[problem.Variables.Count + 1];
-            columnsHeaderArray[0] = "ML";
-            for (int i = 1; i <= problem.Variables.Count; i++)
-                columnsHeaderArray[i] = problem.Variables[i - 1].Value;
+            // Procura por um membro livre negativo
+            for (int i = 1; i < simplexGrid.GetLength(1); i++)
+                if (simplexGrid[0, i].Superior.IsNegative())
+                    return i;
+            return 0;
+        }
 
-            var rowsHeaderArray = new string[problem.Restrictions.Count + 1];
-            rowsHeaderArray[0] = "f(x)";
-            for (int i = 1; i <= problem.Restrictions.Count; i++)
-                rowsHeaderArray[i] = problem.Restrictions[i - 1].RestrictionLeftOver.LeftOverVariable.Value;
-            
-            var simplexGrid = new Tuple<decimal, decimal>[columnsHeaderArray.Length,rowsHeaderArray.Length];
-            simplexGrid[0, 0] = new Tuple<decimal, decimal>(0, 0);
-            for (int i = 0; i < problem.Variables.Count; i++)
+        public static int FirstStageGetAllowedColumn(GridCell[,] simplexGrid)
+        {
+            // Procura por variáveis negativas na linha do membro livre negativo
+            var rowWithNegativeFreeNumber = FirstStageCheckForTheEnd(simplexGrid);
+            for (int n = 1; n <= simplexGrid.GetLength(1); n++)
             {
-                simplexGrid[i + 1, 0] = new Tuple<decimal, decimal>(problem.Variables[i].FunctionValue, 0);
+                if (simplexGrid[n, rowWithNegativeFreeNumber].Superior.IsNegative())
+                    return n;
             }
-            for (int i = 0; i < problem.Restrictions.Count; i++)
+            return 0;
+        }
+
+        public static int FirstStageGetAllowedRow(GridCell[,] simplexGrid, int allowedColumns)
+        {
+            // Procura pelo menor quociente de ML / variável da coluna permitidda
+            int allowedRow = 0;
+            decimal minorNumber = -1;
+            for (int n = 1; n <= simplexGrid.GetLength(0); n++)
             {
-                simplexGrid[0, i+1] = new Tuple<decimal, decimal>(problem.Restrictions[i].RestrictionValue, 0);
-                for (int j = 0; j < problem.Restrictions[i].RestrictionData.Count; j++)
+                if (simplexGrid[allowedColumns, n].Superior != 0)
                 {
-                    simplexGrid[j+1, i + 1] = new Tuple<decimal, decimal>(problem.Restrictions[i].RestrictionData[j].RestrictionValue, 0);
+                    var quoc = simplexGrid[0, n].Superior / simplexGrid[allowedColumns, n].Superior;
+                    if (quoc < minorNumber || minorNumber == -1)
+                    {
+                        minorNumber = quoc;
+                        allowedRow = n;
+                    }
                 }
             }
-            int lockedMemberCollum = 0;
+            return allowedRow;
+        }
 
-            var teste = new SimplexStep1(columnsHeaderArray, rowsHeaderArray, simplexGrid);
-            teste.Show();
-            return true;
+        public static void SecondStageFillInferiorCells(ref GridCell[,] simplexGrid, int allowedColumn, int allowedRow)
+        {
+            var allowedMember = simplexGrid[allowedColumn, allowedRow];
+            allowedMember.Inferior = 1 / allowedMember.Superior;
+
+            for (int c = 0; c < simplexGrid.GetLength(0); c++)
+                if (c != allowedColumn)
+                {
+                    // Está na linha permitida, portanto múltiplica o superior pelo inferior do membro permitido
+                    var editingMember = simplexGrid[c, allowedRow];
+                    editingMember.Inferior = editingMember.Superior * allowedMember.Inferior;
+                }
+
+            for (int r = 0; r < simplexGrid.GetLength(1); r++)
+                if (r != allowedRow)
+                {
+                    // Está na coluna permitida, portando múltiplica pelo negativo do inferior do membro permitido
+                    var editingMember = simplexGrid[allowedColumn, r];
+                    editingMember.Inferior = editingMember.Superior * (allowedMember.Inferior * -1);
+                }
+
+            for (int c = 0; c < simplexGrid.GetLength(0); c++)
+                for (int r = 0; r < simplexGrid.GetLength(1); r++)
+                    if (c != allowedColumn && r != allowedRow)
+                    {
+                        // Caso não esteja nem na linha e nem na coluna permitida, soma os valores da
+                        // celula superior na linha atual e da coluna permitda com da celula superior da coluna atual com a linha permitida
+                        simplexGrid[c, r].Inferior = simplexGrid[c, allowedRow].Superior *
+                                                 simplexGrid[allowedColumn, r].Inferior;
+                    }
+        }
+
+        public static void SecondStageUpdateHeaders(ref string[] nonBasicVariables, ref string[] basicVariables, int allowedColumn, int allowedRow)
+        {
+            // Troca a básica da linah permtida com a não básic da coluna permitida
+            var oldColumnHeader = nonBasicVariables[allowedColumn];
+            nonBasicVariables[allowedColumn] = basicVariables[allowedRow];
+            basicVariables[allowedRow] = oldColumnHeader;
+        }
+
+        public static void SecondStageReposition(ref GridCell[,] simplexGrid, int allowedColumn, int allowedRow)
+        {
+            // Reescreve itens superiores
+            for (int c = 0; c < simplexGrid.GetLength(0); c++)
+            {
+                for (int r = 0; r < simplexGrid.GetLength(1); r++)
+                {
+                    if (c == allowedColumn || r == allowedRow)
+                    {
+                        simplexGrid[c, r].Superior = simplexGrid[c, r].Inferior;
+                        simplexGrid[c, r].Inferior = 0;
+                    }
+                    else
+                    {
+                        simplexGrid[c, r].Superior = simplexGrid[c, r].Superior+ simplexGrid[c, r].Inferior;
+                        simplexGrid[c, r].Inferior = 0;
+                    }
+                }
+            }
         }
     }
 }

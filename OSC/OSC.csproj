@@ -56,6 +56,7 @@
     </Compile>
     <Compile Include="Problem Classes\FunctionData.cs" />
     <Compile Include="Classes\Helpers.cs" />
+    <Compile Include="Problem Classes\GridCell.cs" />
     <Compile Include="Problem Classes\LeftOverData.cs" />
     <Compile Include="Problem Classes\ProblemData.cs" />
     <Compile Include="Problem Classes\RestrictionVariableData.cs" />
@@ -78,11 +79,11 @@
     <Compile Include="SimplexStep0.Designer.cs">
       <DependentUpon>SimplexStep0.cs</DependentUpon>
     </Compile>
-    <Compile Include="SimplexStep1.cs">
+    <Compile Include="SimplexGrid.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SimplexStep1.Designer.cs">
-      <DependentUpon>SimplexStep1.cs</DependentUpon>
+    <Compile Include="SimplexGrid.Designer.cs">
+      <DependentUpon>SimplexGrid.cs</DependentUpon>
     </Compile>
     <Compile Include="Variables.cs">
       <SubType>Form</SubType>
@@ -105,8 +106,8 @@
     <EmbeddedResource Include="SimplexStep0.resx">
       <DependentUpon>SimplexStep0.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SimplexStep1.resx">
-      <DependentUpon>SimplexStep1.cs</DependentUpon>
+    <EmbeddedResource Include="SimplexGrid.resx">
+      <DependentUpon>SimplexGrid.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Variables.resx">
       <DependentUpon>Variables.cs</DependentUpon>

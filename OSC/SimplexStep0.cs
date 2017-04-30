@@ -13,76 +13,72 @@ namespace OSC
 {
     public partial class SimplexStep0 : Form
     {
-        private ProblemData _problem;
-        private int _step;
-        public SimplexStep0(ProblemData problem, int step)
+        private SimplexMethod _simplexMethodClass;
+
+        public SimplexStep0(SimplexMethod simplexMethodClass)
         {
             InitializeComponent();
-            _problem = problem;
-            _step = step;
-        }
-
-        private void btnBack_Click(object sender, EventArgs e)
-        {
-            if (Helpers.BackForm())
-            {
-                Application.OpenForms["SimplexMain"].Show();
-                Hide();
-            }
+            _simplexMethodClass = simplexMethodClass;
+            Location = new Point(Location.X + 10 * _simplexMethodClass.Step, Location.Y + 10 * _simplexMethodClass.Step);
         }
 
         private void btnNextStep_Click(object sender, EventArgs e)
         {
-            var aux = new SimplexMethod(_problem, ++_step);
+            _simplexMethodClass.NextStep();
         }
 
         private void SimplexStep0_Load(object sender, EventArgs e)
         {
-            if (_step == -1)
+            if (_simplexMethodClass.Step == -1)
                 ShowStep01();
-            else if (_step == 0)
+            else if (_simplexMethodClass.Step == 0)
                 ShowStep0();
+
+            txtSimplex.Select(0, 0);
         }
 
         private void ShowStep01()
         {
-            // Cria um texto com a função e restrições ajustadas
-            var functionString = @"MIN Z = 0";
-            foreach (VariableData variable in _problem.Variables)
+            // Cria um texto com a função e restrições ajustadas em um formato legível
+            var functionString = @"MIN Z = 0 - ( ";
+            foreach (VariableData variable in _simplexMethodClass.Problem.Variables)
             {
                 var varValue = variable.FunctionValue;
                 functionString += varValue.GetString() + variable.Value;
             }
+            functionString += " )";
 
             if (Size.Width < TextRenderer.MeasureText(functionString, Font).Width)
                 Size = new Size(TextRenderer.MeasureText(functionString, Font).Width + 30, Height);
 
             txtSimplex.Text += functionString + Environment.NewLine + Environment.NewLine;
-            for (int i = 0; i < _problem.Restrictions.Count; i++)
+            for (int i = 0; i < _simplexMethodClass.Problem.Restrictions.Count; i++)
             {
                 var restricionString = @"(Restrição " + (i + 1) + @"): ";
-                restricionString += _problem.Restrictions[i].GetSimplexRestrictionString();
+                restricionString += _simplexMethodClass.Problem.Restrictions[i].GetSimplexRestrictionString();
                 if (Size.Width < TextRenderer.MeasureText(restricionString, Font).Width)
                     Size = new Size(TextRenderer.MeasureText(restricionString, Font).Width + 30, Height);
                 txtSimplex.Text += restricionString + Environment.NewLine;
             }
+
         }
 
         private void ShowStep0()
         {
-            // Cria um texto com a função e restrições ajustadas
-            var functionString = @"MIN Z = 0";
-            foreach (VariableData variable in _problem.Variables)
+            // Cria um texto com a função e restrições ajustadas em um formato legível
+            var functionString = @"MIN Z = 0 - (";
+            foreach (VariableData variable in _simplexMethodClass.Problem.Variables)
             {
                 var varValue = variable.FunctionValue;
-                functionString += varValue.GetString() + variable.Value + @" ";
+                functionString += varValue.GetString() + variable.Value;
             }
+            functionString += " )";
 
             if (Size.Width < TextRenderer.MeasureText(functionString, Font).Width)
                 Size = new Size(TextRenderer.MeasureText(functionString, Font).Width + 30, Height);
 
             txtSimplex.Text += functionString + Environment.NewLine + Environment.NewLine;
-            foreach (RestrictionFunctionData restr in _problem.Restrictions)
+            foreach (RestrictionFunctionData restr in _simplexMethodClass.Problem.Restrictions)
             {
                 var restricionString = restr.GetSimplexFreeMemberString();
                 if (Size.Width < TextRenderer.MeasureText(restricionString, Font).Width)

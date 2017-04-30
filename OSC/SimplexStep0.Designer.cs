@@ -31,8 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SimplexStep0));
             this.txtSimplex = new System.Windows.Forms.TextBox();
             this.btnNextStep = new System.Windows.Forms.Button();
-            this.btnBack = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.btnBack)).BeginInit();
             this.SuspendLayout();
             // 
             // txtSimplex
@@ -52,27 +50,14 @@
             this.btnNextStep.FlatAppearance.BorderSize = 2;
             this.btnNextStep.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNextStep.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNextStep.Location = new System.Drawing.Point(52, 245);
+            this.btnNextStep.Location = new System.Drawing.Point(12, 245);
             this.btnNextStep.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnNextStep.Name = "btnNextStep";
-            this.btnNextStep.Size = new System.Drawing.Size(177, 32);
+            this.btnNextStep.Size = new System.Drawing.Size(217, 32);
             this.btnNextStep.TabIndex = 2;
             this.btnNextStep.Text = "Próximo Passo";
             this.btnNextStep.UseVisualStyleBackColor = true;
             this.btnNextStep.Click += new System.EventHandler(this.btnNextStep_Click);
-            // 
-            // btnBack
-            // 
-            this.btnBack.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnBack.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnBack.Image = global::OSC.Properties.Resources.back;
-            this.btnBack.Location = new System.Drawing.Point(12, 245);
-            this.btnBack.Name = "btnBack";
-            this.btnBack.Size = new System.Drawing.Size(32, 32);
-            this.btnBack.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.btnBack.TabIndex = 9;
-            this.btnBack.TabStop = false;
-            this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
             // 
             // SimplexStep0
             // 
@@ -80,7 +65,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(242, 286);
-            this.Controls.Add(this.btnBack);
             this.Controls.Add(this.btnNextStep);
             this.Controls.Add(this.txtSimplex);
             this.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -91,10 +75,8 @@
             this.MinimumSize = new System.Drawing.Size(258, 325);
             this.Name = "SimplexStep0";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Preparação para o Simplex";
             this.Load += new System.EventHandler(this.SimplexStep0_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.btnBack)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -104,6 +86,5 @@
 
         private System.Windows.Forms.TextBox txtSimplex;
         private System.Windows.Forms.Button btnNextStep;
-        private System.Windows.Forms.PictureBox btnBack;
     }
 }
