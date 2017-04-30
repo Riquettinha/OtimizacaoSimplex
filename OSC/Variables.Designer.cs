@@ -57,7 +57,7 @@
             this.txtVariableValue.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtVariableValue.Name = "txtVariableValue";
             this.txtVariableValue.Size = new System.Drawing.Size(138, 22);
-            this.txtVariableValue.TabIndex = 2;
+            this.txtVariableValue.TabIndex = 3;
             this.txtVariableValue.TextChanged += new System.EventHandler(this.txtVariableData_TextChanged);
             this.txtVariableValue.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtVariableValue_KeyPress);
             // 
@@ -76,12 +76,15 @@
             // 
             // txtVariableDesc
             // 
+            this.txtVariableDesc.ForeColor = System.Drawing.Color.DimGray;
             this.txtVariableDesc.Location = new System.Drawing.Point(82, 207);
             this.txtVariableDesc.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtVariableDesc.Name = "txtVariableDesc";
             this.txtVariableDesc.Size = new System.Drawing.Size(138, 22);
-            this.txtVariableDesc.TabIndex = 3;
+            this.txtVariableDesc.TabIndex = 4;
+            this.txtVariableDesc.MouseClick += new System.Windows.Forms.MouseEventHandler(this.txtVariableDesc_MouseClick);
             this.txtVariableDesc.TextChanged += new System.EventHandler(this.txtVariableData_TextChanged);
+            this.txtVariableDesc.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtVariableDesc_KeyDown);
             // 
             // btnAdd
             // 
@@ -90,7 +93,7 @@
             this.btnAdd.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(206, 28);
-            this.btnAdd.TabIndex = 4;
+            this.btnAdd.TabIndex = 5;
             this.btnAdd.Text = "Adicionar Variável";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAddVariable_Click);
@@ -124,7 +127,7 @@
             this.btnNext.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnNext.Name = "btnNext";
             this.btnNext.Size = new System.Drawing.Size(206, 32);
-            this.btnNext.TabIndex = 5;
+            this.btnNext.TabIndex = 6;
             this.btnNext.Text = "Próximo Passo";
             this.btnNext.UseVisualStyleBackColor = true;
             this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
@@ -137,13 +140,14 @@
             this.btnEdit.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(99, 28);
-            this.btnEdit.TabIndex = 7;
+            this.btnEdit.TabIndex = 2;
             this.btnEdit.Text = "Editar";
             this.btnEdit.UseVisualStyleBackColor = true;
             this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
             // 
             // Variables
             // 
+            this.AcceptButton = this.btnAdd;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;

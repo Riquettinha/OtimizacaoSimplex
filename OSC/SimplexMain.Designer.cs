@@ -31,6 +31,7 @@ namespace OSC
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SimplexMain));
             this.btnStepByStep = new System.Windows.Forms.Button();
             this.btnBack = new System.Windows.Forms.PictureBox();
             this.btnSimplesExecution = new System.Windows.Forms.Button();
@@ -47,7 +48,7 @@ namespace OSC
             this.btnStepByStep.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnStepByStep.Name = "btnStepByStep";
             this.btnStepByStep.Size = new System.Drawing.Size(188, 32);
-            this.btnStepByStep.TabIndex = 6;
+            this.btnStepByStep.TabIndex = 0;
             this.btnStepByStep.Text = "Passo a Passo";
             this.btnStepByStep.UseVisualStyleBackColor = true;
             this.btnStepByStep.Click += new System.EventHandler(this.btnSetpByStep_Click);
@@ -75,13 +76,14 @@ namespace OSC
             this.btnSimplesExecution.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnSimplesExecution.Name = "btnSimplesExecution";
             this.btnSimplesExecution.Size = new System.Drawing.Size(188, 32);
-            this.btnSimplesExecution.TabIndex = 9;
+            this.btnSimplesExecution.TabIndex = 1;
             this.btnSimplesExecution.Text = "Execução Simples";
             this.btnSimplesExecution.UseVisualStyleBackColor = true;
             this.btnSimplesExecution.Click += new System.EventHandler(this.btnSimplesExecution_Click);
             // 
             // SimplexMain
             // 
+            this.AcceptButton = this.btnSimplesExecution;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
@@ -91,6 +93,7 @@ namespace OSC
             this.Controls.Add(this.btnStepByStep);
             this.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximumSize = new System.Drawing.Size(459, 95);
             this.MinimumSize = new System.Drawing.Size(459, 95);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using OSC.Classes;
 
 namespace OSC
 {
@@ -16,7 +17,7 @@ namespace OSC
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Variables());
+            Application.Run(new SimplexMain());
         }
     }
 }

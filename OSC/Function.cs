@@ -98,7 +98,8 @@ namespace OSC
             {
                 Name = "txtVar" + index,
                 Location = new Point(locationX, 41),
-                Size = new Size(60, 20)
+                Size = new Size(60, 20),
+                TabIndex = 2 + index
             };
             // Validate the input
             txtVar.KeyPress += txtVar_KeyPress;

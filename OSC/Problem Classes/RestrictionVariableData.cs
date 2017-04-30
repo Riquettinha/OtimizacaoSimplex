@@ -1,11 +1,11 @@
-﻿namespace OSC
+﻿namespace OSC.Problem_Classes
 {
-    public class RestrictionData
+    public class RestrictionVariableData
     {
         public decimal RestrictionValue { get; set; }
         public VariableData RestrictionVariable { get; set; }
 
-        public RestrictionData()
+        public RestrictionVariableData()
         {
             RestrictionValue = 0;
         }

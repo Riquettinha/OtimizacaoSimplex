@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using OSC.Classes;
@@ -27,6 +28,7 @@ namespace OSC
                     AddNewVariable(newVariable);
 
                 Helpers.ClearFormValues(this);
+                txtVariableDesc.ForeColor = Color.DimGray;
             }
 
             UpdateButtonsEnableStatus();
@@ -91,6 +93,8 @@ namespace OSC
         private void txtVariableData_TextChanged(object sender, EventArgs e)
         {
             UpdateButtonsEnableStatus();
+            if (!DescTBFontIsBlack())
+                txtVariableDesc.Text = txtVariableValue.Text;
         }
 
         public void AddNewVariable(VariableData newVariable)
@@ -120,6 +124,28 @@ namespace OSC
 
             // Verifica se é possível adicionar o valor a lista
             btnAdd.Enabled = txtVariableDesc.Text.Length != 0 && txtVariableDesc.Text.Length != 0;
+        }
+
+
+        public bool DescTBFontIsBlack()
+        {
+            return txtVariableDesc.ForeColor == Color.Black;
+        }
+
+        private void txtVariableDesc_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (!DescTBFontIsBlack())
+            {
+                txtVariableDesc.ForeColor = Color.Black;
+            }
+        }
+
+        private void txtVariableDesc_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (!DescTBFontIsBlack())
+            {
+                txtVariableDesc.SelectAll();
+            }
         }
     }
 }

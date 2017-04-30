@@ -50,7 +50,7 @@ namespace OSC
             this.restrictionList.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.restrictionList.Name = "restrictionList";
             this.restrictionList.Size = new System.Drawing.Size(224, 116);
-            this.restrictionList.TabIndex = 1;
+            this.restrictionList.TabIndex = 0;
             this.restrictionList.SelectedIndexChanged += new System.EventHandler(this.restrictionList_SelectedIndexChanged);
             // 
             // btnRemove
@@ -76,7 +76,7 @@ namespace OSC
             this.btnEdit.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(110, 28);
-            this.btnEdit.TabIndex = 8;
+            this.btnEdit.TabIndex = 1;
             this.btnEdit.Text = "Editar";
             this.btnEdit.UseVisualStyleBackColor = true;
             this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
@@ -93,7 +93,7 @@ namespace OSC
             this.btnNext.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnNext.Name = "btnNext";
             this.btnNext.Size = new System.Drawing.Size(186, 32);
-            this.btnNext.TabIndex = 9;
+            this.btnNext.TabIndex = 1001;
             this.btnNext.Text = "Próximo Passo";
             this.btnNext.UseVisualStyleBackColor = true;
             this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
@@ -108,7 +108,7 @@ namespace OSC
             this.btnAdd.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(224, 28);
-            this.btnAdd.TabIndex = 10;
+            this.btnAdd.TabIndex = 1000;
             this.btnAdd.Text = "Adicionar Restrição";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
@@ -128,6 +128,7 @@ namespace OSC
             // 
             // Restriction
             // 
+            this.AcceptButton = this.btnAdd;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;

@@ -1,9 +1,10 @@
 ﻿using OSC.Classes;
+using OSC.Problem_Classes;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
-namespace OSC
+namespace OSC.Problem_Classes
 {
     public enum RestrictionType
     {
@@ -19,8 +20,8 @@ namespace OSC
     {
         public RestrictionType RestrictionType { get; set; }
         public decimal RestrictionValue { get; set; }
-        public List<RestrictionData> RestrictionData { get; set; }
-        public VariableData RestrictionLeftOver { get; set; }
+        public List<RestrictionVariableData> RestrictionData { get; set; }
+        public LeftOverData RestrictionLeftOver = new LeftOverData();
 
         public bool CheckIfIsNewRestriction(List<RestrictionFunctionData> problemRestrictions)
         {
@@ -34,8 +35,9 @@ namespace OSC
             e.RestrictionValue != RestrictionValue);
         }
 
-        public string CreateRestrictionString()
+        public string GetRestrictionString()
         {
+            // Monta um string simples com os dados da restrição
             string restrictionString = "";
             for (int i = 0; i < RestrictionData.Count; i++)
             {
@@ -44,10 +46,36 @@ namespace OSC
                 restrictionString += RestrictionData[i].RestrictionValue +
                                      RestrictionData[i].RestrictionVariable.Value + " ";
             }
-            restrictionString += Helpers.GetRestrictionString(RestrictionType) + RestrictionValue;
+            restrictionString += Helpers.GetRestrictionTypeString(RestrictionType) + RestrictionValue;
             return restrictionString;
         }
-        
+
+        public string GetSimplexRestrictionString()
+        {
+            // Monta uma string com os dados da restrição incluindo variável de folga
+            string restrictionString = "";
+            foreach (RestrictionVariableData restr in RestrictionData)
+            {
+                var restrictionVariableValue = restr.RestrictionValue.GetString();
+                if (string.IsNullOrEmpty(restrictionString))
+                    restrictionVariableValue = restrictionVariableValue.Replace(" + ", "");
+
+                if (restr.RestrictionValue != 0)
+                {
+                    if (restr.RestrictionValue != 1)
+                        restrictionString += restrictionVariableValue;
+                    else if (!string.IsNullOrEmpty(restrictionString))
+                        restrictionString += restrictionVariableValue.Replace("1", "");
+                    restrictionString += restr.RestrictionVariable.Value;
+                }
+            }
+
+            restrictionString += RestrictionLeftOver.LeftOverVariable.FunctionValue.GetString().Replace("1", "") + 
+                RestrictionLeftOver.LeftOverVariable.Value;
+            restrictionString += " " + Helpers.GetRestrictionTypeString(RestrictionType) + " " + RestrictionValue;
+            return restrictionString;
+        }
+
         public bool CheckWithConflict(List<RestrictionFunctionData> problemRestrictions)
         {
             //TODO: Se possível corrigir erros desse método.
@@ -85,6 +113,11 @@ namespace OSC
             }
 
             return true;
+        }
+
+        public bool ValueIsNegative()
+        {
+            return RestrictionValue < 0;
         }
     }
 }

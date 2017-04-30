@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OSC
+namespace OSC.Problem_Classes
 {
     public class VariableData
     {

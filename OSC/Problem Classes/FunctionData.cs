@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace OSC
+﻿namespace OSC.Problem_Classes
 {
     public class FunctionData
     {

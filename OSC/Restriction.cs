@@ -22,12 +22,12 @@ namespace OSC
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (GetFilledTextBoxesCount() > 1 && RestrictionValueFilled())
+            if (GetFilledTextBoxesCount() > 1 && NeededValueIsFilled())
             {
                 var newRestr = CreateRestrictionObject();
                 if (newRestr.CheckIfIsNewRestriction(_problem.Restrictions))
                 {
-                    restrictionList.Items.Add(newRestr.CreateRestrictionString());
+                    restrictionList.Items.Add(newRestr.GetRestrictionString());
                     _problem.Restrictions.Add(newRestr);
                     UpdateButtonsEnableStatus();
                     Helpers.ClearFormValues(this);
@@ -65,7 +65,11 @@ namespace OSC
 
         private void txtVar_TextChanged(object sender, EventArgs e)
         {
-            FillComboBoxItems(Controls["cbCondiction"] as ComboBox);
+            UpdateButtonsEnableStatus();
+        }
+        
+        private void cbCondiction_SelectedIndexChanged(object sender, EventArgs e)
+        {
             UpdateButtonsEnableStatus();
         }
 
@@ -120,7 +124,8 @@ namespace OSC
             {
                 Name = "txtVar" + index,
                 Location = new Point(locationX, 173),
-                Size = new Size(60, 20)
+                Size = new Size(60, 20),
+                TabIndex = 3 + index
             };
             
             txtVar.KeyPress += txtVar_KeyPress;
@@ -174,7 +179,8 @@ namespace OSC
                 Font = new Font(Font.FontFamily, Font.Size, FontStyle.Bold),
                 AutoCompleteMode = AutoCompleteMode.None
             };
-
+            condiction.SelectedIndexChanged += cbCondiction_SelectedIndexChanged;
+            
             FillComboBoxItems(condiction);
             
             Controls.Add(condiction);
@@ -205,12 +211,12 @@ namespace OSC
 
             cbSource.Add(new ComboBoxItem
             {
-                Text = Helpers.GetRestrictionString(RestrictionType.LessThan),
+                Text = Helpers.GetRestrictionTypeString(RestrictionType.LessThan),
                 Value = RestrictionType.LessThan
             });
             cbSource.Add(new ComboBoxItem
             {
-                Text = Helpers.GetRestrictionString(RestrictionType.MoreThan),
+                Text = Helpers.GetRestrictionTypeString(RestrictionType.MoreThan),
                 Value = RestrictionType.MoreThan
             });
             condiction.DataSource = cbSource;
@@ -238,12 +244,12 @@ namespace OSC
         private RestrictionFunctionData CreateRestrictionObject()
         {
             // Transforma os valores preenchidos na tela em um objeto do tipo RestrictionFunctionData
-            var listRestricitonData = new List<RestrictionData>();
+            var listRestricitonData = new List<RestrictionVariableData>();
             for (int i = 0; i < _problem.Variables.Count; i++)
             {
                 if (!String.IsNullOrEmpty(Controls["txtVar" + i].Text))
                 {
-                    var newRestritcionData = new RestrictionData
+                    var newRestritcionData = new RestrictionVariableData
                     {
                         RestrictionValue = Controls["txtVar" + i].Text.ConvertToDecimal(),
                         RestrictionVariable = _problem.Variables[i]
@@ -271,16 +277,16 @@ namespace OSC
             return count;
         }
 
-        private bool RestrictionValueFilled()
+        private bool NeededValueIsFilled()
         {
-            return Controls["txtCond"]?.Text.Length > 0;
+            return Controls["txtCond"]?.Text.Length > 0 && (Controls["cbCondiction"] as ComboBox).SelectedIndex != -1;
         }
 
         private void restrictionList_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateButtonsEnableStatus();
         }
-        
+
         private void UpdateButtonsEnableStatus()
         {
             // Caso esvazie a lista de variáveis, desabilita botão para ir para o próximo passo
@@ -301,7 +307,7 @@ namespace OSC
 
             // Verifica se é possível adicionar o valor a lista
             var textsFilles = GetFilledTextBoxesCount();
-            btnAdd.Enabled = RestrictionValueFilled() && textsFilles >= 2;
+            btnAdd.Enabled = NeededValueIsFilled() && textsFilles >= 2;
         }
     }
 }

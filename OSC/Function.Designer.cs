@@ -44,7 +44,8 @@ namespace OSC
             // 
             this.rdMaxValue.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.rdMaxValue.AutoSize = true;
-            this.rdMaxValue.Location = new System.Drawing.Point(120, 4);
+            this.rdMaxValue.Checked = true;
+            this.rdMaxValue.Location = new System.Drawing.Point(3, 4);
             this.rdMaxValue.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.rdMaxValue.Name = "rdMaxValue";
             this.rdMaxValue.Size = new System.Drawing.Size(119, 20);
@@ -58,12 +59,11 @@ namespace OSC
             // 
             this.rdMinValue.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.rdMinValue.AutoSize = true;
-            this.rdMinValue.Location = new System.Drawing.Point(5, 4);
+            this.rdMinValue.Location = new System.Drawing.Point(124, 4);
             this.rdMinValue.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.rdMinValue.Name = "rdMinValue";
             this.rdMinValue.Size = new System.Drawing.Size(115, 20);
             this.rdMinValue.TabIndex = 1;
-            this.rdMinValue.TabStop = true;
             this.rdMinValue.Text = "Minimizar Valor";
             this.rdMinValue.UseVisualStyleBackColor = true;
             this.rdMinValue.CheckedChanged += new System.EventHandler(this.rd_CheckedChanged);
@@ -80,7 +80,7 @@ namespace OSC
             this.btnNext.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnNext.Name = "btnNext";
             this.btnNext.Size = new System.Drawing.Size(203, 32);
-            this.btnNext.TabIndex = 6;
+            this.btnNext.TabIndex = 1000;
             this.btnNext.Text = "Próximo Passo";
             this.btnNext.UseVisualStyleBackColor = true;
             this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
@@ -112,6 +112,7 @@ namespace OSC
             // 
             // Function
             // 
+            this.AcceptButton = this.btnNext;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
@@ -126,7 +127,6 @@ namespace OSC
             this.Name = "Function";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Função";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(Helpers.FormClosing);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnBack)).EndInit();

@@ -13,6 +13,11 @@ namespace OSC
             InitializeComponent();
             _problem = problem;
         }
+    
+        public SimplexMain()
+        {
+            InitializeComponent();
+        }
 
         private void btnBack_Click(object sender, EventArgs e)
         {
@@ -25,11 +30,12 @@ namespace OSC
 
         private void btnSetpByStep_Click(object sender, EventArgs e)
         {
-
+            var simplexMethos = new SimplexMethod(_problem);
         }
 
         private void btnSimplesExecution_Click(object sender, EventArgs e)
         {
+            var simplexMethos = new SimplexMethod();
 
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace OSC.Classes
+﻿using OSC.Problem_Classes;
+
+namespace OSC.Classes
 {
     public class ComboBoxItem
     {
