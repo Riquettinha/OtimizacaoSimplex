@@ -28,14 +28,15 @@ namespace OSC
             }
         }
 
-        private void btnSetpByStep_Click(object sender, EventArgs e)
+        private void btnStepByStep_Click(object sender, EventArgs e)
         {
-            var simplexMethos = new SimplexMethod(_problem);
+            var simplexMethos = new SimplexMethod(-1);
+
         }
 
         private void btnSimplesExecution_Click(object sender, EventArgs e)
         {
-            var simplexMethos = new SimplexMethod();
+            var simplexMethos = new SimplexMethod(-1);
 
         }
     }

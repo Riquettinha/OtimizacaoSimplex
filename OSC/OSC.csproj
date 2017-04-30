@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\SimplexMethod.cs" />
+    <Compile Include="Classes\SimplexSteps.cs" />
     <Compile Include="ComboBoxItem.cs" />
     <Compile Include="Function.cs">
       <SubType>Form</SubType>
@@ -77,6 +78,12 @@
     <Compile Include="SimplexStep0.Designer.cs">
       <DependentUpon>SimplexStep0.cs</DependentUpon>
     </Compile>
+    <Compile Include="SimplexStep1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SimplexStep1.Designer.cs">
+      <DependentUpon>SimplexStep1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Variables.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -97,6 +104,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SimplexStep0.resx">
       <DependentUpon>SimplexStep0.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SimplexStep1.resx">
+      <DependentUpon>SimplexStep1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Variables.resx">
       <DependentUpon>Variables.cs</DependentUpon>

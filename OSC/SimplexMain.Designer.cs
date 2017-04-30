@@ -51,7 +51,7 @@ namespace OSC
             this.btnStepByStep.TabIndex = 0;
             this.btnStepByStep.Text = "Passo a Passo";
             this.btnStepByStep.UseVisualStyleBackColor = true;
-            this.btnStepByStep.Click += new System.EventHandler(this.btnSetpByStep_Click);
+            this.btnStepByStep.Click += new System.EventHandler(this.btnStepByStep_Click);
             // 
             // btnBack
             // 

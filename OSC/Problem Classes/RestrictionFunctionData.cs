@@ -76,6 +76,27 @@ namespace OSC.Problem_Classes
             return restrictionString;
         }
 
+        public string GetSimplexFreeMemberString()
+        {
+            // Monta uma string com os dados da restrição incluindo variável de folga
+            string restrictionString = RestrictionLeftOver.LeftOverVariable.Value + " = " + 
+                RestrictionLeftOver.LockedMember.GetString().Replace(" + ", "") + " - (";
+            foreach (RestrictionVariableData restr in RestrictionLeftOver.RestrictionVariables)
+            {
+                var restrictionVariableValue = restr.RestrictionValue.GetString();
+                if (restr.RestrictionValue != 0)
+                {
+                    if (restr.RestrictionValue != 1)
+                        restrictionString += restrictionVariableValue;
+                    else if (!string.IsNullOrEmpty(restrictionString))
+                        restrictionString += restrictionVariableValue.Replace("1", "");
+                    restrictionString += restr.RestrictionVariable.Value;
+                }
+            }
+            restrictionString += " )";
+            return restrictionString;
+        }
+
         public bool CheckWithConflict(List<RestrictionFunctionData> problemRestrictions)
         {
             //TODO: Se possível corrigir erros desse método.
