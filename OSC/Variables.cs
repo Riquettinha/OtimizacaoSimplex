@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using OSC.Classes;
+using OSC.Problem_Classes;
 
 namespace OSC
 {
     public partial class Variables : Form
     {
-        readonly List<VariableData> _problemVariables = new List<VariableData>();
+        readonly ProblemData _problem = new ProblemData();
         public Variables()
         {
             InitializeComponent();
@@ -17,20 +17,28 @@ namespace OSC
         private void btnAddVariable_Click(object sender, EventArgs e)
         {
             // Adiciona variável à lista caso isso seja possível
-            var newValue = txtVariableValue.Text;
-            var newDesc = txtVariableDesc.Text;
+            var newVariable = CreateNewVariableObject(txtVariableValue.Text, txtVariableDesc.Text);
 
-            if (CheckIfVariableIsValid(newValue, newDesc))
+            if (newVariable.CheckIfVariableIsValid())
             {
-                if (CheckForDuplicatedValueInProblemVariableList(newValue))
-                    Helpers.ShowErrorMessage(string.Concat("Valor ", newValue, " já adicionado."));
+                if (newVariable.CheckForDuplicatedValueInProblemVariableList(_problem.Variables))
+                    Helpers.ShowErrorMessage(string.Concat("Valor ", newVariable.Value, " já adicionado."));
                 else
-                    AddNewVariable(newValue, newDesc);
+                    AddNewVariable(newVariable);
 
                 Helpers.ClearFormValues(this);
             }
 
             UpdateButtonsEnableStatus();
+        }
+
+        private VariableData CreateNewVariableObject(string value, string desc)
+        {
+            return new VariableData
+            {
+                Value = value,
+                Description = desc
+            };
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
@@ -42,7 +50,7 @@ namespace OSC
                 txtVariableValue.Text = variableValue.Split('-')[0].Trim();
                 txtVariableDesc.Text = variableValue.Split('-')[1].Trim();
 
-                _problemVariables.RemoveAt(variableList.SelectedIndex);
+                _problem.Variables.RemoveAt(variableList.SelectedIndex);
                 variableList.Items.RemoveAt(variableList.SelectedIndex);
             }
             else
@@ -53,14 +61,14 @@ namespace OSC
 
         private void btnRemoveVariable_Click(object sender, EventArgs e)
         {
-            _problemVariables.RemoveAt(variableList.SelectedIndex);
+            _problem.Variables.RemoveAt(variableList.SelectedIndex);
             variableList.Items.RemoveAt(variableList.SelectedIndex);
             UpdateButtonsEnableStatus();
         }
 
         private void btnNext_Click(object sender, EventArgs e)
         {
-            var function = new Function(_problemVariables);
+            var function = new Function(_problem);
             function.Show();
 
             Hide();
@@ -85,14 +93,9 @@ namespace OSC
             UpdateButtonsEnableStatus();
         }
 
-        public void AddNewVariable(string value, string desc)
+        public void AddNewVariable(VariableData newVariable)
         {
-            var newVariable = new VariableData
-            {
-                Value = value,
-                Description = desc
-            };
-            _problemVariables.Add(newVariable);
+            _problem.Variables.Add(newVariable);
             variableList.Items.Add(string.Concat(newVariable.Value, " - ", newVariable.Description));
         }
 
@@ -113,36 +116,10 @@ namespace OSC
             }
 
             // Verifica se a lista de variáveis tem valores o suficiente para ir para o próximo passo
-            btnNext.Enabled = _problemVariables.Count >= 2;
+            btnNext.Enabled = _problem.Variables.Count >= 2;
 
             // Verifica se é possível adicionar o valor a lista
             btnAdd.Enabled = txtVariableDesc.Text.Length != 0 && txtVariableDesc.Text.Length != 0;
-        }
-
-        private bool CheckForDuplicatedValueInProblemVariableList(string newValue)
-        {
-            return _problemVariables.Any(p => p.Value == newValue);
-        }
-
-        private bool CheckIfVariableIsValid(string newValue, string newDesc)
-        {
-            if (string.IsNullOrEmpty(newValue) || string.IsNullOrEmpty(newDesc))
-            {
-                Helpers.ShowErrorMessage("Para adicionar uma nova variável é necessário preencher o valor e a descrição.");
-                return false;
-            }
-            if (Helpers.CheckForSpace(newValue))
-            {
-                Helpers.ShowErrorMessage("O valor não pode possuir espaços em branco.");
-                return false;
-            }
-            if (Helpers.CheckForInvalidChars(newValue) || Helpers.CheckForInvalidChars(newDesc))
-            {
-                Helpers.ShowErrorMessage("O valor ou descrição possuem caracteres inválidos, somente são permitidos letras e númros.");
-                return false;
-            }
-
-            return true;
         }
     }
 }

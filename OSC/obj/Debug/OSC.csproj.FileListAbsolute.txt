@@ -38,3 +38,14 @@ C:\Users\isabella.riquetti\Documents\Visual Studio 2015\Projects\Git Faculdade\O
 C:\Users\isabella.riquetti\Documents\Visual Studio 2015\Projects\Git Faculdade\OtimizacaoSimplex\OSC\obj\Debug\OSC.csproj.GenerateResource.Cache
 C:\Users\isabella.riquetti\Documents\Visual Studio 2015\Projects\Git Faculdade\OtimizacaoSimplex\OSC\obj\Debug\OSC.Restriction.resources
 C:\Users\isabella.riquetti\Documents\Visual Studio 2015\Projects\Git Faculdade\OtimizacaoSimplex\OSC\obj\Debug\OSC.csprojResolveAssemblyReference.cache
+C:\Users\Isabella\Documents\Visual Studio 2017\Projects\Git Source\OtimizacaoSimplex\OSC\obj\Debug\OSC.Function.resources
+C:\Users\Isabella\Documents\Visual Studio 2017\Projects\Git Source\OtimizacaoSimplex\OSC\obj\Debug\OSC.Restriction.resources
+C:\Users\Isabella\Documents\Visual Studio 2017\Projects\Git Source\OtimizacaoSimplex\OSC\obj\Debug\OSC.Variables.resources
+C:\Users\Isabella\Documents\Visual Studio 2017\Projects\Git Source\OtimizacaoSimplex\OSC\obj\Debug\OSC.Properties.Resources.resources
+C:\Users\Isabella\Documents\Visual Studio 2017\Projects\Git Source\OtimizacaoSimplex\OSC\obj\Debug\OSC.csproj.GenerateResource.Cache
+C:\Users\Isabella\Documents\Visual Studio 2017\Projects\Git Source\OtimizacaoSimplex\OSC\obj\Debug\OSC.exe
+C:\Users\Isabella\Documents\Visual Studio 2017\Projects\Git Source\OtimizacaoSimplex\OSC\obj\Debug\OSC.pdb
+C:\Users\Isabella\Documents\Visual Studio 2017\Projects\Git Source\OtimizacaoSimplex\OSC\bin\Debug\OSC.exe.config
+C:\Users\Isabella\Documents\Visual Studio 2017\Projects\Git Source\OtimizacaoSimplex\OSC\bin\Debug\OSC.exe
+C:\Users\Isabella\Documents\Visual Studio 2017\Projects\Git Source\OtimizacaoSimplex\OSC\bin\Debug\OSC.pdb
+C:\Users\Isabella\Documents\Visual Studio 2017\Projects\Git Source\OtimizacaoSimplex\OSC\obj\Debug\OSC.SimplexMain.resources

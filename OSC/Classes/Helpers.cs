@@ -149,5 +149,23 @@ namespace OSC.Classes
             }
             return true;
         }
+
+        /// <summary>
+        /// Return the text that reference the RestrictionType
+        /// </summary>
+        public static string GetRestrictionString(RestrictionType restType)
+        {
+            switch (restType)
+            {
+                case RestrictionType.EqualTo:
+                    return "=";
+                case RestrictionType.LessThan:
+                    return "<=";
+                case RestrictionType.MoreThan:
+                    return ">=";
+                default:
+                    return "";
+            }
+        }
     }
 }

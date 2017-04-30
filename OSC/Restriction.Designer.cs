@@ -109,7 +109,7 @@ namespace OSC
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(224, 28);
             this.btnAdd.TabIndex = 10;
-            this.btnAdd.Text = "Adicionar Variável";
+            this.btnAdd.Text = "Adicionar Restrição";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
@@ -144,7 +144,6 @@ namespace OSC
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Restriction";
             this.Text = "Função de Restrição";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(Helpers.FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.btnBack)).EndInit();
             this.ResumeLayout(false);
 

@@ -4,17 +4,18 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using OSC.Classes;
+using OSC.Problem_Classes;
 
 namespace OSC
 {
     public partial class Function : Form
     {
-        readonly List<VariableData> _problemaVariables;
+        readonly ProblemData _problem;
 
-        public Function(List<VariableData> problemaVariables)
+        public Function(ProblemData problem)
         {
             InitializeComponent();
-            _problemaVariables = problemaVariables;
+            _problem = problem;
             LoadExtraFields();
         }
 
@@ -22,7 +23,7 @@ namespace OSC
         {
             // Carrega uma textbox e uma label para cada variável e depois redefine tamanho da tela.
             int locationX = 12;
-            for (int i = 0; i < _problemaVariables.Count; i++)
+            for (int i = 0; i < _problem.Variables.Count; i++)
             {
                 AddNewVariableTextBoxAndLabel(i, ref locationX);
                 AddPlusLabelOrResizeForm(i, ref locationX);
@@ -31,19 +32,18 @@ namespace OSC
 
         private void btnNext_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < _problemaVariables.Count; i++)
+            for (int i = 0; i < _problem.Variables.Count; i++)
             {
                 var functionValue = Convert.ToDecimal(Controls["txtVar" + i].Text);
-                _problemaVariables[i].FunctionValue = functionValue;
+                _problem.Variables[i].FunctionValue = functionValue;
             }
-
-            var functionData = new FunctionData
+            
+            _problem.Function = new FunctionData
             {
-                Maximiza = rdMaxValue.Checked,
-                Variables = _problemaVariables
+                Maximiza = rdMaxValue.Checked
             };
 
-            var restrictions = new Restriction(functionData);
+            var restrictions = new Restriction(_problem);
             restrictions.Show();
             Hide();
         }
@@ -111,18 +111,18 @@ namespace OSC
             {
                 Name = "lbVar" + index,
                 Location = new Point(locationX, 43),
-                Size = TextRenderer.MeasureText(_problemaVariables[index].Value, Font),
-                Text = _problemaVariables[index].Value,
+                Size = TextRenderer.MeasureText(_problem.Variables[index].Value, Font),
+                Text = _problem.Variables[index].Value,
                 BackColor = Color.Transparent
             };
 
             Controls.Add(lbVar);
-            locationX += TextRenderer.MeasureText(_problemaVariables[index].Value, Font).Width - 1;
+            locationX += TextRenderer.MeasureText(_problem.Variables[index].Value, Font).Width - 1;
         }
 
         private void AddPlusLabelOrResizeForm(int index, ref int locationX)
         {
-            if (index + 1 < _problemaVariables.Count)
+            if (index + 1 < _problem.Variables.Count)
             {
                 // Add plus label
 

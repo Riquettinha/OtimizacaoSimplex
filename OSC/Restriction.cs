@@ -4,31 +4,33 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using OSC.Classes;
+using OSC.Problem_Classes;
 
 namespace OSC
 {
     public partial class Restriction : Form
     {
-        readonly List<VariableData> _problemVariables;
-        readonly List<RestrictionFunctionData> _problemRestrictions = new List<RestrictionFunctionData>();
+        readonly ProblemData _problem = new ProblemData();
 
-        public Restriction(FunctionData functionData)
+        public Restriction(ProblemData problem)
         {
             InitializeComponent();
-            _problemVariables = functionData.Variables;
+            _problem = problem;
 
             LoadExtraFields();
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (TextBoxFilledCount() > 1 && RestrictionValueFilled())
+            if (GetFilledTextBoxesCount() > 1 && RestrictionValueFilled())
             {
                 var newRestr = CreateRestrictionObject();
-                if (CheckIfIsNewRestriction(newRestr))
+                if (newRestr.CheckIfIsNewRestriction(_problem.Restrictions))
                 {
-                    restrictionList.Items.Add(CreateRestrictionString(newRestr));
-                    _problemRestrictions.Add(newRestr);
+                    restrictionList.Items.Add(newRestr.CreateRestrictionString());
+                    _problem.Restrictions.Add(newRestr);
+                    UpdateButtonsEnableStatus();
+                    Helpers.ClearFormValues(this);
                 }
                 else
                 {
@@ -44,20 +46,20 @@ namespace OSC
 
         private void btnRemove_Click(object sender, EventArgs e)
         {
-            _problemRestrictions.RemoveAt(restrictionList.SelectedIndex);
+            _problem.Restrictions.RemoveAt(restrictionList.SelectedIndex);
             restrictionList.Items.RemoveAt(restrictionList.SelectedIndex);
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            var restriction = _problemRestrictions[restrictionList.SelectedIndex];
+            var restriction = _problem.Restrictions[restrictionList.SelectedIndex];
             for (int i = 0; i < restriction.RestrictionData.Count; i++)
                 Controls["txtVar" + i].Text = restriction.RestrictionData[i].RestrictionValue.ToString();
 
             Controls["txtCond"].Text = restriction.RestrictionValue.ToString();
             (Controls["cbCondiction"] as ComboBox).SelectedValue = restriction.RestrictionType;
 
-            _problemRestrictions.RemoveAt(restrictionList.SelectedIndex);
+            _problem.Restrictions.RemoveAt(restrictionList.SelectedIndex);
             restrictionList.Items.RemoveAt(restrictionList.SelectedIndex);
         }
 
@@ -95,13 +97,15 @@ namespace OSC
 
         private void btnNext_Click(object sender, EventArgs e)
         {
-
+            var simplexForm = new SimplexMain(_problem);
+            simplexForm.Show();
+            Hide();
         }
 
         private void LoadExtraFields()
         {
             int locationX = 12;
-            for (int i = 0; i < _problemVariables.Count; i++)
+            for (int i = 0; i < _problem.Variables.Count; i++)
             {
                 AddNewVariableTextBoxAndLabel(i, ref locationX);
                 AddPlusLabel(i, ref locationX);
@@ -129,18 +133,18 @@ namespace OSC
             {
                 Name = "lbVar" + index,
                 Location = new Point(locationX, 175),
-                Size = TextRenderer.MeasureText(_problemVariables[index].Value, Font),
-                Text = _problemVariables[index].Value,
+                Size = TextRenderer.MeasureText(_problem.Variables[index].Value, Font),
+                Text = _problem.Variables[index].Value,
                 BackColor = Color.Transparent
             };
 
             Controls.Add(lbVar);
-            locationX += TextRenderer.MeasureText(_problemVariables[index].Value, Font).Width - 1;
+            locationX += TextRenderer.MeasureText(_problem.Variables[index].Value, Font).Width - 1;
         }
 
         private void AddPlusLabel(int index, ref int locationX)
         {
-            if (index + 1 < _problemVariables.Count)
+            if (index + 1 < _problem.Variables.Count)
             {
                 var plus = new Label
                 {
@@ -198,33 +202,21 @@ namespace OSC
         private void FillComboBoxItems(ComboBox condiction)
         {
             var cbSource = new List<ComboBoxItem>();
-            var textsFilles = TextBoxFilledCount();
-            var restrictionValueFilled = RestrictionValueFilled();
-            var singleVariableValueFilled = textsFilles == 1 && !restrictionValueFilled || textsFilles == 2 && restrictionValueFilled;
-            if (singleVariableValueFilled)
-            {
-                // Se somente um valor de váriavel de restrição está preenchido permite igualar
-                cbSource.Add(new ComboBoxItem
-                {
-                    Text = GetRestrictionString(RestrictionType.EqualTo),
-                    Value = RestrictionType.EqualTo
-                });
-            }
 
             cbSource.Add(new ComboBoxItem
             {
-                Text = GetRestrictionString(RestrictionType.LessThan),
+                Text = Helpers.GetRestrictionString(RestrictionType.LessThan),
                 Value = RestrictionType.LessThan
             });
             cbSource.Add(new ComboBoxItem
             {
-                Text = GetRestrictionString(RestrictionType.MoreThan),
+                Text = Helpers.GetRestrictionString(RestrictionType.MoreThan),
                 Value = RestrictionType.MoreThan
             });
             condiction.DataSource = cbSource;
             condiction.DisplayMember = "Text";
             condiction.ValueMember = "Value";
-            condiction.SelectedValue = singleVariableValueFilled ? RestrictionType.EqualTo : RestrictionType.LessThan;
+            condiction.SelectedValue = RestrictionType.LessThan;
 
         }
 
@@ -243,32 +235,18 @@ namespace OSC
             }
         }
 
-        private string CreateRestrictionString(RestrictionFunctionData newRestr)
-        {
-            string restrictionString = "";
-            for (int i = 0; i < newRestr.RestrictionData.Count; i++)
-            {
-                if (i != 0)
-                    restrictionString += "+ ";
-                restrictionString += newRestr.RestrictionData[i].RestrictionValue +
-                                     newRestr.RestrictionData[i].RestrictionVariable.Value + " ";
-            }
-            restrictionString += GetRestrictionString(newRestr.RestrictionType) + newRestr.RestrictionValue;
-            return restrictionString;
-        }
-
         private RestrictionFunctionData CreateRestrictionObject()
         {
             // Transforma os valores preenchidos na tela em um objeto do tipo RestrictionFunctionData
             var listRestricitonData = new List<RestrictionData>();
-            for (int i = 0; i < _problemVariables.Count; i++)
+            for (int i = 0; i < _problem.Variables.Count; i++)
             {
                 if (!String.IsNullOrEmpty(Controls["txtVar" + i].Text))
                 {
                     var newRestritcionData = new RestrictionData
                     {
                         RestrictionValue = Controls["txtVar" + i].Text.ConvertToDecimal(),
-                        RestrictionVariable = _problemVariables[i]
+                        RestrictionVariable = _problem.Variables[i]
                     };
                     listRestricitonData.Add(newRestritcionData);
                 }
@@ -282,72 +260,7 @@ namespace OSC
             };
         }
 
-        private bool CheckIfIsNewRestriction(RestrictionFunctionData newRestr)
-        {
-            // Verifica quais problmas existentes possuem mesmos valores para todas as variáveis da restrição
-            var existedProblemWithTheSameSubData = _problemRestrictions.Where(p => p.RestrictionData.All(d => newRestr.RestrictionData.Any(n =>
-                d.RestrictionValue == n.RestrictionValue && d.RestrictionVariable.Value == n.RestrictionVariable.Value))).ToList();
-
-            // Verifica desses existentes se algum deles possui também o mesmo tipo e valor da restrição
-            return existedProblemWithTheSameSubData.All(e => e.RestrictionType != newRestr.RestrictionType
-                || e.RestrictionValue != newRestr.RestrictionValue);
-        }
-
-        private bool CheckWithConflict(RestrictionFunctionData newRestr)
-        {
-            //TODO: Se possível corrigir erros desse método.
-            // Verifica quais problmas existentes possuem mesmos valores para todas as variáveis da restrição
-            var existedProblemWithTheSameSubData =
-                _problemRestrictions.Where(p => p.RestrictionData.All(d => newRestr.RestrictionData.Any(n =>
-                    d.RestrictionValue == n.RestrictionValue &&
-                    d.RestrictionVariable.Value == n.RestrictionVariable.Value))).ToList();
-
-            // Verifica se somente o tipo é diferente
-            var onlyTypeIsDifferent =
-                existedProblemWithTheSameSubData.Any(s => s.RestrictionValue == newRestr.RestrictionValue && s.RestrictionType != newRestr.RestrictionType);
-            if(onlyTypeIsDifferent)
-                return false;
-
-            var possibleConflict = existedProblemWithTheSameSubData.Where(s => s.RestrictionType != newRestr.RestrictionType).ToList();
-            // Se somente o tipo é diferente quer dizer que está adicionando uma restrição que impossibilita
-            // Se os tipos são diferentes, mas pelo menos um deles é do tipo "=" também impossibilita o cálculo
-            if (onlyTypeIsDifferent || (possibleConflict.Count > 0 && 
-                (possibleConflict.Any(p => p.RestrictionType == RestrictionType.EqualTo) ||
-                newRestr.RestrictionType == RestrictionType.EqualTo)))
-            {
-                return false;
-            }
-
-            foreach (var existingPossibleConflict in possibleConflict)
-            {
-                if ((existingPossibleConflict.RestrictionType == RestrictionType.MoreThan &&
-                     existingPossibleConflict.RestrictionValue > newRestr.RestrictionValue) ||
-                    existingPossibleConflict.RestrictionType == RestrictionType.LessThan &&
-                    existingPossibleConflict.RestrictionValue < newRestr.RestrictionValue)
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        private string GetRestrictionString(RestrictionType restType)
-        {
-            switch (restType)
-            {
-                case RestrictionType.EqualTo:
-                    return "=";
-                case RestrictionType.LessThan:
-                    return "<=";
-                case RestrictionType.MoreThan:
-                    return ">=";
-                default:
-                    return "";
-            }
-        }
-
-        private int TextBoxFilledCount()
+        private int GetFilledTextBoxesCount()
         {
             int count = 0;
             foreach (var control in Controls)
@@ -371,7 +284,7 @@ namespace OSC
         private void UpdateButtonsEnableStatus()
         {
             // Caso esvazie a lista de variáveis, desabilita botão para ir para o próximo passo
-            if (_problemRestrictions.Count == 0 || restrictionList.SelectedIndex == -1)
+            if (_problem.Restrictions.Count == 0 || restrictionList.SelectedIndex == -1)
             {
                 btnRemove.Enabled = false;
                 btnEdit.Enabled = false;
@@ -384,10 +297,10 @@ namespace OSC
             }
 
             // Verifica se a lista de variáveis tem valores o suficiente para ir para o próximo passo
-            btnNext.Enabled = _problemRestrictions.Count >= 2;
+            btnNext.Enabled = _problem.Restrictions.Count >= 2;
 
             // Verifica se é possível adicionar o valor a lista
-            var textsFilles = TextBoxFilledCount();
+            var textsFilles = GetFilledTextBoxesCount();
             btnAdd.Enabled = RestrictionValueFilled() && textsFilles >= 2;
         }
     }
