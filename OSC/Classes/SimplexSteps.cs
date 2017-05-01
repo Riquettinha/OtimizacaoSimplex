@@ -92,7 +92,7 @@ namespace OSC.Classes
         {
             // Procura por variáveis negativas na linha do membro livre negativo
             var rowWithNegativeFreeNumber = FirstStageCheckForTheEnd(simplexGrid);
-            for (int n = 1; n <= simplexGrid.GetLength(1); n++)
+            for (int n = 1; n < simplexGrid.GetLength(1); n++)
                 if (simplexGrid[n, rowWithNegativeFreeNumber].Superior.IsNegative())
                     return n;
 

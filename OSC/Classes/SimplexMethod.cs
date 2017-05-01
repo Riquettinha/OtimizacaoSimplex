@@ -179,8 +179,6 @@ namespace OSC.Classes
                 // Troca variáveis básicas com não básicas
                 SimplexSteps.FirstStageUpdateHeaders(ref SimplexData);
                 Step++;
-                var aux = new SimplexGrid(this);
-                aux.ShowDialog();
             }
             else if (Step == 6)
             {
@@ -200,8 +198,8 @@ namespace OSC.Classes
                 else
                 {
                     // Solução ÓTIMA
-                var aux = new SimplexGrid(this);
-                aux.ShowDialog();
+                    var aux = new SimplexGrid(this);
+                    aux.ShowDialog();
                 }
             }
             else if (Stage == 2 && Step == 2)

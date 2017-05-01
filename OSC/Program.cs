@@ -17,7 +17,7 @@ namespace OSC
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new SimplexMain());
+            Application.Run(new Variables());
         }
     }
 }
