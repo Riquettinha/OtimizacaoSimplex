@@ -60,6 +60,7 @@
     <Compile Include="Problem Classes\LeftOverData.cs" />
     <Compile Include="Problem Classes\ProblemData.cs" />
     <Compile Include="Problem Classes\RestrictionVariableData.cs" />
+    <Compile Include="Problem Classes\SimplexData.cs" />
     <Compile Include="Restriction.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -73,11 +74,11 @@
     <Compile Include="SimplexMain.Designer.cs">
       <DependentUpon>SimplexMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="SimplexStep0.cs">
+    <Compile Include="SimplexText.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SimplexStep0.Designer.cs">
-      <DependentUpon>SimplexStep0.cs</DependentUpon>
+    <Compile Include="SimplexText.Designer.cs">
+      <DependentUpon>SimplexText.cs</DependentUpon>
     </Compile>
     <Compile Include="SimplexGrid.cs">
       <SubType>Form</SubType>
@@ -103,8 +104,8 @@
     <EmbeddedResource Include="SimplexMain.resx">
       <DependentUpon>SimplexMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SimplexStep0.resx">
-      <DependentUpon>SimplexStep0.cs</DependentUpon>
+    <EmbeddedResource Include="SimplexText.resx">
+      <DependentUpon>SimplexText.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SimplexGrid.resx">
       <DependentUpon>SimplexGrid.cs</DependentUpon>

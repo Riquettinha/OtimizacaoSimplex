@@ -11,11 +11,11 @@ using OSC.Classes;
 
 namespace OSC
 {
-    public partial class SimplexStep0 : Form
+    public partial class SimplexText : Form
     {
         private SimplexMethod _simplexMethodClass;
 
-        public SimplexStep0(SimplexMethod simplexMethodClass)
+        public SimplexText(SimplexMethod simplexMethodClass)
         {
             InitializeComponent();
             _simplexMethodClass = simplexMethodClass;
@@ -41,7 +41,7 @@ namespace OSC
         {
             // Cria um texto com a função e restrições ajustadas em um formato legível
             var functionString = @"MIN Z = 0 - ( ";
-            foreach (VariableData variable in _simplexMethodClass.Problem.Variables)
+            foreach (VariableData variable in _simplexMethodClass.SimplexData.Problem.Variables)
             {
                 var varValue = variable.FunctionValue;
                 functionString += varValue.GetString() + variable.Value;
@@ -52,10 +52,10 @@ namespace OSC
                 Size = new Size(TextRenderer.MeasureText(functionString, Font).Width + 30, Height);
 
             txtSimplex.Text += functionString + Environment.NewLine + Environment.NewLine;
-            for (int i = 0; i < _simplexMethodClass.Problem.Restrictions.Count; i++)
+            for (int i = 0; i < _simplexMethodClass.SimplexData.Problem.Restrictions.Count; i++)
             {
                 var restricionString = @"(Restrição " + (i + 1) + @"): ";
-                restricionString += _simplexMethodClass.Problem.Restrictions[i].GetSimplexRestrictionString();
+                restricionString += _simplexMethodClass.SimplexData.Problem.Restrictions[i].GetSimplexRestrictionString();
                 if (Size.Width < TextRenderer.MeasureText(restricionString, Font).Width)
                     Size = new Size(TextRenderer.MeasureText(restricionString, Font).Width + 30, Height);
                 txtSimplex.Text += restricionString + Environment.NewLine;
@@ -67,7 +67,7 @@ namespace OSC
         {
             // Cria um texto com a função e restrições ajustadas em um formato legível
             var functionString = @"MIN Z = 0 - (";
-            foreach (VariableData variable in _simplexMethodClass.Problem.Variables)
+            foreach (VariableData variable in _simplexMethodClass.SimplexData.Problem.Variables)
             {
                 var varValue = variable.FunctionValue;
                 functionString += varValue.GetString() + variable.Value;
@@ -78,7 +78,7 @@ namespace OSC
                 Size = new Size(TextRenderer.MeasureText(functionString, Font).Width + 30, Height);
 
             txtSimplex.Text += functionString + Environment.NewLine + Environment.NewLine;
-            foreach (RestrictionFunctionData restr in _simplexMethodClass.Problem.Restrictions)
+            foreach (RestrictionFunctionData restr in _simplexMethodClass.SimplexData.Problem.Restrictions)
             {
                 var restricionString = restr.GetSimplexFreeMemberString();
                 if (Size.Width < TextRenderer.MeasureText(restricionString, Font).Width)

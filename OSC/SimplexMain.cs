@@ -30,13 +30,13 @@ namespace OSC
 
         private void btnStepByStep_Click(object sender, EventArgs e)
         {
-            var simplexMethos = new SimplexMethod(-1);
+            var simplexMethod = new SimplexMethod(_problem);
 
         }
 
         private void btnSimplesExecution_Click(object sender, EventArgs e)
         {
-            var simplexMethos = new SimplexMethod(-1);
+            var simplexMethod = new SimplexMethod(-1);
 
         }
     }

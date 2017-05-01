@@ -9,7 +9,8 @@ namespace OSC.Problem_Classes
         public string Value { get; set; }
         public string Description { get; set; }
         public decimal FunctionValue { get; set; }
-        
+        public decimal FinalValue { get; set; }
+
         public bool CheckIfVariableIsValid()
         {
             if (string.IsNullOrEmpty(Value) || string.IsNullOrEmpty(Description))

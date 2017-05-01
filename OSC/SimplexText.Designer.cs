@@ -1,6 +1,6 @@
 ﻿namespace OSC
 {
-    partial class SimplexStep0
+    partial class SimplexText
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SimplexStep0));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SimplexText));
             this.txtSimplex = new System.Windows.Forms.TextBox();
             this.btnNextStep = new System.Windows.Forms.Button();
             this.SuspendLayout();

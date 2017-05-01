@@ -31,20 +31,20 @@ namespace OSC
             // Transforma o grid e cabeçalhos em um datagridview legível
             DataTable tbl = new DataTable();
             tbl.Columns.Add("MB / MNB");
-            foreach (var ch in _simplexMethodClass.NotBasicVariables)
+            foreach (var ch in _simplexMethodClass.SimplexData.NonBasicVariables)
                 tbl.Columns.Add(ch);
 
-            for (int r = 0; r < _simplexMethodClass.BasicVariables.Length; r++)
+            for (int r = 0; r < _simplexMethodClass.SimplexData.BasicVariables.Length; r++)
             {
                 DataRow row = tbl.NewRow();
-                row["MB / MNB"] = _simplexMethodClass.BasicVariables[r];
-                for (int c = 0; c < _simplexMethodClass.NotBasicVariables.Length; c++)
+                row["MB / MNB"] = _simplexMethodClass.SimplexData.BasicVariables[r];
+                for (int c = 0; c < _simplexMethodClass.SimplexData.NonBasicVariables.Length; c++)
                 {
-                    if (_simplexMethodClass.SimplexTupleGrid[c, r] != null)
+                    if (_simplexMethodClass.SimplexData.SimplexGridArray[c, r] != null)
                     {
                         var tblCol = tbl.Columns[c+1];
-                        row[tblCol.ColumnName] = Math.Round(_simplexMethodClass.SimplexTupleGrid[c, r].Superior, 4) + " / " +
-                                                  Math.Round(_simplexMethodClass.SimplexTupleGrid[c, r].Inferior, 4);
+                        row[tblCol.ColumnName] = Math.Round(_simplexMethodClass.SimplexData.SimplexGridArray[c, r].Superior, 4) + " / " +
+                                                  Math.Round(_simplexMethodClass.SimplexData.SimplexGridArray[c, r].Inferior, 4);
                     }
                 }
                 tbl.Rows.Add(row);
