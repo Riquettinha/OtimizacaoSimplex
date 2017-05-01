@@ -34,10 +34,6 @@ namespace OSC.Classes
                     // então positiva o valor da folga
                     restr.RestrictionLeftOver.LeftOverVariable.FunctionValue = 1;
                 }
-
-                // Após a adição da variável de folga a restrição + o "FuncionValue"
-                // da folga sempre deve ser igual ao RestrictionValue
-                restr.RestrictionType = RestrictionType.EqualTo;
             }
         }
 

@@ -13,6 +13,8 @@ namespace OSC
         {
             InitializeComponent();
             _simplexMethodClass = simplexMethodClass;
+            var location = _simplexMethodClass.Stage * _simplexMethodClass.Stage + _simplexMethodClass.Step * 10;
+            Location = new Point(location, location);
             ConvertGridToDataTable();
         }
 

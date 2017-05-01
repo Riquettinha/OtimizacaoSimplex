@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using OSC.Problem_Classes;
 using System.Windows.Forms;
 using OSC.Classes;
@@ -19,7 +14,8 @@ namespace OSC
         {
             InitializeComponent();
             _simplexMethodClass = simplexMethodClass;
-            Location = new Point(Location.X + 10 * _simplexMethodClass.Step, Location.Y + 10 * _simplexMethodClass.Step);
+            var location = _simplexMethodClass.Stage * _simplexMethodClass.Stage + _simplexMethodClass.Step * 10;
+            Location = new Point(location, location);
         }
 
         private void btnNextStep_Click(object sender, EventArgs e)
