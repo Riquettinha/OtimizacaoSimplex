@@ -25,9 +25,9 @@ namespace OSC
 
         private void SimplexStep0_Load(object sender, EventArgs e)
         {
-            if (_simplexMethodClass.Step == -1)
+            if (_simplexMethodClass.Step-1 == -1)
                 ShowStep01();
-            else if (_simplexMethodClass.Step == 0)
+            else if (_simplexMethodClass.Step-1 == 0)
                 ShowStep0();
 
             txtSimplex.Select(0, 0);

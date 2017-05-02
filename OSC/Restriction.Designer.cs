@@ -93,7 +93,7 @@ namespace OSC
             this.btnNext.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnNext.Name = "btnNext";
             this.btnNext.Size = new System.Drawing.Size(186, 32);
-            this.btnNext.TabIndex = 1001;
+            this.btnNext.TabIndex = 1003;
             this.btnNext.Text = "Próximo Passo";
             this.btnNext.UseVisualStyleBackColor = true;
             this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
@@ -108,7 +108,7 @@ namespace OSC
             this.btnAdd.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(224, 28);
-            this.btnAdd.TabIndex = 1000;
+            this.btnAdd.TabIndex = 1002;
             this.btnAdd.Text = "Adicionar Restrição";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);

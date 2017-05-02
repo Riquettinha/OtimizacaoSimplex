@@ -29,8 +29,8 @@ namespace OSC
                 {
                     restrictionList.Items.Add(newRestr.GetRestrictionString());
                     _problem.Restrictions.Add(newRestr);
-                    UpdateButtonsEnableStatus();
                     Helpers.ClearFormValues(this);
+                    UpdateButtonsEnableStatus();
                 }
                 else
                 {
@@ -177,6 +177,7 @@ namespace OSC
                 Name = "cbCondiction",
                 ForeColor = Color.FromArgb(45, 55, 175),
                 Font = new Font(Font.FontFamily, Font.Size, FontStyle.Bold),
+                TabIndex = 1000,
                 AutoCompleteMode = AutoCompleteMode.None
             };
             condiction.SelectedIndexChanged += cbCondiction_SelectedIndexChanged;
@@ -191,7 +192,8 @@ namespace OSC
             {
                 Name = "txtCond",
                 Location = new Point(locationX, 173),
-                Size = new Size(60, 20)
+                Size = new Size(60, 20),
+                TabIndex = 1001
             };
 
             // Validate the input

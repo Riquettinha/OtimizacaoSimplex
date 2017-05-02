@@ -47,7 +47,7 @@
   <ItemGroup>
     <Compile Include="Classes\SimplexMethod.cs" />
     <Compile Include="Classes\SimplexSteps.cs" />
-    <Compile Include="ComboBoxItem.cs" />
+    <Compile Include="Classes\ComboBoxItem.cs" />
     <Compile Include="Function.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -56,7 +56,7 @@
     </Compile>
     <Compile Include="Problem Classes\FunctionData.cs" />
     <Compile Include="Classes\Helpers.cs" />
-    <Compile Include="Problem Classes\GridCell.cs" />
+    <Compile Include="Classes\GridCell.cs" />
     <Compile Include="Problem Classes\LeftOverData.cs" />
     <Compile Include="Problem Classes\ProblemData.cs" />
     <Compile Include="Problem Classes\RestrictionVariableData.cs" />

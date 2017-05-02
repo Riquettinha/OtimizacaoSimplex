@@ -100,11 +100,11 @@ namespace OSC.Classes
             // Procura pelo menor quociente de ML / variável da coluna permitidda
             int allowedRow = 0;
             decimal minorNumber = -1;
-            for (int n = 1; n <= simplexData.SimplexGridArray.GetLength(0); n++)
+            for (int n = 1; n <= simplexData.GridArray.GetLength(0); n++)
             {
-                if (simplexData.SimplexGridArray[simplexData.AllowedColumn, n].Superior != 0)
+                if (simplexData.GridArray[simplexData.AllowedColumn, n].Superior != 0)
                 {
-                    var quoc = simplexData.SimplexGridArray[0, n].Superior / simplexData.SimplexGridArray[simplexData.AllowedColumn, n].Superior;
+                    var quoc = simplexData.GridArray[0, n].Superior / simplexData.GridArray[simplexData.AllowedColumn, n].Superior;
                     if (quoc < minorNumber || minorNumber == -1)
                     {
                         minorNumber = quoc;
@@ -117,33 +117,33 @@ namespace OSC.Classes
 
         public static void FirstStageFillInferiorCells(ref SimplexData simplexData)
         {
-            var allowedMember = simplexData.SimplexGridArray[simplexData.AllowedColumn, simplexData.AllowedRow];
+            var allowedMember = simplexData.GridArray[simplexData.AllowedColumn, simplexData.AllowedRow];
             allowedMember.Inferior = 1 / allowedMember.Superior;
 
-            for (int c = 0; c < simplexData.SimplexGridArray.GetLength(0); c++)
+            for (int c = 0; c < simplexData.GridArray.GetLength(0); c++)
                 if (c != simplexData.AllowedColumn)
                 {
                     // Está na linha permitida, portanto múltiplica o superior pelo inferior do membro permitido
-                    var editingMember = simplexData.SimplexGridArray[c, simplexData.AllowedRow];
+                    var editingMember = simplexData.GridArray[c, simplexData.AllowedRow];
                     editingMember.Inferior = editingMember.Superior * allowedMember.Inferior;
                 }
 
-            for (int r = 0; r < simplexData.SimplexGridArray.GetLength(1); r++)
+            for (int r = 0; r < simplexData.GridArray.GetLength(1); r++)
                 if (r != simplexData.AllowedRow)
                 {
                     // Está na coluna permitida, portando múltiplica pelo negativo do inferior do membro permitido
-                    var editingMember = simplexData.SimplexGridArray[simplexData.AllowedColumn, r];
+                    var editingMember = simplexData.GridArray[simplexData.AllowedColumn, r];
                     editingMember.Inferior = editingMember.Superior * (allowedMember.Inferior * -1);
                 }
 
-            for (int c = 0; c < simplexData.SimplexGridArray.GetLength(0); c++)
-                for (int r = 0; r < simplexData.SimplexGridArray.GetLength(1); r++)
+            for (int c = 0; c < simplexData.GridArray.GetLength(0); c++)
+                for (int r = 0; r < simplexData.GridArray.GetLength(1); r++)
                     if (c != simplexData.AllowedColumn && r != simplexData.AllowedRow)
                     {
                         // Caso não esteja nem na linha e nem na coluna permitida, soma os valores da
                         // celula superior na linha atual e da coluna permitda com da celula superior da coluna atual com a linha permitida
-                        simplexData.SimplexGridArray[c, r].Inferior = simplexData.SimplexGridArray[c, simplexData.AllowedRow].Superior *
-                                                                      simplexData.SimplexGridArray[simplexData.AllowedColumn, r].Inferior;
+                        simplexData.GridArray[c, r].Inferior = simplexData.GridArray[c, simplexData.AllowedRow].Superior *
+                                                                      simplexData.GridArray[simplexData.AllowedColumn, r].Inferior;
                     }
         }
 
@@ -158,19 +158,19 @@ namespace OSC.Classes
         public static void FirstStageReposition(ref SimplexData simplexData)
         {
             // Reescreve itens superiores
-            for (int c = 0; c < simplexData.SimplexGridArray.GetLength(0); c++)
+            for (int c = 0; c < simplexData.GridArray.GetLength(0); c++)
             {
-                for (int r = 0; r < simplexData.SimplexGridArray.GetLength(1); r++)
+                for (int r = 0; r < simplexData.GridArray.GetLength(1); r++)
                 {
                     if (c == simplexData.AllowedColumn || r == simplexData.AllowedRow)
                     {
-                        simplexData.SimplexGridArray[c, r].Superior = simplexData.SimplexGridArray[c, r].Inferior;
-                        simplexData.SimplexGridArray[c, r].Inferior = 0;
+                        simplexData.GridArray[c, r].Superior = simplexData.GridArray[c, r].Inferior;
+                        simplexData.GridArray[c, r].Inferior = 0;
                     }
                     else
                     {
-                        simplexData.SimplexGridArray[c, r].Superior = simplexData.SimplexGridArray[c, r].Superior+ simplexData.SimplexGridArray[c, r].Inferior;
-                        simplexData.SimplexGridArray[c, r].Inferior = 0;
+                        simplexData.GridArray[c, r].Superior = simplexData.GridArray[c, r].Superior+ simplexData.GridArray[c, r].Inferior;
+                        simplexData.GridArray[c, r].Inferior = 0;
                     }
                 }
             }
@@ -201,12 +201,12 @@ namespace OSC.Classes
             // Procura pelo menor quociente de ML / variável da coluna permitidda
             int allowedRow = 0;
             decimal minorNumber = -1;
-            for (int n = 1; n <= simplexData.SimplexGridArray.GetLength(0); n++)
+            for (int n = 1; n <= simplexData.GridArray.GetLength(0); n++)
             {
-                if (simplexData.SimplexGridArray[simplexData.AllowedColumn, n].Superior != 0 && 
-                    simplexData.SimplexGridArray[simplexData.AllowedColumn, n].Superior.IsNegative() == simplexData.SimplexGridArray[0, n].Superior.IsNegative())
+                if (simplexData.GridArray[simplexData.AllowedColumn, n].Superior != 0 && 
+                    simplexData.GridArray[simplexData.AllowedColumn, n].Superior.IsNegative() == simplexData.GridArray[0, n].Superior.IsNegative())
                 {
-                    var quoc = simplexData.SimplexGridArray[0, n].Superior / simplexData.SimplexGridArray[simplexData.AllowedColumn, n].Superior;
+                    var quoc = simplexData.GridArray[0, n].Superior / simplexData.GridArray[simplexData.AllowedColumn, n].Superior;
                     if (quoc < minorNumber || minorNumber == -1)
                     {
                         minorNumber = quoc;

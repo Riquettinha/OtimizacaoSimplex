@@ -3,29 +3,21 @@ using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 using OSC.Classes;
+using OSC.Problem_Classes;
 
 namespace OSC
 {
     public partial class SimplexGrid : Form
     {
-        private SimplexMethod _simplexMethodClass;
+        private readonly SimplexMethod _simplexMethodClass;
         public SimplexGrid(SimplexMethod simplexMethodClass)
         {
             InitializeComponent();
             _simplexMethodClass = simplexMethodClass;
             var location = _simplexMethodClass.Stage * _simplexMethodClass.Stage + _simplexMethodClass.Step * 10;
             Location = new Point(location, location);
+            this.Text = _simplexMethodClass.Stage + @"ª Etapa " + _simplexMethodClass.Step + @"º Passo";
             ConvertGridToDataTable();
-        }
-
-        public SimplexGrid(string text)
-        {
-            Text = text;
-        }
-
-        public void SelectedGridItem(int column, int row)
-        {
-            gridView.CurrentCell = gridView.Rows[row].Cells[column];
         }
 
         public void ConvertGridToDataTable()
@@ -42,11 +34,11 @@ namespace OSC
                 row["MB / MNB"] = _simplexMethodClass.SimplexData.BasicVariables[r];
                 for (int c = 0; c < _simplexMethodClass.SimplexData.NonBasicVariables.Length; c++)
                 {
-                    if (_simplexMethodClass.SimplexData.SimplexGridArray[c, r] != null)
+                    if (_simplexMethodClass.SimplexData.GridArray[c, r] != null)
                     {
                         var tblCol = tbl.Columns[c+1];
-                        row[tblCol.ColumnName] = Math.Round(_simplexMethodClass.SimplexData.SimplexGridArray[c, r].Superior, 4) + " / " +
-                                                  Math.Round(_simplexMethodClass.SimplexData.SimplexGridArray[c, r].Inferior, 4);
+                        row[tblCol.ColumnName] = Math.Round(_simplexMethodClass.SimplexData.GridArray[c, r].Superior, 4) + " / " +
+                                                  Math.Round(_simplexMethodClass.SimplexData.GridArray[c, r].Inferior, 4);
                     }
                 }
                 tbl.Rows.Add(row);
@@ -62,6 +54,15 @@ namespace OSC
             gridView.MinimumSize = new Size(this.Width, this.Height);
             gridView.MaximumSize = new Size(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
 
+            if (_simplexMethodClass.SimplexData.Status == SimplexStatus.Sucess)
+            {
+                btnNextStep.Visible = false;
+                gridView.Dock = DockStyle.Fill;
+            }
+            else if(_simplexMethodClass.SimplexData.Status == SimplexStatus.Fail)
+            {
+                Helpers.ShowErrorMessage("Solução ótima inatingível!");
+            }
 
             gridView.AutoSize = true;
             AutoSize = true;
