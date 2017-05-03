@@ -52,6 +52,7 @@ namespace OSC
         {
             if (Helpers.BackForm())
             {
+                _problem.Function = null;
                 Application.OpenForms["Variables"].Show();
                 Hide();
             }

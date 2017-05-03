@@ -8,7 +8,7 @@ namespace OSC
 {
     public partial class SimplexText : Form
     {
-        private SimplexMethod _simplexMethodClass;
+        private readonly SimplexMethod _simplexMethodClass;
 
         public SimplexText(SimplexMethod simplexMethodClass)
         {

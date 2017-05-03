@@ -80,11 +80,11 @@
     <Compile Include="SimplexText.Designer.cs">
       <DependentUpon>SimplexText.cs</DependentUpon>
     </Compile>
-    <Compile Include="SimplexGrid.cs">
+    <Compile Include="StepByStepForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SimplexGrid.Designer.cs">
-      <DependentUpon>SimplexGrid.cs</DependentUpon>
+    <Compile Include="StepByStepForm.Designer.cs">
+      <DependentUpon>StepByStepForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Variables.cs">
       <SubType>Form</SubType>
@@ -107,8 +107,8 @@
     <EmbeddedResource Include="SimplexText.resx">
       <DependentUpon>SimplexText.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SimplexGrid.resx">
-      <DependentUpon>SimplexGrid.cs</DependentUpon>
+    <EmbeddedResource Include="StepByStepForm.resx">
+      <DependentUpon>StepByStepForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Variables.resx">
       <DependentUpon>Variables.cs</DependentUpon>

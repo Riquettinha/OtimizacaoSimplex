@@ -30,6 +30,7 @@ namespace OSC
                     restrictionList.Items.Add(newRestr.GetRestrictionString());
                     _problem.Restrictions.Add(newRestr);
                     Helpers.ClearFormValues(this);
+                    Controls["txtVar0"].Focus();
                     UpdateButtonsEnableStatus();
                 }
                 else
@@ -94,6 +95,7 @@ namespace OSC
         {
             if (Helpers.BackForm())
             {
+                _problem.Restrictions = null;
                 Application.OpenForms["Function"].Show();
                 Hide();
             }

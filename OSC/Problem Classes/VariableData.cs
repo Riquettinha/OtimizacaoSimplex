@@ -11,6 +11,17 @@ namespace OSC.Problem_Classes
         public decimal FunctionValue { get; set; }
         public decimal FinalValue { get; set; }
 
+        public VariableData Clone()
+        {
+            return new VariableData
+            {
+                Value = Value,
+                Description = Description,
+                FunctionValue = FunctionValue,
+                FinalValue = FinalValue
+            };
+        }
+
         public bool CheckIfVariableIsValid()
         {
             if (string.IsNullOrEmpty(Value) || string.IsNullOrEmpty(Description))

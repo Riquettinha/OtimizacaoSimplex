@@ -29,6 +29,7 @@ namespace OSC
 
                 Helpers.ClearFormValues(this);
                 txtVariableDesc.ForeColor = Color.DimGray;
+                txtVariableValue.Focus();
             }
 
             UpdateButtonsEnableStatus();

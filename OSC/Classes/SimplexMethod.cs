@@ -1,4 +1,6 @@
-﻿using OSC.Problem_Classes;
+﻿using System.Net.Mime;
+using System.Windows.Forms;
+using OSC.Problem_Classes;
 
 namespace OSC.Classes
 {
@@ -130,30 +132,27 @@ namespace OSC.Classes
                 Step++;
             }
 
-            if (!_stepbystep || !StepHasVisualChange())
-                ExecuteSimplex();
-            else
+            if (_stepbystep && StepHasVisualChange())
                 ShowStepForm();
+            else
+                ExecuteSimplex();
         }
 
         private void ShowStepForm()
         {
-            if (Step <= 1 || SimplexData.Status == SimplexStatus.Sucess)
-            {
-                // Primeiros passos possui solução em texto e solução ótima retorna o valor das variáveis
-                var textForm = new SimplexText(this);
-                textForm.Show();
-            }
+            var openedGrid = Application.OpenForms["StepByStepForm"];
+            if (openedGrid != null)
+                (openedGrid as StepByStepForm).Restart(this);
             else
             {
-                var gridForm = new SimplexGrid(this);
+                var gridForm = new StepByStepForm(this);
                 gridForm.Show();
             }
         }
 
         private bool StepHasVisualChange()
         {
-            if (Step == 0 || Step == 1 || Step == 2||Step == 5 || Step == 6 || SimplexData.Status != SimplexStatus.Pending)
+            if (((Step == 0 || Step == 1) && SimplexData.AllowedColumn == 0) || Step == 2||Step == 5 || Step == 6 || SimplexData.Status != SimplexStatus.Pending)
                 return true;
             return false;
         }

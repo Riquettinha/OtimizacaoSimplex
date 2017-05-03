@@ -71,11 +71,19 @@ namespace OSC.Classes
         }
 
         /// <summary>
-        /// Show message box with warning icon.
+        /// Show message box with warning icon and "Atenção" header.
         /// </summary>
         public static void ShowErrorMessage(string message)
         {
             MessageBox.Show(message, @"Atenção!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        /// <summary>
+        /// Show message box with exclamation icon and "Sucesso" header.
+        /// </summary>
+        public static void ShowSucessMessage(string message)
+        {
+            MessageBox.Show(message, @"Sucesso!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         /// <summary>
