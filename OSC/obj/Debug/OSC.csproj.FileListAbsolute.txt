@@ -52,3 +52,6 @@ C:\Users\Isabella\Documents\Visual Studio 2017\Projects\Git Source\OtimizacaoSim
 C:\Users\Isabella\Documents\Visual Studio 2017\Projects\Git Source\OtimizacaoSimplex\OSC\obj\Debug\OSC.csprojResolveAssemblyReference.cache
 C:\Users\Isabella\Documents\Visual Studio 2017\Projects\Git Source\OtimizacaoSimplex\OSC\obj\Debug\OSC.SimplexGrid.resources
 C:\Users\Isabella\Documents\Visual Studio 2017\Projects\Git Source\OtimizacaoSimplex\OSC\obj\Debug\OSC.SimplexText.resources
+C:\Users\isabella.riquetti\Documents\Visual Studio 2015\Projects\Git Faculdade\OtimizacaoSimplex\OSC\obj\Debug\OSC.SimplexMain.resources
+C:\Users\isabella.riquetti\Documents\Visual Studio 2015\Projects\Git Faculdade\OtimizacaoSimplex\OSC\obj\Debug\OSC.SimplexText.resources
+C:\Users\isabella.riquetti\Documents\Visual Studio 2015\Projects\Git Faculdade\OtimizacaoSimplex\OSC\obj\Debug\OSC.StepByStepForm.resources
