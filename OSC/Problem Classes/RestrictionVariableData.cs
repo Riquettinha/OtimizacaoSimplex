@@ -9,5 +9,14 @@
         {
             RestrictionValue = 0;
         }
+
+        public RestrictionVariableData Clone()
+        {
+            return new RestrictionVariableData
+            {
+                RestrictionValue = RestrictionValue,
+                RestrictionVariable = RestrictionVariable.Clone()
+            };
+        }
     }
 }

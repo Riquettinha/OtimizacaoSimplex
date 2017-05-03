@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using OSC.Problem_Classes;
 using System.Windows.Forms;
 using OSC.Classes;
@@ -13,13 +8,14 @@ namespace OSC
 {
     public partial class SimplexText : Form
     {
-        private SimplexMethod _simplexMethodClass;
+        private readonly SimplexMethod _simplexMethodClass;
 
         public SimplexText(SimplexMethod simplexMethodClass)
         {
             InitializeComponent();
             _simplexMethodClass = simplexMethodClass;
-            Location = new Point(Location.X + 10 * _simplexMethodClass.Step, Location.Y + 10 * _simplexMethodClass.Step);
+            var location = _simplexMethodClass.Stage * _simplexMethodClass.Stage + _simplexMethodClass.Step * 10;
+            Location = new Point(location, location);
         }
 
         private void btnNextStep_Click(object sender, EventArgs e)
@@ -29,9 +25,9 @@ namespace OSC
 
         private void SimplexStep0_Load(object sender, EventArgs e)
         {
-            if (_simplexMethodClass.Step == -1)
+            if (_simplexMethodClass.Step-1 == -1)
                 ShowStep01();
-            else if (_simplexMethodClass.Step == 0)
+            else if (_simplexMethodClass.Step-1 == 0)
                 ShowStep0();
 
             txtSimplex.Select(0, 0);

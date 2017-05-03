@@ -31,28 +31,32 @@ namespace OSC.Classes
                 {
                     form.Invoke(new Action(delegate
                     {
-                        ((TextBox)form.Controls[i]).Text = "";
+                        (form.Controls[i] as TextBox).Text = "";
                     }));
                 }
                 else if (formControls[i].GetType() == typeof(ComboBox))
                 {
-                    form.Invoke(new Action(delegate
+                    var comboBox = form.Controls[i] as ComboBox;
+                    if (comboBox.DataSource == null)
                     {
-                        ((ComboBox)form.Controls[i]).SelectedIndex = -1;
-                    }));
+                        form.Invoke(new Action(delegate
+                        {
+                            comboBox.SelectedIndex = -1;
+                        }));
+                    }
                 }
                 else if (formControls[i].GetType() == typeof(CheckBox))
                 {
                     form.Invoke(new Action(delegate
                     {
-                        ((CheckBox)form.Controls[i]).Checked = false;
+                        (form.Controls[i] as CheckBox).Checked = false;
                     }));
                 }
                 else if (formControls[i].GetType() == typeof(RadioButton))
                 {
                     form.Invoke(new Action(delegate
                     {
-                        ((RadioButton)form.Controls[i]).Checked = false;
+                        (form.Controls[i] as RadioButton).Checked = false;
                     }));
                 }
             }
@@ -67,11 +71,19 @@ namespace OSC.Classes
         }
 
         /// <summary>
-        /// Show message box with warning icon.
+        /// Show message box with warning icon and "Atenção" header.
         /// </summary>
         public static void ShowErrorMessage(string message)
         {
             MessageBox.Show(message, @"Atenção!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        /// <summary>
+        /// Show message box with exclamation icon and "Sucesso" header.
+        /// </summary>
+        public static void ShowSucessMessage(string message)
+        {
+            MessageBox.Show(message, @"Sucesso!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         /// <summary>

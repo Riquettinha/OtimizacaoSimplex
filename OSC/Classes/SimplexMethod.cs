@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Threading;
+﻿using System.Net.Mime;
 using System.Windows.Forms;
 using OSC.Problem_Classes;
 
@@ -12,106 +9,18 @@ namespace OSC.Classes
         public SimplexData SimplexData;
         public int Stage = 1;
         public int Step = -1;
+        readonly bool _stepbystep;
 
-        public SimplexMethod(ProblemData problem)
+        public SimplexMethod(ProblemData problem, bool stepbystep)
         {
             SimplexData = new SimplexData
             {
-                Problem = problem
+                Problem = problem,
+                Status = SimplexStatus.Pending
             };
 
+            _stepbystep = stepbystep;
             ExecuteSimplex();
-        }
-
-        public SimplexMethod(int step)
-        {
-            GeraProblemaParaTeste();
-            Step = step;
-            ExecuteSimplex();
-        }
-        
-        public SimplexMethod(ProblemData problem, int step)
-        {
-            SimplexData.Problem = problem;
-            Step = step;
-            ExecuteSimplex();
-        }
-
-        private void GeraProblemaParaTeste()
-        {
-            SimplexData = new SimplexData();
-            // Gera um problema para testes (igual ao do slide)
-            SimplexData.Problem = new ProblemData();
-            SimplexData.Problem.Variables.Add(new VariableData
-            {
-                Description = "x1".SubscriptNumber(),
-                Value = "x1".SubscriptNumber(),
-                FunctionValue = 80
-            });
-            SimplexData.Problem.Variables.Add(new VariableData
-            {
-                Description = "x2".SubscriptNumber(),
-                Value = "x2".SubscriptNumber(),
-                FunctionValue = 60
-            });
-            SimplexData.Problem.Function = new FunctionData()
-            {
-                Maximiza = false
-            };
-            SimplexData.Problem.Restrictions.Add(new RestrictionFunctionData
-            {
-                RestrictionType = RestrictionType.MoreThan,
-                RestrictionValue = 24,
-                RestrictionData = new List<RestrictionVariableData>
-                {
-                    new RestrictionVariableData
-                    {
-                        RestrictionValue = 4,
-                        RestrictionVariable = SimplexData.Problem.Variables[0]
-                    },
-                    new RestrictionVariableData
-                    {
-                        RestrictionValue = 6,
-                        RestrictionVariable = SimplexData.Problem.Variables[1]
-                    }
-                }
-            });
-            SimplexData.Problem.Restrictions.Add(new RestrictionFunctionData
-            {
-                RestrictionType = RestrictionType.LessThan,
-                RestrictionValue = 16,
-                RestrictionData = new List<RestrictionVariableData>
-                {
-                    new RestrictionVariableData
-                    {
-                        RestrictionValue = 4,
-                        RestrictionVariable = SimplexData.Problem.Variables[0]
-                    },
-                    new RestrictionVariableData
-                    {
-                        RestrictionValue = 2,
-                        RestrictionVariable = SimplexData.Problem.Variables[1]
-                    }
-                }
-            });
-            SimplexData.Problem.Restrictions.Add(new RestrictionFunctionData
-            {
-                RestrictionType = RestrictionType.LessThan,
-                RestrictionValue = 3,
-                RestrictionData = new List<RestrictionVariableData>
-                {
-                    new RestrictionVariableData
-                    {
-                        RestrictionValue = 0,
-                        RestrictionVariable = SimplexData.Problem.Variables[0]
-                    },
-                    new RestrictionVariableData
-                    {
-                        RestrictionValue = 1,
-                        RestrictionVariable = SimplexData.Problem.Variables[1]
-                    }
-                }
-            });
         }
 
         private void ExecuteSimplex()
@@ -130,12 +39,12 @@ namespace OSC.Classes
                 // Preenche um grid com as informações corretas
                 SimplexData.NonBasicVariables = GetColumnsHeaderArray();
                 SimplexData.BasicVariables = GetRowsHeaderArray();
-                SimplexData.SimplexGridArray = GetProblemSimplexGrid();
+                SimplexData.GridArray = GetProblemSimplexGrid();
             }
             else if (Stage == 1 && Step == 1)
             {
                 // Verifica se existe membro livre negativpo
-                if (SimplexSteps.FirstStageCheckForTheEnd(SimplexData.SimplexGridArray) != 0)
+                if (SimplexSteps.FirstStageCheckForTheEnd(SimplexData.GridArray) != 0)
                 {
                     // Caso tenha vai para o próximo passo
                     Step++;
@@ -150,39 +59,39 @@ namespace OSC.Classes
             else if (Stage == 1 && Step == 2)
             {
                 // Pega primeira coluna com valor negativo
-                SimplexData.AllowedColumn = SimplexSteps.FirstStageGetAllowedColumn(SimplexData.SimplexGridArray);
+                SimplexData.AllowedColumn = SimplexSteps.FirstStageGetAllowedColumn(SimplexData.GridArray);
                 if (SimplexData.AllowedColumn != 0)
                 {
+                    // Se coluna permitida existe vai para o próximo passo
                     Step++;
                 }
                 else
                 {
-                    Helpers.ShowErrorMessage("Solução permissível inexistente!");
-                    return;
+                    // Se não tem, é um caso de região permissiva inexistente
+                    SimplexData.Status = SimplexStatus.Fail;
                 }
             }
             else if (Stage == 1 && Step == 3)
             {
                 // Pega linha com menor quocite do ML pela celula superior da coluna permitida
-                 SimplexData.AllowedRow  = SimplexSteps.FirstStageGetAllowedRow(SimplexData);
+                SimplexData.AllowedRow  = SimplexSteps.FirstStageGetAllowedRow(SimplexData);
                 Step++;
             }
             else if (Step == 4)
             {
-                // Independe de etapa
-                // Preenche célular inferiores
+                // Preenche célular inferiores do grid
                 SimplexSteps.FirstStageFillInferiorCells(ref SimplexData);
                 Step++;
             }
             else if (Step == 5)
             {
-                // Troca variáveis básicas com não básicas
+                // Troca coluna da variáveis básicas com não básicas
                 SimplexSteps.FirstStageUpdateHeaders(ref SimplexData);
                 Step++;
             }
             else if (Step == 6)
             {
-                // Preenche novamente células superiores
+                // Preenche novamente células superiores e volta à verificação do primeiro passo
                 SimplexSteps.FirstStageReposition(ref SimplexData);
                 Step = 1;
                 Stage = 1;
@@ -190,30 +99,30 @@ namespace OSC.Classes
             else if (Stage == 2 && Step == 1)
             {
                 // Verifica se existe variável com valor de função positiva
-                if (SimplexSteps.SecondStageNegativeValueInFunction(SimplexData.SimplexGridArray) != 0)
+                if (SimplexSteps.SecondStageNegativeValueInFunction(SimplexData.GridArray) != 0)
                 {
                     // Caso tenha vai para o próximo passo
                     Step++;
                 }
                 else
                 {
-                    // Solução ÓTIMA
-                    var aux = new SimplexGrid(this);
-                    aux.ShowDialog();
+                    // Solução ÓTIMA encontrada
+                    SimplexData.Status = SimplexStatus.Sucess;
                 }
             }
             else if (Stage == 2 && Step == 2)
             {
                 // Pega coluna permitida
-                SimplexData.AllowedColumn = SimplexSteps.SecondStageGetAllowedColumn(SimplexData.SimplexGridArray);
+                SimplexData.AllowedColumn = SimplexSteps.SecondStageGetAllowedColumn(SimplexData.GridArray);
                 if (SimplexData.AllowedColumn != 0)
                 {
+                    // Caso tenha vai para o próximo passo
                     Step++;
                 }
                 else
                 {
-                    Helpers.ShowErrorMessage("Solução permissível inexistente! Infinita.");
-                    return;
+                    // Se não tem, é um caso de região permissiva impossível
+                    SimplexData.Status = SimplexStatus.Fail;
                 }
             }
             else if (Stage == 2 && Step == 3)
@@ -222,7 +131,30 @@ namespace OSC.Classes
                 SimplexData.AllowedRow = SimplexSteps.SecondStageGetAllowedRow(SimplexData);
                 Step++;
             }
-            ExecuteSimplex();
+
+            if (_stepbystep && StepHasVisualChange())
+                ShowStepForm();
+            else
+                ExecuteSimplex();
+        }
+
+        private void ShowStepForm()
+        {
+            var openedGrid = Application.OpenForms["StepByStepForm"];
+            if (openedGrid != null)
+                (openedGrid as StepByStepForm).Restart(this);
+            else
+            {
+                var gridForm = new StepByStepForm(this);
+                gridForm.Show();
+            }
+        }
+
+        private bool StepHasVisualChange()
+        {
+            if (((Step == 0 || Step == 1) && SimplexData.AllowedColumn == 0) || Step == 2||Step == 5 || Step == 6 || SimplexData.Status != SimplexStatus.Pending)
+                return true;
+            return false;
         }
 
         private string[] GetColumnsHeaderArray()
@@ -273,8 +205,6 @@ namespace OSC.Classes
 
         public void NextStep()
         {
-            if (Step <= 0)
-                Step++;
             ExecuteSimplex();
         }
     }
