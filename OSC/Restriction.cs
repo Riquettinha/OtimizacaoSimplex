@@ -312,6 +312,11 @@ namespace OSC
             // Verifica se é possível adicionar o valor a lista
             var textsFilles = GetFilledTextBoxesCount();
             btnAdd.Enabled = NeededValueIsFilled() && textsFilles >= 2;
+
+            if (!btnAdd.Enabled && btnNext.Enabled)
+                AcceptButton = btnNext;
+            else
+                AcceptButton = btnAdd;
         }
     }
 }

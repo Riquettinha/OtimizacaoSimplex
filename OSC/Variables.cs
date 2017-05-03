@@ -122,12 +122,15 @@ namespace OSC
 
             // Verifica se a lista de variáveis tem valores o suficiente para ir para o próximo passo
             btnNext.Enabled = _problem.Variables.Count >= 2;
-
+            
             // Verifica se é possível adicionar o valor a lista
             btnAdd.Enabled = txtVariableDesc.Text.Length != 0 && txtVariableDesc.Text.Length != 0;
+            if (!btnAdd.Enabled && btnNext.Enabled)
+                AcceptButton = btnNext;
+            else
+                AcceptButton = btnAdd;
         }
-
-
+        
         public bool DescTBFontIsBlack()
         {
             return txtVariableDesc.ForeColor == Color.Black;
@@ -147,6 +150,11 @@ namespace OSC
             {
                 txtVariableDesc.SelectAll();
             }
+        }
+
+        private void Variables_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.OpenForms["Main"].Show();
         }
     }
 }

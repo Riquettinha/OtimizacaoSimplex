@@ -54,6 +54,12 @@
     <Compile Include="Function.Designer.cs">
       <DependentUpon>Function.cs</DependentUpon>
     </Compile>
+    <Compile Include="Main.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main.Designer.cs">
+      <DependentUpon>Main.cs</DependentUpon>
+    </Compile>
     <Compile Include="Problem Classes\FunctionData.cs" />
     <Compile Include="Classes\Helpers.cs" />
     <Compile Include="Classes\GridCell.cs" />
@@ -74,12 +80,6 @@
     <Compile Include="SimplexMain.Designer.cs">
       <DependentUpon>SimplexMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="SimplexText.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SimplexText.Designer.cs">
-      <DependentUpon>SimplexText.cs</DependentUpon>
-    </Compile>
     <Compile Include="StepByStepForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -98,14 +98,14 @@
     <EmbeddedResource Include="Function.resx">
       <DependentUpon>Function.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Main.resx">
+      <DependentUpon>Main.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Restriction.resx">
       <DependentUpon>Restriction.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SimplexMain.resx">
       <DependentUpon>SimplexMain.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SimplexText.resx">
-      <DependentUpon>SimplexText.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StepByStepForm.resx">
       <DependentUpon>StepByStepForm.cs</DependentUpon>

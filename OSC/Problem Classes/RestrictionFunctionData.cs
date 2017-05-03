@@ -13,7 +13,8 @@ namespace OSC.Problem_Classes
         [Description("Maior ou igual a")]
         MoreThan = 1,
         [Description("Igual a")]
-        EqualTo = 2
+        EqualTo = 2,
+        Default = -1
     }
 
     public class RestrictionFunctionData

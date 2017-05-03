@@ -172,6 +172,7 @@
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Variáveis";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Variables_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

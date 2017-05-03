@@ -247,5 +247,25 @@ namespace OSC.Classes
             }
             return finalString;
         }
+
+        /// <summary>
+        /// Get excel column name from number
+        /// </summary>
+        /// <param name="columnNumber"></param>
+        /// <returns></returns>
+        public static string GetExcelColumnName(int columnNumber)
+        {
+            int dividend = columnNumber;
+            string columnName = String.Empty;
+
+            while (dividend > 0)
+            {
+                var modulo = (dividend - 1) % 26;
+                columnName = Convert.ToChar(65 + modulo).ToString() + columnName;
+                dividend = (int)((dividend - modulo) / 26);
+            }
+
+            return columnName;
+        }
     }
 }
