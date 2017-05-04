@@ -318,5 +318,10 @@ namespace OSC
             else
                 AcceptButton = btnAdd;
         }
+
+        private void Restriction_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Environment.Exit(0);
+        }
     }
 }

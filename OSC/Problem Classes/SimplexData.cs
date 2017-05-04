@@ -8,8 +8,10 @@ namespace OSC.Problem_Classes
         Pending = 0,
         [Description("Ponto ótimo encontrado")]
         Sucess = 1,
-        [Description("Solulção infinita ou impossível")]
-        Fail = 3
+        [Description("Solução impossível")]
+        Impossible = 3,
+        [Description("Solução infinita")]
+        Infinite = 4
     }
 
     public class SimplexData

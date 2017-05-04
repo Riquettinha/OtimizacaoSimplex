@@ -21,6 +21,7 @@ namespace OSC.Problem_Classes
     {
         public RestrictionType RestrictionType { get; set; }
         public decimal RestrictionValue { get; set; }
+        public decimal RestrictionFinalSum { get; set; }
         public List<RestrictionVariableData> RestrictionData { get; set; }
         public LeftOverData RestrictionLeftOver = new LeftOverData();
 

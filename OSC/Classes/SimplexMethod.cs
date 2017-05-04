@@ -1,4 +1,5 @@
-﻿using System.Net.Mime;
+﻿using System.Linq;
+using System.Net.Mime;
 using System.Windows.Forms;
 using OSC.Problem_Classes;
 
@@ -68,7 +69,7 @@ namespace OSC.Classes
                 else
                 {
                     // Se não tem, é um caso de região permissiva inexistente
-                    SimplexData.Status = SimplexStatus.Fail;
+                    SimplexData.Status = SimplexStatus.Impossible;
                 }
             }
             else if (Stage == 1 && Step == 3)
@@ -108,6 +109,7 @@ namespace OSC.Classes
                 {
                     // Solução ÓTIMA encontrada
                     SimplexData.Status = SimplexStatus.Sucess;
+                    FillSucessData();
                 }
             }
             else if (Stage == 2 && Step == 2)
@@ -122,7 +124,7 @@ namespace OSC.Classes
                 else
                 {
                     // Se não tem, é um caso de região permissiva impossível
-                    SimplexData.Status = SimplexStatus.Fail;
+                    SimplexData.Status = SimplexStatus.Infinite;
                 }
             }
             else if (Stage == 2 && Step == 3)
@@ -132,10 +134,39 @@ namespace OSC.Classes
                 Step++;
             }
 
-            if (_stepbystep && StepHasVisualChange())
+            if (SimplexData.Status != SimplexStatus.Pending || _stepbystep && StepHasVisualChange())
                 ShowStepForm();
-            else
+            else if (SimplexData.Status == SimplexStatus.Pending)
                 ExecuteSimplex();
+        }
+
+        private void FillSucessData()
+        {
+            var problem = SimplexData.Problem;
+            var grid = SimplexData.GridArray;
+            var firstColumn = SimplexData.BasicVariables;
+
+            // Preenche o valor final das variáveis
+            for (int i = 1; i < firstColumn.Length; i++)
+            {
+                var originalVariable = problem.Variables.FirstOrDefault(v => v.Value == firstColumn[i]);
+                if (originalVariable != null)
+                    originalVariable.FinalValue = grid[0, i].Superior;
+            }
+
+            // Preenche o valor final das restrições
+            foreach (var restriction in SimplexData.Problem.Restrictions)
+            {
+                // Calcula o valor total da restrição com base nos valores dela e valores finais das variáveis
+                decimal sum = 0;
+                foreach (RestrictionVariableData data in restriction.RestrictionData)
+                    sum += data.RestrictionVariable.FinalValue * data.RestrictionValue;
+
+                restriction.RestrictionFinalSum = sum;
+
+                // Calcula o valor da sobra da restrição
+                restriction.RestrictionLeftOver.LeftOverVariable.FinalValue = restriction.RestrictionValue - restriction.RestrictionFinalSum;
+            }
         }
 
         private void ShowStepForm()

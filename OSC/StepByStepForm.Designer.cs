@@ -48,6 +48,7 @@
             this.gridView.AllowUserToResizeRows = false;
             this.gridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.gridView.BackgroundColor = System.Drawing.Color.White;
+            this.gridView.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -96,8 +97,8 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.Controls.Add(this.gridView);
             this.panel1.Controls.Add(this.txtSimplex);
+            this.panel1.Controls.Add(this.gridView);
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(589, 393);
@@ -139,8 +140,9 @@
             this.Location = new System.Drawing.Point(10, 10);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "StepByStepForm";
-            this.Text = "Primeiro Estágio";
-            this.Load += new System.EventHandler(this.SimplexStep1_Load);
+            this.Text = "Passo a Passo";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.StepByStepForm_FormClosing);
+            this.Load += new System.EventHandler(this.SimplexStep_Load);
             ((System.ComponentModel.ISupportInitialize)(this.gridView)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

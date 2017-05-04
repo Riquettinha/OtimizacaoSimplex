@@ -88,9 +88,10 @@ namespace OSC.Classes
         {
             // Procura por variáveis negativas na linha do membro livre negativo
             var rowWithNegativeFreeNumber = FirstStageCheckForTheEnd(simplexGrid);
-            for (int n = 1; n < simplexGrid.GetLength(1); n++)
+            for (int n = 1; n < simplexGrid.GetLength(0); n++)
                 if (simplexGrid[n, rowWithNegativeFreeNumber].Superior.IsNegative())
                     return n;
+                
 
             return 0;
         }
@@ -100,12 +101,12 @@ namespace OSC.Classes
             // Procura pelo menor quociente de ML / variável da coluna permitidda
             int allowedRow = 0;
             decimal minorNumber = -1;
-            for (int n = 1; n <= simplexData.GridArray.GetLength(0); n++)
+            for (int n = 1; n < simplexData.GridArray.GetLength(1); n++)
             {
                 if (simplexData.GridArray[simplexData.AllowedColumn, n].Superior != 0)
                 {
                     var quoc = simplexData.GridArray[0, n].Superior / simplexData.GridArray[simplexData.AllowedColumn, n].Superior;
-                    if (quoc < minorNumber || minorNumber == -1)
+                    if (quoc > 0 && (quoc < minorNumber || minorNumber == -1))
                     {
                         minorNumber = quoc;
                         allowedRow = n;
@@ -189,7 +190,7 @@ namespace OSC.Classes
         {
             // Procura por variáveis negativas na coluna do membro livre da função positiva
             var columnWithPositiveFunctionValue = SecondStageNegativeValueInFunction(simplexGrid);
-            for (int n = 1; n <= simplexGrid.GetLength(1); n++)
+            for (int n = 1; n < simplexGrid.GetLength(1); n++)
                 if (!simplexGrid[columnWithPositiveFunctionValue, n].Superior.IsNegative())
                     return n;
 
@@ -201,13 +202,12 @@ namespace OSC.Classes
             // Procura pelo menor quociente de ML / variável da coluna permitidda
             int allowedRow = 0;
             decimal minorNumber = -1;
-            for (int n = 1; n <= simplexData.GridArray.GetLength(0); n++)
+            for (int n = 1; n < simplexData.GridArray.GetLength(1); n++)
             {
-                if (simplexData.GridArray[simplexData.AllowedColumn, n].Superior != 0 && 
-                    simplexData.GridArray[simplexData.AllowedColumn, n].Superior.IsNegative() == simplexData.GridArray[0, n].Superior.IsNegative())
+                if (simplexData.GridArray[simplexData.AllowedColumn, n].Superior != 0)
                 {
                     var quoc = simplexData.GridArray[0, n].Superior / simplexData.GridArray[simplexData.AllowedColumn, n].Superior;
-                    if (quoc < minorNumber || minorNumber == -1)
+                    if (quoc > 0 && (quoc < minorNumber || minorNumber == -1))
                     {
                         minorNumber = quoc;
                         allowedRow = n;

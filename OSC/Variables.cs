@@ -152,9 +152,14 @@ namespace OSC
             }
         }
 
-        private void Variables_FormClosing(object sender, FormClosingEventArgs e)
+        private void btnBack_Click(object sender, EventArgs e)
         {
             Application.OpenForms["Main"].Show();
+        }
+
+        private void Variables_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }

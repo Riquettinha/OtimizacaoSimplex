@@ -31,7 +31,7 @@ namespace OSC
             txtFile.Text = ofdCsv.FileName;
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void btnManual_Click(object sender, EventArgs e)
         {
             new Variables().Show();
             Hide();
@@ -102,9 +102,9 @@ namespace OSC
 
         private bool GetFunctionType(string[] line)
         {
-            if (line[line[0].Length].Equals("-"))
+            if (line[line.Length-2].Equals("-"))
                 _problem.Function = new FunctionData{Maximiza = false};
-            else if (line[line[0].Length].Equals("+"))
+            else if (line[line.Length-2].Equals("+"))
                 _problem.Function = new FunctionData{Maximiza = true};
             else
                 return false;
@@ -186,6 +186,11 @@ namespace OSC
             if(value == "=")
                 return RestrictionType.MoreThan;
             return RestrictionType.Default;
+        }
+
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }

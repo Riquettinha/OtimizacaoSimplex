@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using OSC.Classes;
 using OSC.Problem_Classes;
@@ -14,7 +15,11 @@ namespace OSC
         {
             InitializeComponent();
             _simplexMethodClass = simplexMethodClass;
-            this.Text = _simplexMethodClass.Stage + @"ª Etapa " + _simplexMethodClass.Step + @"º Passo";
+        }
+
+        private void SimplexStep_Load(object sender, EventArgs e)
+        {
+            FillData();
         }
 
         public void ConvertGridToDataTable()
@@ -44,11 +49,6 @@ namespace OSC
             gridView.DataSource = tbl;
         }
 
-        private void SimplexStep1_Load(object sender, EventArgs e)
-        {
-            FillData();
-        }
-
         private void FillData()
         {
             txtSimplex.Text = "";
@@ -58,12 +58,16 @@ namespace OSC
             {
                 btnNextStep.Visible = false;
                 gridView.Dock = DockStyle.Fill;
-                Helpers.ShowErrorMessage("Ponto ótimo encontrado!");
                 ShowSucess();
+                Helpers.ShowErrorMessage("Ponto ótimo encontrado!");
             }
-            else if (_simplexMethodClass.SimplexData.Status == SimplexStatus.Fail)
+            else if (_simplexMethodClass.SimplexData.Status == SimplexStatus.Impossible)
             {
-                Helpers.ShowErrorMessage("Solução ótima inatingível!");
+                Helpers.ShowErrorMessage("Solução ótima impossível de ser atingida!");
+            }
+            else if (_simplexMethodClass.SimplexData.Status == SimplexStatus.Infinite)
+            {
+                Helpers.ShowErrorMessage("Solução infinita!");
             }
             else
             {
@@ -102,7 +106,24 @@ namespace OSC
 
         private void ShowSucess()
         {
-            // TODO: Preencher dados básicos do inicio e valores finais de cada variável.
+            txtSimplex.Visible = true;
+            txtSimplex.BringToFront();
+            gridView.Visible = false;
+
+            var problem = _simplexMethodClass.SimplexData.Problem;
+            var finalString = "";
+            foreach (VariableData data in problem.Variables)
+                finalString += string.Concat(data.Value, " = ", data.FinalValue.ToString("0.###"), Environment.NewLine);
+
+            finalString += Environment.NewLine;
+            for (int i = 0; i < problem.Restrictions.Count; i++)
+            {
+                var restriction = problem.Restrictions[i];
+                finalString += string.Concat("(Restrição ", (i + 1).ToString(), ") = ", restriction.RestrictionFinalSum.ToString("0.###"), Environment.NewLine);
+                finalString += string.Concat(restriction.RestrictionLeftOver.LeftOverVariable.Value, " = ", restriction.RestrictionLeftOver.LeftOverVariable.FinalValue.ToString("0.###").Replace("-", ""), Environment.NewLine);
+            }
+
+            txtSimplex.Text = finalString;
         }
 
         private void ShowStep01()
@@ -187,9 +208,20 @@ namespace OSC
         public void Restart(SimplexMethod simplexMethodClass)
         {
             _simplexMethodClass = simplexMethodClass;
-
-            this.Text = _simplexMethodClass.Stage + @"ª Etapa " + _simplexMethodClass.Step + @"º Passo";
+            
             FillData();
+        }
+
+        private void StepByStepForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _simplexMethodClass.SimplexData = new SimplexData
+            {
+                Problem = _simplexMethodClass.SimplexData.Problem,
+                Status = SimplexStatus.Pending
+            };
+
+            _simplexMethodClass.Stage = 1;
+            _simplexMethodClass.Step = -1;
         }
     }
 }

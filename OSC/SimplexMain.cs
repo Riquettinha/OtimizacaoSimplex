@@ -23,7 +23,10 @@ namespace OSC
         {
             if (Helpers.BackForm())
             {
-                Application.OpenForms["Restriction"].Show();
+                if (Application.OpenForms["Restriction"] != null)
+                    Application.OpenForms["Restriction"].Show();
+                else
+                    Application.OpenForms["Main"].Show();
                 Hide();
             }
         }
@@ -38,6 +41,11 @@ namespace OSC
         {
             new SimplexMethod(_problem, false);
 
+        }
+
+        private void SimplexMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }

@@ -148,5 +148,10 @@ namespace OSC
                     Size = new Size(locationX + 26, Size.Height);
             }
         }
+
+        private void Function_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Environment.Exit(0);
+        }
     }
 }

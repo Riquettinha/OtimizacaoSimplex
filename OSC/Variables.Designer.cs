@@ -38,6 +38,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.btnNext = new System.Windows.Forms.Button();
             this.btnEdit = new System.Windows.Forms.Button();
+            this.btnBack = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.btnBack)).BeginInit();
             this.SuspendLayout();
             // 
             // variableList
@@ -123,10 +125,10 @@
             this.btnNext.FlatAppearance.BorderSize = 2;
             this.btnNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNext.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNext.Location = new System.Drawing.Point(14, 274);
+            this.btnNext.Location = new System.Drawing.Point(52, 274);
             this.btnNext.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnNext.Name = "btnNext";
-            this.btnNext.Size = new System.Drawing.Size(206, 32);
+            this.btnNext.Size = new System.Drawing.Size(168, 32);
             this.btnNext.TabIndex = 6;
             this.btnNext.Text = "Próximo Passo";
             this.btnNext.UseVisualStyleBackColor = true;
@@ -145,6 +147,19 @@
             this.btnEdit.UseVisualStyleBackColor = true;
             this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
             // 
+            // btnBack
+            // 
+            this.btnBack.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnBack.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnBack.Image = global::OSC.Properties.Resources.back;
+            this.btnBack.Location = new System.Drawing.Point(12, 274);
+            this.btnBack.Name = "btnBack";
+            this.btnBack.Size = new System.Drawing.Size(32, 32);
+            this.btnBack.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.btnBack.TabIndex = 12;
+            this.btnBack.TabStop = false;
+            this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
+            // 
             // Variables
             // 
             this.AcceptButton = this.btnAdd;
@@ -152,6 +167,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(239, 316);
+            this.Controls.Add(this.btnBack);
             this.Controls.Add(this.txtVariableValue);
             this.Controls.Add(this.txtVariableDesc);
             this.Controls.Add(this.btnEdit);
@@ -173,6 +189,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Variáveis";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Variables_FormClosing);
+            ((System.ComponentModel.ISupportInitialize)(this.btnBack)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -189,6 +206,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.Button btnEdit;
+        private System.Windows.Forms.PictureBox btnBack;
     }
 }
 

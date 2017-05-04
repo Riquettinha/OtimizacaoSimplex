@@ -75,7 +75,7 @@
             this.btnManual.TabIndex = 3;
             this.btnManual.Text = "Inserir manualmente";
             this.btnManual.UseVisualStyleBackColor = true;
-            this.btnManual.Click += new System.EventHandler(this.button3_Click);
+            this.btnManual.Click += new System.EventHandler(this.btnManual_Click);
             // 
             // ofdCsv
             // 
@@ -99,6 +99,7 @@
             this.MinimumSize = new System.Drawing.Size(612, 113);
             this.Name = "Main";
             this.Text = "Main";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Load += new System.EventHandler(this.Main_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
