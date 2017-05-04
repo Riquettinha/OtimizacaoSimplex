@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using OSC.Problem_Classes;
 
 namespace OSC.Classes
@@ -91,7 +92,7 @@ namespace OSC.Classes
             for (int n = 1; n < simplexGrid.GetLength(0); n++)
                 if (simplexGrid[n, rowWithNegativeFreeNumber].Superior.IsNegative())
                     return n;
-                
+
 
             return 0;
         }
@@ -105,7 +106,8 @@ namespace OSC.Classes
             {
                 if (simplexData.GridArray[simplexData.AllowedColumn, n].Superior != 0)
                 {
-                    var quoc = simplexData.GridArray[0, n].Superior / simplexData.GridArray[simplexData.AllowedColumn, n].Superior;
+                    var quoc = simplexData.GridArray[0, n].Superior /
+                               simplexData.GridArray[simplexData.AllowedColumn, n].Superior;
                     if (quoc > 0 && (quoc < minorNumber || minorNumber == -1))
                     {
                         minorNumber = quoc;
@@ -138,21 +140,22 @@ namespace OSC.Classes
                 }
 
             for (int c = 0; c < simplexData.GridArray.GetLength(0); c++)
-                for (int r = 0; r < simplexData.GridArray.GetLength(1); r++)
-                    if (c != simplexData.AllowedColumn && r != simplexData.AllowedRow)
-                    {
-                        // Caso não esteja nem na linha e nem na coluna permitida, soma os valores da
-                        // celula superior na linha atual e da coluna permitda com da celula superior da coluna atual com a linha permitida
-                        simplexData.GridArray[c, r].Inferior = simplexData.GridArray[c, simplexData.AllowedRow].Superior *
-                                                                      simplexData.GridArray[simplexData.AllowedColumn, r].Inferior;
-                    }
+            for (int r = 0; r < simplexData.GridArray.GetLength(1); r++)
+                if (c != simplexData.AllowedColumn && r != simplexData.AllowedRow)
+                {
+                    // Caso não esteja nem na linha e nem na coluna permitida, soma os valores da
+                    // celula superior na linha atual e da coluna permitda com da celula superior da coluna atual com a linha permitida
+                    simplexData.GridArray[c, r].Inferior = simplexData.GridArray[c, simplexData.AllowedRow].Superior *
+                                                           simplexData.GridArray[simplexData.AllowedColumn, r].Inferior;
+                }
         }
 
         public static void FirstStageUpdateHeaders(ref SimplexData simplexData)
         {
             // Troca a básica da linah permtida com a não básic da coluna permitida
             var oldColumnHeader = simplexData.NonBasicVariables[simplexData.AllowedColumn];
-            simplexData.NonBasicVariables[simplexData.AllowedColumn] = simplexData.BasicVariables[simplexData.AllowedRow];
+            simplexData.NonBasicVariables[simplexData.AllowedColumn] =
+                simplexData.BasicVariables[simplexData.AllowedRow];
             simplexData.BasicVariables[simplexData.AllowedRow] = oldColumnHeader;
         }
 
@@ -170,14 +173,15 @@ namespace OSC.Classes
                     }
                     else
                     {
-                        simplexData.GridArray[c, r].Superior = simplexData.GridArray[c, r].Superior+ simplexData.GridArray[c, r].Inferior;
+                        simplexData.GridArray[c, r].Superior = simplexData.GridArray[c, r].Superior +
+                                                               simplexData.GridArray[c, r].Inferior;
                         simplexData.GridArray[c, r].Inferior = 0;
                     }
                 }
             }
         }
 
-        public static int SecondStageNegativeValueInFunction(GridCell[,] simplexGrid)
+        public static int SecondStageGetAllowedColumn(GridCell[,] simplexGrid)
         {
             // Procura por um membro da função positivo
             for (int i = 1; i < simplexGrid.GetLength(0); i++)
@@ -186,15 +190,15 @@ namespace OSC.Classes
             return 0;
         }
 
-        public static int SecondStageGetAllowedColumn(GridCell[,] simplexGrid)
+        public static bool SecondStageCheckIfValid(GridCell[,] simplexGrid)
         {
             // Procura por variáveis negativas na coluna do membro livre da função positiva
-            var columnWithPositiveFunctionValue = SecondStageNegativeValueInFunction(simplexGrid);
+            var columnWithPositiveFunctionValue = SecondStageGetAllowedColumn(simplexGrid);
             for (int n = 1; n < simplexGrid.GetLength(1); n++)
                 if (!simplexGrid[columnWithPositiveFunctionValue, n].Superior.IsNegative())
-                    return n;
+                    return true;
 
-            return 0;
+            return false;
         }
 
         public static int SecondStageGetAllowedRow(SimplexData simplexData)
@@ -206,7 +210,8 @@ namespace OSC.Classes
             {
                 if (simplexData.GridArray[simplexData.AllowedColumn, n].Superior != 0)
                 {
-                    var quoc = simplexData.GridArray[0, n].Superior / simplexData.GridArray[simplexData.AllowedColumn, n].Superior;
+                    var quoc = simplexData.GridArray[0, n].Superior /
+                               simplexData.GridArray[simplexData.AllowedColumn, n].Superior;
                     if (quoc > 0 && (quoc < minorNumber || minorNumber == -1))
                     {
                         minorNumber = quoc;
@@ -215,6 +220,59 @@ namespace OSC.Classes
                 }
             }
             return allowedRow;
+        }
+
+        public static void TransformFunction(ref SimplexData simplexData)
+        {
+            if (simplexData.Problem.Function.Maximiza)
+            {
+                simplexData.Problem.Function.Maximiza = false;
+            }
+            else
+            {
+                foreach (var problemVariable in simplexData.Problem.Variables)
+                {
+                    problemVariable.FunctionValue *= -1;
+                }
+            }
+        }
+
+        public static void FillSucessData(ref SimplexData simplexData)
+        {
+            var problem = simplexData.Problem;
+            var grid = simplexData.GridArray;
+            var firstColumn = simplexData.BasicVariables;
+
+            // Preenche o valor final das variáveis
+            for (int i = 1; i < firstColumn.Length; i++)
+            {
+                var originalVariable = problem.Variables.FirstOrDefault(v => v.Value == firstColumn[i]);
+                if (originalVariable != null)
+                    originalVariable.FinalValue = grid[0, i].Superior;
+            }
+
+            // Preenche o valor final das restrições
+            foreach (var restriction in simplexData.Problem.Restrictions)
+            {
+                // Calcula o valor total da restrição com base nos valores dela e valores finais das variáveis
+                decimal sum = 0;
+                foreach (RestrictionVariableData data in restriction.RestrictionData)
+                    sum += data.RestrictionVariable.FinalValue * data.RestrictionValue;
+
+                restriction.RestrictionFinalSum = sum;
+
+                // Calcula o valor da sobra da restrição
+                restriction.RestrictionLeftOver.LeftOverVariable.FinalValue = restriction.RestrictionValue -
+                                                                              restriction.RestrictionFinalSum;
+            }
+
+            // Calcula o Z
+            foreach (var problemVariable in simplexData.Problem.Variables)
+            {
+                simplexData.Problem.Function.FinalValue += (problemVariable.FunctionValue.IsNegative() ?
+                    problemVariable.FunctionValue  *-1 : problemVariable.FunctionValue)
+                    * problemVariable.FinalValue;
+            }
         }
     }
 }

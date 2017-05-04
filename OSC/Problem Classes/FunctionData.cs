@@ -3,6 +3,7 @@
     public class FunctionData
     {
         public bool Maximiza { get; set; }
+        public decimal FinalValue { get; set; }
 
         public FunctionData Clone()
         {

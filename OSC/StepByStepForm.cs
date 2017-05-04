@@ -111,7 +111,8 @@ namespace OSC
             gridView.Visible = false;
 
             var problem = _simplexMethodClass.SimplexData.Problem;
-            var finalString = "";
+            var finalString = string.Concat("Z = ", problem.Function.FinalValue.ToString("0.###"),
+                Environment.NewLine, Environment.NewLine);
             foreach (VariableData data in problem.Variables)
                 finalString += string.Concat(data.Value, " = ", data.FinalValue.ToString("0.###"), Environment.NewLine);
 
