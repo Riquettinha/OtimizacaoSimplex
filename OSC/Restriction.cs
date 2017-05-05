@@ -5,12 +5,13 @@ using System.Linq;
 using System.Windows.Forms;
 using OSC.Classes;
 using OSC.Problem_Classes;
+using OSC.SimplexApi;
 
 namespace OSC
 {
     public partial class Restriction : Form
     {
-        readonly ProblemData _problem = new ProblemData();
+        readonly ProblemData _problem;
 
         public Restriction(ProblemData problem)
         {
@@ -25,9 +26,9 @@ namespace OSC
             if (GetFilledTextBoxesCount() > 1 && NeededValueIsFilled())
             {
                 var newRestr = CreateRestrictionObject();
-                if (newRestr.CheckIfIsNewRestriction(_problem.Restrictions))
+                if (RestrictionFunctionDataHelper.CheckIfIsNewRestriction(_problem.Restrictions, newRestr))
                 {
-                    restrictionList.Items.Add(newRestr.GetRestrictionString());
+                    restrictionList.Items.Add(RestrictionFunctionDataHelper.GetRestrictionString(newRestr));
                     _problem.Restrictions.Add(newRestr);
                     Helpers.ClearFormValues(this);
                     Controls["txtVar0"].Focus();
@@ -262,12 +263,12 @@ namespace OSC
                 }
             }
 
-            return new RestrictionFunctionData
-            {
-                RestrictionValue = Controls["txtCond"].Text.ConvertToDecimal(),
-                RestrictionType = ((Controls["cbCondiction"] as ComboBox).SelectedItem as ComboBoxItem).Value,
-                RestrictionData = listRestricitonData
-            };
+            var restr = Create.RestrictionFunctionData();
+            restr.RestrictionValue = Controls["txtCond"].Text.ConvertToDecimal();
+            restr.RestrictionType = ((Controls["cbCondiction"] as ComboBox).SelectedItem as ComboBoxItem).Value;
+            restr.RestrictionData = listRestricitonData;
+
+            return restr;
         }
 
         private int GetFilledTextBoxesCount()
@@ -317,11 +318,6 @@ namespace OSC
                 AcceptButton = btnNext;
             else
                 AcceptButton = btnAdd;
-        }
-
-        private void Restriction_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Environment.Exit(0);
         }
     }
 }

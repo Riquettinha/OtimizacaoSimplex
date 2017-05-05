@@ -145,7 +145,7 @@ namespace OSC
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Restriction";
             this.Text = "Função de Restrição";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Restriction_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(Classes.Helpers.FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.btnBack)).EndInit();
             this.ResumeLayout(false);
 

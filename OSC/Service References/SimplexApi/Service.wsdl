@@ -1,0 +1,761 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="ExecuteSimplex">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="simplexData" type="tns:SimplexData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SimplexData">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Problem" type="tns:ProblemData" />
+          <s:element minOccurs="0" maxOccurs="1" name="GridArray" type="tns:ArrayOfArrayOfGridCell" />
+          <s:element minOccurs="1" maxOccurs="1" name="AllowedColumn" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="AllowedRow" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="NonBasicVariables" type="tns:ArrayOfString" />
+          <s:element minOccurs="0" maxOccurs="1" name="BasicVariables" type="tns:ArrayOfString" />
+          <s:element minOccurs="1" maxOccurs="1" name="Status" type="tns:SimplexStatus" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ProblemData">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Function" type="tns:FunctionData" />
+          <s:element minOccurs="0" maxOccurs="1" name="Variables" type="tns:ArrayOfVariableData" />
+          <s:element minOccurs="0" maxOccurs="1" name="Restrictions" type="tns:ArrayOfRestrictionFunctionData" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="FunctionData">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Maximiza" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="FinalValue" type="s:decimal" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfVariableData">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="VariableData" nillable="true" type="tns:VariableData" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="VariableData">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Value" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="FunctionValue" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="FinalValue" type="s:decimal" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfRestrictionFunctionData">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="RestrictionFunctionData" nillable="true" type="tns:RestrictionFunctionData" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RestrictionFunctionData">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="RestrictionType" type="tns:RestrictionType" />
+          <s:element minOccurs="1" maxOccurs="1" name="RestrictionValue" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="RestrictionFinalSum" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="RestrictionData" type="tns:ArrayOfRestrictionVariableData" />
+          <s:element minOccurs="0" maxOccurs="1" name="RestrictionLeftOver" type="tns:LeftOverData" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="RestrictionType">
+        <s:restriction base="s:string">
+          <s:enumeration value="LessThan" />
+          <s:enumeration value="MoreThan" />
+          <s:enumeration value="EqualTo" />
+          <s:enumeration value="Default" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="ArrayOfRestrictionVariableData">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="RestrictionVariableData" nillable="true" type="tns:RestrictionVariableData" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RestrictionVariableData">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="RestrictionValue" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="RestrictionVariable" type="tns:VariableData" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="LeftOverData">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="LeftOverVariable" type="tns:VariableData" />
+          <s:element minOccurs="1" maxOccurs="1" name="FreeMember" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="RestrictionVariables" type="tns:ArrayOfRestrictionVariableData" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfArrayOfGridCell">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ArrayOfGridCell" nillable="true" type="tns:ArrayOfGridCell" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfGridCell">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="GridCell" nillable="true" type="tns:GridCell" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="GridCell">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Superior" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="Inferior" type="s:decimal" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="SimplexStatus">
+        <s:restriction base="s:string">
+          <s:enumeration value="Pending" />
+          <s:enumeration value="Sucess" />
+          <s:enumeration value="Impossible" />
+          <s:enumeration value="Infinite" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="ExecuteSimplexResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ExecuteSimplexResult" type="tns:SimplexData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateRestrictionLeftover">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="problem" type="tns:ProblemData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateRestrictionLeftoverResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CreateRestrictionLeftoverResult" type="tns:ProblemData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="IsolateTheLeftOver">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="problem" type="tns:ProblemData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="IsolateTheLeftOverResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="IsolateTheLeftOverResult" type="tns:ProblemData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FirstStageCheckForTheEnd">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="simplexGrid" type="tns:ArrayOfArrayOfGridCell" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FirstStageCheckForTheEndResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="FirstStageCheckForTheEndResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FirstStageGetAllowedColumn">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="simplexGrid" type="tns:ArrayOfArrayOfGridCell" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FirstStageGetAllowedColumnResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="FirstStageGetAllowedColumnResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FirstStageGetAllowedRow">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="simplexData" type="tns:SimplexData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FirstStageGetAllowedRowResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="FirstStageGetAllowedRowResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FirstStageFillInferiorCells">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="simplexData" type="tns:SimplexData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FirstStageFillInferiorCellsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="FirstStageFillInferiorCellsResult" type="tns:SimplexData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FirstStageUpdateHeaders">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="simplexData" type="tns:SimplexData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FirstStageUpdateHeadersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="FirstStageUpdateHeadersResult" type="tns:SimplexData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FirstStageReposition">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="simplexData" type="tns:SimplexData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FirstStageRepositionResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="FirstStageRepositionResult" type="tns:SimplexData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SecondStageGetAllowedColumn">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="simplexGrid" type="tns:ArrayOfArrayOfGridCell" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SecondStageGetAllowedColumnResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="SecondStageGetAllowedColumnResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SecondStageCheckIfValid">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="simplexGrid" type="tns:ArrayOfArrayOfGridCell" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SecondStageCheckIfValidResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="SecondStageCheckIfValidResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SecondStageGetAllowedRow">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="simplexData" type="tns:SimplexData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SecondStageGetAllowedRowResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="SecondStageGetAllowedRowResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TransformFunction">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="simplexData" type="tns:SimplexData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TransformFunctionResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="TransformFunctionResult" type="tns:SimplexData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FillSucessData">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="simplexData" type="tns:SimplexData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FillSucessDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="FillSucessDataResult" type="tns:SimplexData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetGridCell">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="x" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="y" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="simplexData" type="tns:SimplexData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetGridCellResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetGridCellResult" type="tns:GridCell" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="ExecuteSimplexSoapIn">
+    <wsdl:part name="parameters" element="tns:ExecuteSimplex" />
+  </wsdl:message>
+  <wsdl:message name="ExecuteSimplexSoapOut">
+    <wsdl:part name="parameters" element="tns:ExecuteSimplexResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateRestrictionLeftoverSoapIn">
+    <wsdl:part name="parameters" element="tns:CreateRestrictionLeftover" />
+  </wsdl:message>
+  <wsdl:message name="CreateRestrictionLeftoverSoapOut">
+    <wsdl:part name="parameters" element="tns:CreateRestrictionLeftoverResponse" />
+  </wsdl:message>
+  <wsdl:message name="IsolateTheLeftOverSoapIn">
+    <wsdl:part name="parameters" element="tns:IsolateTheLeftOver" />
+  </wsdl:message>
+  <wsdl:message name="IsolateTheLeftOverSoapOut">
+    <wsdl:part name="parameters" element="tns:IsolateTheLeftOverResponse" />
+  </wsdl:message>
+  <wsdl:message name="FirstStageCheckForTheEndSoapIn">
+    <wsdl:part name="parameters" element="tns:FirstStageCheckForTheEnd" />
+  </wsdl:message>
+  <wsdl:message name="FirstStageCheckForTheEndSoapOut">
+    <wsdl:part name="parameters" element="tns:FirstStageCheckForTheEndResponse" />
+  </wsdl:message>
+  <wsdl:message name="FirstStageGetAllowedColumnSoapIn">
+    <wsdl:part name="parameters" element="tns:FirstStageGetAllowedColumn" />
+  </wsdl:message>
+  <wsdl:message name="FirstStageGetAllowedColumnSoapOut">
+    <wsdl:part name="parameters" element="tns:FirstStageGetAllowedColumnResponse" />
+  </wsdl:message>
+  <wsdl:message name="FirstStageGetAllowedRowSoapIn">
+    <wsdl:part name="parameters" element="tns:FirstStageGetAllowedRow" />
+  </wsdl:message>
+  <wsdl:message name="FirstStageGetAllowedRowSoapOut">
+    <wsdl:part name="parameters" element="tns:FirstStageGetAllowedRowResponse" />
+  </wsdl:message>
+  <wsdl:message name="FirstStageFillInferiorCellsSoapIn">
+    <wsdl:part name="parameters" element="tns:FirstStageFillInferiorCells" />
+  </wsdl:message>
+  <wsdl:message name="FirstStageFillInferiorCellsSoapOut">
+    <wsdl:part name="parameters" element="tns:FirstStageFillInferiorCellsResponse" />
+  </wsdl:message>
+  <wsdl:message name="FirstStageUpdateHeadersSoapIn">
+    <wsdl:part name="parameters" element="tns:FirstStageUpdateHeaders" />
+  </wsdl:message>
+  <wsdl:message name="FirstStageUpdateHeadersSoapOut">
+    <wsdl:part name="parameters" element="tns:FirstStageUpdateHeadersResponse" />
+  </wsdl:message>
+  <wsdl:message name="FirstStageRepositionSoapIn">
+    <wsdl:part name="parameters" element="tns:FirstStageReposition" />
+  </wsdl:message>
+  <wsdl:message name="FirstStageRepositionSoapOut">
+    <wsdl:part name="parameters" element="tns:FirstStageRepositionResponse" />
+  </wsdl:message>
+  <wsdl:message name="SecondStageGetAllowedColumnSoapIn">
+    <wsdl:part name="parameters" element="tns:SecondStageGetAllowedColumn" />
+  </wsdl:message>
+  <wsdl:message name="SecondStageGetAllowedColumnSoapOut">
+    <wsdl:part name="parameters" element="tns:SecondStageGetAllowedColumnResponse" />
+  </wsdl:message>
+  <wsdl:message name="SecondStageCheckIfValidSoapIn">
+    <wsdl:part name="parameters" element="tns:SecondStageCheckIfValid" />
+  </wsdl:message>
+  <wsdl:message name="SecondStageCheckIfValidSoapOut">
+    <wsdl:part name="parameters" element="tns:SecondStageCheckIfValidResponse" />
+  </wsdl:message>
+  <wsdl:message name="SecondStageGetAllowedRowSoapIn">
+    <wsdl:part name="parameters" element="tns:SecondStageGetAllowedRow" />
+  </wsdl:message>
+  <wsdl:message name="SecondStageGetAllowedRowSoapOut">
+    <wsdl:part name="parameters" element="tns:SecondStageGetAllowedRowResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransformFunctionSoapIn">
+    <wsdl:part name="parameters" element="tns:TransformFunction" />
+  </wsdl:message>
+  <wsdl:message name="TransformFunctionSoapOut">
+    <wsdl:part name="parameters" element="tns:TransformFunctionResponse" />
+  </wsdl:message>
+  <wsdl:message name="FillSucessDataSoapIn">
+    <wsdl:part name="parameters" element="tns:FillSucessData" />
+  </wsdl:message>
+  <wsdl:message name="FillSucessDataSoapOut">
+    <wsdl:part name="parameters" element="tns:FillSucessDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetGridCellSoapIn">
+    <wsdl:part name="parameters" element="tns:GetGridCell" />
+  </wsdl:message>
+  <wsdl:message name="GetGridCellSoapOut">
+    <wsdl:part name="parameters" element="tns:GetGridCellResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ServiceSoap">
+    <wsdl:operation name="ExecuteSimplex">
+      <wsdl:input message="tns:ExecuteSimplexSoapIn" />
+      <wsdl:output message="tns:ExecuteSimplexSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateRestrictionLeftover">
+      <wsdl:input message="tns:CreateRestrictionLeftoverSoapIn" />
+      <wsdl:output message="tns:CreateRestrictionLeftoverSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="IsolateTheLeftOver">
+      <wsdl:input message="tns:IsolateTheLeftOverSoapIn" />
+      <wsdl:output message="tns:IsolateTheLeftOverSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="FirstStageCheckForTheEnd">
+      <wsdl:input message="tns:FirstStageCheckForTheEndSoapIn" />
+      <wsdl:output message="tns:FirstStageCheckForTheEndSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="FirstStageGetAllowedColumn">
+      <wsdl:input message="tns:FirstStageGetAllowedColumnSoapIn" />
+      <wsdl:output message="tns:FirstStageGetAllowedColumnSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="FirstStageGetAllowedRow">
+      <wsdl:input message="tns:FirstStageGetAllowedRowSoapIn" />
+      <wsdl:output message="tns:FirstStageGetAllowedRowSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="FirstStageFillInferiorCells">
+      <wsdl:input message="tns:FirstStageFillInferiorCellsSoapIn" />
+      <wsdl:output message="tns:FirstStageFillInferiorCellsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="FirstStageUpdateHeaders">
+      <wsdl:input message="tns:FirstStageUpdateHeadersSoapIn" />
+      <wsdl:output message="tns:FirstStageUpdateHeadersSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="FirstStageReposition">
+      <wsdl:input message="tns:FirstStageRepositionSoapIn" />
+      <wsdl:output message="tns:FirstStageRepositionSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SecondStageGetAllowedColumn">
+      <wsdl:input message="tns:SecondStageGetAllowedColumnSoapIn" />
+      <wsdl:output message="tns:SecondStageGetAllowedColumnSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SecondStageCheckIfValid">
+      <wsdl:input message="tns:SecondStageCheckIfValidSoapIn" />
+      <wsdl:output message="tns:SecondStageCheckIfValidSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SecondStageGetAllowedRow">
+      <wsdl:input message="tns:SecondStageGetAllowedRowSoapIn" />
+      <wsdl:output message="tns:SecondStageGetAllowedRowSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="TransformFunction">
+      <wsdl:input message="tns:TransformFunctionSoapIn" />
+      <wsdl:output message="tns:TransformFunctionSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="FillSucessData">
+      <wsdl:input message="tns:FillSucessDataSoapIn" />
+      <wsdl:output message="tns:FillSucessDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetGridCell">
+      <wsdl:input message="tns:GetGridCellSoapIn" />
+      <wsdl:output message="tns:GetGridCellSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ServiceSoap" type="tns:ServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ExecuteSimplex">
+      <soap:operation soapAction="http://tempuri.org/ExecuteSimplex" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateRestrictionLeftover">
+      <soap:operation soapAction="http://tempuri.org/CreateRestrictionLeftover" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsolateTheLeftOver">
+      <soap:operation soapAction="http://tempuri.org/IsolateTheLeftOver" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FirstStageCheckForTheEnd">
+      <soap:operation soapAction="http://tempuri.org/FirstStageCheckForTheEnd" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FirstStageGetAllowedColumn">
+      <soap:operation soapAction="http://tempuri.org/FirstStageGetAllowedColumn" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FirstStageGetAllowedRow">
+      <soap:operation soapAction="http://tempuri.org/FirstStageGetAllowedRow" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FirstStageFillInferiorCells">
+      <soap:operation soapAction="http://tempuri.org/FirstStageFillInferiorCells" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FirstStageUpdateHeaders">
+      <soap:operation soapAction="http://tempuri.org/FirstStageUpdateHeaders" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FirstStageReposition">
+      <soap:operation soapAction="http://tempuri.org/FirstStageReposition" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SecondStageGetAllowedColumn">
+      <soap:operation soapAction="http://tempuri.org/SecondStageGetAllowedColumn" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SecondStageCheckIfValid">
+      <soap:operation soapAction="http://tempuri.org/SecondStageCheckIfValid" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SecondStageGetAllowedRow">
+      <soap:operation soapAction="http://tempuri.org/SecondStageGetAllowedRow" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TransformFunction">
+      <soap:operation soapAction="http://tempuri.org/TransformFunction" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FillSucessData">
+      <soap:operation soapAction="http://tempuri.org/FillSucessData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetGridCell">
+      <soap:operation soapAction="http://tempuri.org/GetGridCell" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ServiceSoap12" type="tns:ServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ExecuteSimplex">
+      <soap12:operation soapAction="http://tempuri.org/ExecuteSimplex" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateRestrictionLeftover">
+      <soap12:operation soapAction="http://tempuri.org/CreateRestrictionLeftover" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsolateTheLeftOver">
+      <soap12:operation soapAction="http://tempuri.org/IsolateTheLeftOver" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FirstStageCheckForTheEnd">
+      <soap12:operation soapAction="http://tempuri.org/FirstStageCheckForTheEnd" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FirstStageGetAllowedColumn">
+      <soap12:operation soapAction="http://tempuri.org/FirstStageGetAllowedColumn" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FirstStageGetAllowedRow">
+      <soap12:operation soapAction="http://tempuri.org/FirstStageGetAllowedRow" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FirstStageFillInferiorCells">
+      <soap12:operation soapAction="http://tempuri.org/FirstStageFillInferiorCells" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FirstStageUpdateHeaders">
+      <soap12:operation soapAction="http://tempuri.org/FirstStageUpdateHeaders" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FirstStageReposition">
+      <soap12:operation soapAction="http://tempuri.org/FirstStageReposition" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SecondStageGetAllowedColumn">
+      <soap12:operation soapAction="http://tempuri.org/SecondStageGetAllowedColumn" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SecondStageCheckIfValid">
+      <soap12:operation soapAction="http://tempuri.org/SecondStageCheckIfValid" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SecondStageGetAllowedRow">
+      <soap12:operation soapAction="http://tempuri.org/SecondStageGetAllowedRow" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TransformFunction">
+      <soap12:operation soapAction="http://tempuri.org/TransformFunction" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FillSucessData">
+      <soap12:operation soapAction="http://tempuri.org/FillSucessData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetGridCell">
+      <soap12:operation soapAction="http://tempuri.org/GetGridCell" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Service">
+    <wsdl:port name="ServiceSoap" binding="tns:ServiceSoap">
+      <soap:address location="http://localhost:1558/Service.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ServiceSoap12" binding="tns:ServiceSoap12">
+      <soap12:address location="http://localhost:1558/Service.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

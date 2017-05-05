@@ -1,24 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using OSC.Classes;
-using OSC.Problem_Classes;
+using OSC.SimplexApi;
 
 namespace OSC
 {
     public partial class Main : Form
     {
-        private ProblemData _problem = new ProblemData();
+        private ProblemData _problem;
         public Main()
         {
             InitializeComponent();
+            _problem = Create.ProblemData();
         }
 
         private void btnGetFile_Click(object sender, EventArgs e)
@@ -57,7 +54,7 @@ namespace OSC
                 try
                 {
                     var sr = new StreamReader(txtFile.Text);
-                    _problem = new ProblemData();
+                    _problem = Create.ProblemData();
                     // Cria lista de dados importados
                     List<string[]> lines = new List<string[]>();
                     string line;
@@ -102,10 +99,10 @@ namespace OSC
 
         private bool GetFunctionType(string[] line)
         {
-            if (line[line.Length-2].Equals("-"))
-                _problem.Function = new FunctionData{Maximiza = false};
-            else if (line[line.Length-2].Equals("+"))
-                _problem.Function = new FunctionData{Maximiza = true};
+            if (line[line.Length - 2].Equals("-"))
+                _problem.Function = Create.FunctionData(false);
+            else if (line[line.Length - 2].Equals("+"))
+                _problem.Function = Create.FunctionData(true);
             else
                 return false;
             return true;
@@ -147,12 +144,9 @@ namespace OSC
                 if (!Helpers.CheckIfIsAValidDecimal(value) || type == RestrictionType.Default)
                     return false;
 
-                var restr = new RestrictionFunctionData
-                {
-                    RestrictionData = new List<RestrictionVariableData>(),
-                    RestrictionType = type,
-                    RestrictionValue = Convert.ToDecimal(value)
-                };
+                var restr = Create.RestrictionFunctionData();
+                restr.RestrictionType = type;
+                restr.RestrictionValue = Convert.ToDecimal(value);
 
                 for (int columnIndex = 0; columnIndex < line.Length-2; columnIndex++)
                 {
@@ -186,11 +180,6 @@ namespace OSC
             if(value == "=")
                 return RestrictionType.MoreThan;
             return RestrictionType.Default;
-        }
-
-        private void Main_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Environment.Exit(0);
         }
     }
 }

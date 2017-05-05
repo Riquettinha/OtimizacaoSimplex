@@ -1,4 +1,5 @@
 ﻿using OSC.Problem_Classes;
+using OSC.SimplexApi;
 
 namespace OSC.Classes
 {

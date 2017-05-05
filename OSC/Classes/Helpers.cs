@@ -1,7 +1,9 @@
 ﻿using OSC.Problem_Classes;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using OSC.SimplexApi;
 
 // ReSharper disable AccessToModifiedClosure
 namespace OSC.Classes
@@ -109,8 +111,7 @@ namespace OSC.Classes
         {
             return number < 0;
         }
-
-
+        
         /// <summary>
         /// Get the number string
         /// </summary>
@@ -198,54 +199,6 @@ namespace OSC.Classes
                 default:
                     return "";
             }
-        }
-
-        /// <summary>
-        /// Superscript the numbers in a text.
-        /// </summary>
-        public static string SubscriptNumber(this string textNumber)
-        {
-            string finalString = "";
-            foreach (var letter in textNumber)
-            {
-                switch (letter)
-                {
-                    case '0':
-                        finalString += "₀";
-                        break;
-                    case '1':
-                        finalString += "₁";
-                        break;
-                    case '2':
-                        finalString += "₂";
-                        break;
-                    case '3':
-                        finalString += "₃";
-                        break;
-                    case '4':
-                        finalString += "₄";
-                        break;
-                    case '5':
-                        finalString += "₅";
-                        break;
-                    case '6':
-                        finalString += "₆";
-                        break;
-                    case '7':
-                        finalString += "₇";
-                        break;
-                    case '8':
-                        finalString += "₈";
-                        break;
-                    case '9':
-                        finalString += "₉";
-                        break;
-                    default:
-                        finalString += letter;
-                        break;
-                }
-            }
-            return finalString;
         }
 
         /// <summary>

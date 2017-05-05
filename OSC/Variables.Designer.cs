@@ -1,4 +1,6 @@
-﻿namespace OSC
+﻿using OSC.Classes;
+
+namespace OSC
 {
     partial class Variables
     {
@@ -188,7 +190,7 @@
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Variáveis";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Variables_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(Helpers.FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.btnBack)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

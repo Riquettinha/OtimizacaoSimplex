@@ -1,13 +1,13 @@
 ﻿using OSC.Classes;
 using System;
-using OSC.Problem_Classes;
 using System.Windows.Forms;
+using OSC.SimplexApi;
 
 namespace OSC
 {
     public partial class SimplexMain : Form
     {
-        ProblemData _problem;
+        readonly ProblemData _problem;
         public SimplexMain(ProblemData problem)
         {
             InitializeComponent();
@@ -43,9 +43,9 @@ namespace OSC
 
         }
 
-        private void SimplexMain_FormClosing(object sender, FormClosingEventArgs e)
+        private void SimplexMain_Load(object sender, EventArgs e)
         {
-            Environment.Exit(0);
+
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using OSC.Classes;
 using OSC.Problem_Classes;
+using OSC.SimplexApi;
 
 namespace OSC
 {
@@ -37,11 +38,8 @@ namespace OSC
                 var functionValue = Convert.ToDecimal(Controls["txtVar" + i].Text);
                 _problem.Variables[i].FunctionValue = functionValue;
             }
-            
-            _problem.Function = new FunctionData
-            {
-                Maximiza = rdMaxValue.Checked
-            };
+
+            _problem.Function = Create.FunctionData(rdMaxValue.Checked);
 
             var restrictions = new Restriction(_problem);
             restrictions.Show();
@@ -147,11 +145,6 @@ namespace OSC
                 if (locationX + 30 > Size.Width)
                     Size = new Size(locationX + 26, Size.Height);
             }
-        }
-
-        private void Function_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Environment.Exit(0);
         }
     }
 }

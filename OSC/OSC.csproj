@@ -34,6 +34,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,8 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Create.cs" />
     <Compile Include="Classes\SimplexMethod.cs" />
-    <Compile Include="Classes\SimplexSteps.cs" />
     <Compile Include="Classes\ComboBoxItem.cs" />
     <Compile Include="Function.cs">
       <SubType>Form</SubType>
@@ -60,20 +62,20 @@
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
-    <Compile Include="Problem Classes\FunctionData.cs" />
     <Compile Include="Classes\Helpers.cs" />
-    <Compile Include="Classes\GridCell.cs" />
-    <Compile Include="Problem Classes\LeftOverData.cs" />
-    <Compile Include="Problem Classes\ProblemData.cs" />
-    <Compile Include="Problem Classes\RestrictionVariableData.cs" />
-    <Compile Include="Problem Classes\SimplexData.cs" />
+    <Compile Include="Problem Classes\RestrictionFunctionDataHelper.cs" />
+    <Compile Include="Problem Classes\VariableDataHelper.cs" />
     <Compile Include="Restriction.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Restriction.Designer.cs">
       <DependentUpon>Restriction.cs</DependentUpon>
     </Compile>
-    <Compile Include="Problem Classes\RestrictionFunctionData.cs" />
+    <Compile Include="Service References\SimplexApi\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="SimplexMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -94,7 +96,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Problem Classes\VariableData.cs" />
     <EmbeddedResource Include="Function.resx">
       <DependentUpon>Function.cs</DependentUpon>
     </EmbeddedResource>
@@ -132,6 +133,61 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Service References\SimplexApi\OSC.SimplexApi.CreateRestrictionLeftoverResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SimplexApi\OSC.SimplexApi.ExecuteSimplexResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SimplexApi\OSC.SimplexApi.FillSucessDataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SimplexApi\OSC.SimplexApi.FirstStageCheckForTheEndResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SimplexApi\OSC.SimplexApi.FirstStageFillInferiorCellsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SimplexApi\OSC.SimplexApi.FirstStageGetAllowedColumnResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SimplexApi\OSC.SimplexApi.FirstStageGetAllowedRowResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SimplexApi\OSC.SimplexApi.FirstStageRepositionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SimplexApi\OSC.SimplexApi.FirstStageUpdateHeadersResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SimplexApi\OSC.SimplexApi.GetGridCellResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SimplexApi\OSC.SimplexApi.GridCell.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SimplexApi\OSC.SimplexApi.IsolateTheLeftOverResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SimplexApi\OSC.SimplexApi.ProblemData.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SimplexApi\OSC.SimplexApi.SecondStageCheckIfValidResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SimplexApi\OSC.SimplexApi.SecondStageGetAllowedColumnResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SimplexApi\OSC.SimplexApi.SecondStageGetAllowedRowResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SimplexApi\OSC.SimplexApi.SimplexData.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SimplexApi\OSC.SimplexApi.TransformFunctionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SimplexApi\Service.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -141,6 +197,27 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="External References\back.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\SimplexApi\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\SimplexApi\Service.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\SimplexApi\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\SimplexApi\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\SimplexApi\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

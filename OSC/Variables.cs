@@ -1,18 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using OSC.Classes;
 using OSC.Problem_Classes;
+using OSC.SimplexApi;
 
 namespace OSC
 {
     public partial class Variables : Form
     {
-        readonly ProblemData _problem = new ProblemData();
+        readonly ProblemData _problem;
         public Variables()
         {
             InitializeComponent();
+            _problem = Create.ProblemData();
         }
 
         private void btnAddVariable_Click(object sender, EventArgs e)
@@ -20,9 +23,9 @@ namespace OSC
             // Adiciona variável à lista caso isso seja possível
             var newVariable = CreateNewVariableObject(txtVariableValue.Text, txtVariableDesc.Text);
 
-            if (newVariable.CheckIfVariableIsValid())
+            if (VariableDataHelper.CheckIfVariableIsValid(newVariable))
             {
-                if (newVariable.CheckForDuplicatedValueInProblemVariableList(_problem.Variables))
+                if (VariableDataHelper.CheckForDuplicatedValueInProblemVariableList(_problem.Variables, newVariable))
                     Helpers.ShowErrorMessage(string.Concat("Valor ", newVariable.Value, " já adicionado."));
                 else
                     AddNewVariable(newVariable);

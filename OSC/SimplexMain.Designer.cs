@@ -100,7 +100,7 @@ namespace OSC
             this.Name = "SimplexMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Método Simplex";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SimplexMain_FormClosing);
+            this.Load += new System.EventHandler(this.SimplexMain_Load);
             ((System.ComponentModel.ISupportInitialize)(this.btnBack)).EndInit();
             this.ResumeLayout(false);
 
